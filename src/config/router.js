@@ -5,6 +5,7 @@ import D from "debug";
 import Home from "../components/Home.vue";
 import Login from "../components/Login.vue";
 import RutasMapa from "../components/mapa/rutas.js";
+import RutasEmpleados from "../components/empleados/rutas.js";
 import RutasDocumentacion from "../documentacion/rutas.js";
 
 const debug = D("ciris:config/router.js");
@@ -18,7 +19,7 @@ const router = new Router({
       path: "/",
       name: "home",
       component: Home,
-      children: _.union(RutasDocumentacion, RutasMapa),
+      children: _.union(RutasDocumentacion, RutasMapa, RutasEmpleados),
     },
     {
       path: "/login",
