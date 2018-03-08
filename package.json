@@ -1,7 +1,7 @@
 {
-  "name": "lab-carlos-araya",
+  "name": "rastreador",
   "version": "1.0.1",
-  "description": "UI del labotario",
+  "description": "UI del rastreador",
   "author": "Ciris Informatic Solutions <ventas@ciriscr.com>",
   "private": true,
   "scripts": {
@@ -31,6 +31,7 @@
     "vue-popover": "1.6.0",
     "vue-progressbar": "0.7.3",
     "vue-router": "3.0.1",
+    "vue2-google-maps": "0.8.10",
     "vuejs-datepicker": "0.9.24"
   },
   "devDependencies": {
