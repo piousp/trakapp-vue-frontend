@@ -3,7 +3,7 @@
     <gmap-map
       class="mapa"
       :center="center"
-      :zoom="7"
+      :zoom="15"
       map-type-id="terrain">
       <gmap-marker
         :key="index"
@@ -18,11 +18,12 @@
 </template>
 
 <script>
+import _ from "lodash";
 import empleadoApi from "../empleados/empleadoApi";
 
 function data() {
   return {
-    center: { lat: 10.0, lng: 10.0 },
+    center: { lat: 9.934739, lng: -84.087502 },
     empleados: [],
   };
 }
@@ -30,7 +31,7 @@ function data() {
 function beforeRouteEnter(to, from, next) {
   next((vm) => {
     empleadoApi.listar(0, 0).then((empleados) => {
-      vm.empleados = empleados.docs.map((e) => {
+      vm.empleados = _.map(empleados.docs, (e) => {
         e.opened = false;
         return e;
       });
@@ -38,9 +39,23 @@ function beforeRouteEnter(to, from, next) {
   });
 }
 
+function actualizarPosicion(e) {
+  const i = _.findIndex(this.empleados, {_id: e._id});
+  this.empleados[i].position = generarCoords(e.position.lat+1, e.position.lng+1);
+}
+
+function generarCoords(lat, lng) {
+  return new google.maps.LatLng(lat, lng);
+}
+
 export default {
   data,
   beforeRouteEnter,
+  socket: {
+    events: {
+      actualizarPosicion,
+    },
+  },
 };
 </script>
 
