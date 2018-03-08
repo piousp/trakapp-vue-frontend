@@ -123,6 +123,10 @@ function version() {
     color: $blanco;
     text-shadow: 0 1px 1px $sombra1;
     cursor: pointer;
+
+    @media (min-width: $reflex-md ) {
+      display: none;
+    }
   }
   .navbar__right {
     text-align: center;

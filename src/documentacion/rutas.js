@@ -14,7 +14,7 @@ export default [
     path: "/documentacion",
     name: "doc",
     meta: {
-      icono: "fal fa-code",
+      icono: "fal fa-fw fa-code",
       esconder: false,
       titulo: "Documentación",
     },
@@ -25,7 +25,7 @@ export default [
         name: "botones",
         component: Botones,
         meta: {
-          icono: "fas fa-square",
+          icono: "fas fa-fw fa-square",
           titulo: "Botones",
         },
       },
@@ -34,7 +34,7 @@ export default [
         name: "checks",
         component: Checks,
         meta: {
-          icono: "far fa-check-square",
+          icono: "far fa-fw fa-check-square",
           titulo: "Checks/Radios",
         },
       },
@@ -43,7 +43,7 @@ export default [
         name: "colores",
         component: Colores,
         meta: {
-          icono: "fas fa-paint-brush",
+          icono: "fas fa-fw fa-paint-brush",
           titulo: "Colores",
         },
       },
@@ -52,7 +52,7 @@ export default [
         name: "forms",
         component: Forms,
         meta: {
-          icono: "fal fa-th-list",
+          icono: "fal fa-fw fa-th-list",
           titulo: "Forms",
         },
       },
@@ -61,7 +61,7 @@ export default [
         name: "notificaciones",
         component: Notificaciones,
         meta: {
-          icono: "far fa-bullhorn",
+          icono: "far fa-fw fa-bullhorn",
           titulo: "Notificaciones",
         },
       },
@@ -70,7 +70,7 @@ export default [
         name: "panels",
         component: Panels,
         meta: {
-          icono: "fas fa-window-maximize",
+          icono: "fas fa-fw fa-window-maximize",
           titulo: "Panels",
         },
       },
@@ -79,7 +79,7 @@ export default [
         name: "tablas",
         component: Tablas,
         meta: {
-          icono: "fal fa-table",
+          icono: "fal fa-fw fa-table",
           titulo: "Tablas",
         },
       },
@@ -88,7 +88,7 @@ export default [
         name: "tema",
         component: Tema,
         meta: {
-          icono: "far fa-window-restore",
+          icono: "far fa-fw fa-window-restore",
           titulo: "Tema",
         },
       },
@@ -97,7 +97,7 @@ export default [
         name: "tipografía",
         component: Tipografia,
         meta: {
-          icono: "fal fa-font",
+          icono: "fal fa-fw fa-font",
           titulo: "Tipografía",
         },
       },

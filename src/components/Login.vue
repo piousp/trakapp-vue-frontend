@@ -1,27 +1,27 @@
 <template>
   <section class="login">
-    <form class="login__body" novalidate v-on:submit.stop.prevent="login()">
+    <form class="login__body" novalidate @submit.stop.prevent="login()">
       <div class="text--center">
-        <h1 class="h1 text--blanco"><i class="fa fa-fw fa-flask"></i> Laboratorio de Materiales Carlos Araya</h1>
+        <h1 class="h1 text--blanco"><i class="fal fa-crosshairs"/> Rastreador</h1>
       </div>
-      <div class="form__group" v-bind:class="{ 'form__group--error': errors.has('usuario') && submitted }">
+      <div class="form__group" :class="{ 'form__group--error': errors.has('usuario') && submitted }">
         <label for="usuario" class="form__label">Correo:</label>
         <div class="form__input-group">
-          <span class="form__input-group__addon"><i class="fa fa-fw fa-user"></i></span>
-          <input name="usuario" id="usuario" type="text" class="form__input login__input"  v-model="usuario" placeholder="usuario@dominio.com" v-validate="'required'" @input="usuario = usuario.toLowerCase()">
+          <span class="form__input-group__addon"><i class="fa fa-fw fa-user"/></span>
+          <input name="usuario" id="usuario" type="text" class="form__input login__input" v-model="usuario" placeholder="usuario@dominio.com" v-validate="'required'" @input="usuario = usuario.toLowerCase()">
         </div>
       </div>
-      <div class="form__group" v-bind:class="{ 'form__group--error': errors.has('password') && submitted }">
+      <div class="form__group" :class="{ 'form__group--error': errors.has('password') && submitted }">
         <label for="password" class="form__label">Contraseña:</label>
         <div class="form__input-group">
-          <span class="form__input-group__addon"><i class="fa fa-fw fa-lock"></i></span>
-          <input name="password" id="password" type="password" class="form__input login__input"  v-model="password" placeholder="********" v-validate="'required'">
+          <span class="form__input-group__addon"><i class="fa fa-fw fa-lock"/></span>
+          <input name="password" id="password" type="password" class="form__input login__input" v-model="password" placeholder="********" v-validate="'required'">
         </div>
       </div>
       <br>
       <div class="text--center">
         <button class="boton boton--verde-o boton--l" type="submit">
-          <i class="fa fa-fw fa-sign-in"></i>
+          <i class="fa fa-fw fa-sign-in"/>
           Iniciar sesión
         </button>
       </div>
@@ -31,32 +31,32 @@
 
 <script>
 export default {
-  data: function() {
+  data() {
     return {
-      usuario: '',
-      password: '',
+      usuario: "",
+      password: "",
       recordar: true,
-      submitted: false
-    }
+      submitted: false,
+    };
   },
   methods: {
     login() {
       this.submitted = true;
       this.$validator.validateAll();
-      if(!this.errors.any()){
+      if (!this.errors.any()) {
         this.$auth.login(this.usuario, this.password, this.recordar)
-        .then(response => {
-          this.$router.push({name: "home"});
-          this.$toastr('success', this.$t("login.success"));
-        })
-        .catch(err => {
-          this.$toastr('error', this.$t("login.error"));
-          console.error(err);
-        })
+          .then((response) => {
+            this.$router.push({ name: "home" });
+            console.log(response);
+            this.$toastr("success", this.$t("login.success"), `${response.usuario.nombre}`);
+          })
+          .catch((err) => {
+            this.$toastr("error", this.$t("login.error"), "Error");
+          });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">

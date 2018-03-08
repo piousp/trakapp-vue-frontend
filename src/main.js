@@ -4,6 +4,7 @@ import Vue from "vue";
 import Datepicker from "vuejs-datepicker";
 import VeeValidate from "vee-validate";
 import VueI18n from "vue-i18n";
+import * as VueGoogleMaps from "vue2-google-maps";
 import VueToastr from "@deveodk/vue-toastr";
 import App from "./App.vue";
 import router from "./config/router";
@@ -20,8 +21,15 @@ Vue.use(VueToastr);
 Vue.use(VeeValidate);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyC15TkWYaTzDMlb1B2NIAn9pUuB5mY1fZE",
+    libraries: "weather,geometry,visualization",
+  },
+});
 
 Vue.component("datepicker", Datepicker);
+Vue.component("infoWindow", VueGoogleMaps.InfoWindow);
 
 Vue.prototype.$auth.checkAuth();
 

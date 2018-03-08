@@ -79,7 +79,7 @@ export default {
     background-size: cover;
     @media (min-width: $reflex-md ) {
       margin-left: 200px;
-      margin-top: 43px;
+      margin-top: 52px;
     }
   }
 
