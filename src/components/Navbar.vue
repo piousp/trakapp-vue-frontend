@@ -5,7 +5,7 @@
     </div>
     <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
       <div class="navbar__right__elem">
-        <i class="fa fa-fw" v-bind:class="titulo.meta.icono"></i>
+        <i v-bind:class="titulo.meta.icono"></i>
         <span class="text text--negro4">{{titulo.meta.titulo}}</span>
       </div>
       <div class="navbar__right__botones navbar__right__elem"></div>
