@@ -32,11 +32,6 @@ function data() {
     copia: {},
     editando: true,
     submitted: false,
-    listaTipos: [
-      "Técnico Lvl1",
-      "Técnico Lvl2",
-      "Técnico Lvl3",
-    ],
   };
 }
 
