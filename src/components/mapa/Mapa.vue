@@ -1,7 +1,8 @@
 <template>
   <section>
     <gmap-map
-      class="mapa"
+      class="map-container"
+      ref="map"
       :center="center"
       :zoom="15"
       map-type-id="terrain">
@@ -23,7 +24,7 @@ import empleadoApi from "../empleados/empleadoApi";
 
 function data() {
   return {
-    center: { lat: 9.934739, lng: -84.087502 },
+    center: { lat: 0, lng: 0 },
     empleados: [],
   };
 }
@@ -41,11 +42,20 @@ function beforeRouteEnter(to, from, next) {
 
 function actualizarPosicion(e) {
   const i = _.findIndex(this.empleados, {_id: e._id});
-  this.empleados[i].position = generarCoords(e.position.lat+1, e.position.lng+1);
+  this.empleados[i].position = generarCoords(e.position.lat, e.position.lng);
+  this.centrarMapa();
 }
 
 function generarCoords(lat, lng) {
   return new google.maps.LatLng(lat, lng);
+}
+
+function centrarMapa() {
+  const bounds = new google.maps.LatLngBounds();
+  for (let i=0; i<this.empleados.length; i=i+1) {
+    bounds.extend(this.empleados[i].position);
+  }
+  this.$refs.map.fitBounds(bounds);
 }
 
 export default {
@@ -56,11 +66,19 @@ export default {
       actualizarPosicion,
     },
   },
+  methods: {
+    centrarMapa,
+  },
+  mounted() {
+    setTimeout(() => {
+      this.centrarMapa();
+    }, 100);
+  }
 };
 </script>
 
 <style lang="scss">
-.mapa {
+.map-container {
   height: 500px;
   margin-top: 2em;
 }
