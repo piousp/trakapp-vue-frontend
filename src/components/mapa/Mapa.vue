@@ -21,8 +21,6 @@
 <script>
 import _ from "lodash";
 import empleadoApi from "../empleados/empleadoApi";
-import { log } from 'util';
-import { setTimeout } from 'timers';
 
 function data() {
   return {
