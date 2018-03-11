@@ -21,6 +21,8 @@
 <script>
 import _ from "lodash";
 import empleadoApi from "../empleados/empleadoApi";
+import { log } from 'util';
+import { setTimeout } from 'timers';
 
 function data() {
   return {
@@ -43,19 +45,23 @@ function beforeRouteEnter(to, from, next) {
 function actualizarPosicion(e) {
   const i = _.findIndex(this.empleados, {_id: e._id});
   this.empleados[i].position = generarCoords(e.position.lat, e.position.lng);
-  this.centrarMapa();
 }
 
 function generarCoords(lat, lng) {
   return new google.maps.LatLng(lat, lng);
 }
 
-function centrarMapa() {
-  const bounds = new google.maps.LatLngBounds();
-  for (let i=0; i<this.empleados.length; i=i+1) {
-    bounds.extend(this.empleados[i].position);
-  }
-  this.$refs.map.fitBounds(bounds);
+function mounted() {
+  this.$refs.map.$mapCreated.then((objMapa) => {
+    const mapaCargado = objMapa.addListener("tilesloaded", () => {
+      mapaCargado.remove();
+      const bounds = new google.maps.LatLngBounds();
+      this.empleados.forEach((emp, i) => {
+        bounds.extend(emp.position);
+      });
+      objMapa.fitBounds(bounds);
+    });
+  });
 }
 
 export default {
@@ -66,14 +72,7 @@ export default {
       actualizarPosicion,
     },
   },
-  methods: {
-    centrarMapa,
-  },
-  mounted() {
-    setTimeout(() => {
-      this.centrarMapa();
-    }, 100);
-  }
+  mounted,
 };
 </script>
 
