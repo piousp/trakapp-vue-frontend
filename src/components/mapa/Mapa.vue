@@ -41,7 +41,7 @@ function beforeRouteEnter(to, from, next) {
 }
 
 function actualizarPosicion(e) {
-  const i = _.findIndex(this.empleados, {_id: e._id});
+  const i = _.findIndex(this.empleados, { _id: e._id });
   this.empleados[i].position = generarCoords(e.position.lat, e.position.lng);
 }
 
@@ -54,7 +54,7 @@ function mounted() {
     const mapaCargado = objMapa.addListener("tilesloaded", () => {
       mapaCargado.remove();
       const bounds = new google.maps.LatLngBounds();
-      this.empleados.forEach((emp, i) => {
+      this.empleados.forEach((emp) => {
         bounds.extend(emp.position);
       });
       objMapa.fitBounds(bounds);
