@@ -1,7 +1,8 @@
 <template>
   <section>
     <gmap-map
-      class="mapa"
+      class="map-container"
+      ref="map"
       :center="center"
       :zoom="15"
       map-type-id="terrain">
@@ -23,7 +24,7 @@ import empleadoApi from "../empleados/empleadoApi";
 
 function data() {
   return {
-    center: { lat: 9.934739, lng: -84.087502 },
+    center: { lat: 0, lng: 0 },
     empleados: [],
   };
 }
@@ -40,12 +41,25 @@ function beforeRouteEnter(to, from, next) {
 }
 
 function actualizarPosicion(e) {
-  const i = _.findIndex(this.empleados, {_id: e._id});
-  this.empleados[i].position = generarCoords(e.position.lat+1, e.position.lng+1);
+  const i = _.findIndex(this.empleados, { _id: e._id });
+  this.empleados[i].position = generarCoords(e.position.lat, e.position.lng);
 }
 
 function generarCoords(lat, lng) {
   return new google.maps.LatLng(lat, lng);
+}
+
+function mounted() {
+  this.$refs.map.$mapCreated.then((objMapa) => {
+    const mapaCargado = objMapa.addListener("tilesloaded", () => {
+      mapaCargado.remove();
+      const bounds = new google.maps.LatLngBounds();
+      this.empleados.forEach((emp) => {
+        bounds.extend(emp.position);
+      });
+      objMapa.fitBounds(bounds);
+    });
+  });
 }
 
 export default {
@@ -56,11 +70,12 @@ export default {
       actualizarPosicion,
     },
   },
+  mounted,
 };
 </script>
 
 <style lang="scss">
-.mapa {
+.map-container {
   height: 500px;
   margin-top: 2em;
 }
