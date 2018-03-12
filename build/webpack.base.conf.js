@@ -32,12 +32,14 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: "vue-loader",
+        exclude: /node_modules/,
         options: vueLoaderConfig
       },
       {
         test: /\.js$/,
-        loader: "babel-loader",
-        include: [resolve("src"), resolve("test")]
+        exclude: /node_modules/,
+        include: [resolve("src"), resolve("test")],
+        loader: "babel-loader"
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
