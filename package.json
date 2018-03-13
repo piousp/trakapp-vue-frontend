@@ -6,7 +6,9 @@
   "private": true,
   "scripts": {
     "lint": "eslint src/* --ext .js --ext .vue --fix --cache",
+    "prelint:watch": "npm run lint",
     "lint:watch": "onchange 'src/*.js' 'src/**/*.js' 'src/*.vue' 'src/**/*.vue' -- npm run lint",
+    "predev": "npm run lint:watch",
     "dev": "cross-env DEBUG=ciris:* node build/dev-server.js",
     "start": "cross-env DEBUG=ciris:* node build/dev-server.js",
     "build": "cross-env NODE_ENV=production DEBUG=ciris:* npx rimraf dist; node build/build.js",

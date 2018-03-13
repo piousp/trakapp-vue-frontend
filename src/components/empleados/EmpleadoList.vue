@@ -16,12 +16,21 @@
           </tr>
         </thead>
         <tbody class="tabla__body tabla__body--clickable tabla__body--striped">
-          <tr v-for="empleado in empleados.docs">
-            <router-link tag="td" :to="{name: 'empleadoform', params: {id: empleado._id}}">{{ empleado.nombre }}</router-link>
-            <router-link tag="td" :to="{name: 'empleadoform', params: {id: empleado._id}}">{{ empleado.apellidos }}</router-link>
+          <tr v-for="empleado in empleados.docs" :key="empleado._id">
+            <router-link tag="td"
+                         :to="{name: 'empleadoform', params: {id: empleado._id}}">
+              {{ empleado.nombre }}
+            </router-link>
+            <router-link tag="td"
+                         :to="{name: 'empleadoform', params: {id: empleado._id}}">
+              {{ empleado.apellidos }}
+            </router-link>
             <td>
               <ul class="tabla__opciones">
-                <router-link tag="li" class="tabla__opciones__elem" tooltip="Editar" :to="{name: 'empleadoform', params: {id: empleado._id, edit: true}}">
+                <router-link tag="li"
+                             class="tabla__opciones__elem"
+                             tooltip="Editar"
+                             :to="{name: 'empleadoform', params: {id: empleado._id, edit: true}}">
                   <i class="text--cyan fa fa-fw fa-edit"/>
                 </router-link>
                 <li class="tabla__opciones__elem" tooltip="Eliminar" @click="eliminar(empleado)">
@@ -43,8 +52,8 @@
 </template>
 <script>//
 import _ from "lodash";
-import empleadoApi from "./empleadoApi.js";
 import swal from "sweetalert2";
+import empleadoApi from "./empleadoApi.js";
 
 export default {
   data,
@@ -80,6 +89,7 @@ function eliminar(empleado) {
           this.$toastr("error", err, "Error");
         });
     }
+    return null;
   });
 }
 
