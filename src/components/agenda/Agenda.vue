@@ -1,6 +1,6 @@
 <template>
   <section>
-    <full-calendar :events="tareas" :config="config" />
+    <full-calendar :events="cargarTareas" :config="config" />
     <div class="backdrop" v-if="modalVisible">
       <div class="modal">
         <div class="modal__header">
@@ -67,6 +67,7 @@ function data() {
       eventClick: this.editarModal,
       eventDrop: this.moverTarea,
       eventResize: this.moverTarea,
+      eventColor: "#2196f3",
       buttonText: {
         month: "Mes",
         week: "Semana",
@@ -141,6 +142,12 @@ function parsearTarea(tarea) {
   };
 }
 
+function cargarTareas(inicio, fin, tz, cb) {
+  return agendaApi.listar(inicio.format(), fin.format()).then((resp) => {
+    cb(resp.docs);
+  });
+}
+
 function beforeRouteEnter(to, from, next) {
   next((vm) => {
     const promesas = [
@@ -167,6 +174,7 @@ export default {
     editarModal,
     moverTarea,
     eliminarTarea,
+    cargarTareas,
   },
   beforeRouteEnter,
 };

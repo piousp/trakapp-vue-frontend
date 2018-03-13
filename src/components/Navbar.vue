@@ -2,6 +2,7 @@
   <nav class="navbar">
     <div class="navbar__left">
       <i class="navbar__left__menu far fa-bars fa-2x" v-on:click="mostrarMenu"></i>
+      <img src="/static/Ciris-contraforma.png" height="32">
     </div>
     <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
       <div class="navbar__right__elem">
@@ -100,7 +101,7 @@ function version() {
     left: 0;
     height: 52px;
     width: 100%;
-    z-index: 2;
+    z-index: 5;
 
     @media (min-width: $reflex-md ) {
       position: fixed;

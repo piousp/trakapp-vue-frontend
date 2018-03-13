@@ -1,10 +1,10 @@
 import axios from "../../config/axios";
 
-function listar(pagina, cantidad) {
+function listar(fechaInicio, fechaFin) {
   const query = {
     params: {
-      pagina: pagina || 0,
-      cantidad: cantidad || 0,
+      fechaInicio,
+      fechaFin,
     },
   };
   return axios
