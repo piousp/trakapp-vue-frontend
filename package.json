@@ -9,7 +9,7 @@
     "prelint:watch": "npm run lint",
     "lint:watch": "onchange 'src/*.js' 'src/**/*.js' 'src/*.vue' 'src/**/*.vue' -- npm run lint",
     "dev": "cross-env DEBUG=ciris:* node build/dev-server.js",
-    "start": "cross-env DEBUG=ciris:* node build/dev-server.js",
+    "start": "npm-run-all --parallel lint:watch dev",
     "build": "cross-env NODE_ENV=production DEBUG=ciris:* npx rimraf dist; node build/build.js",
     "test": "cross-env DEBUG=ciris:* tape ./src/*.spec.js -r ./config/tests.js | tap-notify | tap-summary",
     "coverage": "cross-env DEBUG=ciris:* nyc  babel-tape-runner ./src/**/*.js | tap-nyc; nyc report --reporter=text-summary"
@@ -65,6 +65,7 @@
     "html-webpack-plugin": "2.30.1",
     "http-proxy-middleware": "0.17.4",
     "node-sass": "4.7.2",
+    "npm-run-all": "4.1.2",
     "onchange": "3.3.0",
     "opn": "5.1.0",
     "optimize-css-assets-webpack-plugin": "3.2.0",
