@@ -4,8 +4,15 @@
     <div class="grid grid--bleed">
       <div class="col-sm-auto">
         <h2 class="h2">Texto regular</h2>
-        <p class="text">El texto regular, puede ir en un <code>p</code>, un <code>span</code>, un <code>label</code> o cualquier otro elemento para textos.</p>
-        <p class="text">La clase para texto genérico es <code>text</code>. <span class="text--bold text--uppercase">TODO</span> texto debe tener una clase o de lo contrario se va a ver feo</p>
+        <p class="text">
+          El texto regular, puede ir en un <code>p</code>,
+          un <code>span</code>, un <code>label</code> o cualquier otro elemento para textos.
+        </p>
+        <p class="text">
+          La clase para texto genérico es <code>text</code>.
+          <span class="text--bold text--uppercase">TODO</span>
+          texto debe tener una clase o de lo contrario se va a ver feo
+        </p>
       </div>
       <div class="col-sm-auto">
         <h2 class="h2">Alineamiento</h2>
@@ -28,8 +35,12 @@
         <h2 class="h2">Modificadores</h2>
         <p class="text text--bold">Esto es un texto en negrita <code>text--bold</code></p>
         <p class="text text--italic">Esto es un texto en itálica <code>text--italic</code></p>
-        <p class="text text--capitalize">Esto es un texto capitalizado <code>text--capitalize</code></p>
-        <p class="text text--uppercase">Esto es un texto en mayúsculas <code>text--uppercase</code></p>
+        <p class="text text--capitalize">
+          Esto es un texto capitalizado <code>text--capitalize</code>
+        </p>
+        <p class="text text--uppercase">
+          Esto es un texto en mayúsculas <code>text--uppercase</code>
+        </p>
       </div>
     </div>
     <div class="grid grid--bleed">
@@ -81,7 +92,11 @@
     </div>
     <div>
       <h2 class="h2">Headers</h2>
-      <p class="text">Las clases de los títulos se pueden aplicar independientemente del tipo de texto. Osea, puede ser un <code>p class="h3"</code> por ejemplo, y ese <code>p</code> tomará el estilo del h3.</p>
+      <p class="text">
+        Las clases de los títulos se pueden aplicar independientemente
+        del tipo de texto. Osea, puede ser un <code>p class="h3"</code>
+        por ejemplo, y ese <code>p</code> tomará el estilo del h3.
+      </p>
       <div class="grid grid--bleed">
         <div class="col-sm-auto">
           <h1 class="h1">Header H1 - Clase:<code>h1</code></h1>
@@ -91,7 +106,11 @@
           <h5 class="h5">Header H5 - Clase:<code>h5</code></h5>
         </div>
         <div class="col-sm-auto">
-          <p class="text text--extra-small">Estos son los estilos por defecto; osea, no tienen la clase adecuada. <span class="text--bold">IMPORTANTE</span> recordar poner las clases h a los h</p>
+          <p class="text text--extra-small">
+            Estos son los estilos por defecto; osea, no tienen la clase
+            adecuada. <span class="text--bold">IMPORTANTE</span> recordar poner
+            las clases h a los h
+          </p>
           <h1>h1</h1>
           <h2>h2</h2>
           <h3>h3</h3>
