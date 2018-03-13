@@ -42,7 +42,10 @@
         <div class="modal__footer">
           <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
           <button type="button" class="boton boton--guardar" @click="aceptarModal(tarea)"/>
-          <button type="button" class="boton boton--eliminar" @click="eliminarTarea(tarea)" v-show="tarea._id"/>
+          <button type="button"
+                  class="boton boton--eliminar"
+                  @click="eliminarTarea(tarea)"
+                  v-show="tarea._id"/>
         </div>
       </div>
     </div>

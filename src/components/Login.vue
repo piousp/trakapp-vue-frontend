@@ -4,18 +4,33 @@
       <div class="text--center">
         <h1 class="h1 text--blanco"><i class="fal fa-crosshairs"/> Rastreador</h1>
       </div>
-      <div class="form__group" :class="{ 'form__group--error': errors.has('usuario') && submitted }">
+      <div class="form__group"
+           :class="{ 'form__group--error': errors.has('usuario') && submitted }">
         <label for="usuario" class="form__label">Correo:</label>
         <div class="form__input-group">
           <span class="form__input-group__addon"><i class="fa fa-fw fa-user"/></span>
-          <input name="usuario" id="usuario" type="text" class="form__input login__input" v-model="usuario" placeholder="usuario@dominio.com" v-validate="'required'" @input="usuario = usuario.toLowerCase()">
+          <input name="usuario"
+                 id="usuario"
+                 type="text"
+                 class="form__input login__input"
+                 placeholder="usuario@dominio.com"
+                 v-model="usuario"
+                 v-validate="'required'"
+                 @input="usuario = usuario.toLowerCase()">
         </div>
       </div>
-      <div class="form__group" :class="{ 'form__group--error': errors.has('password') && submitted }">
+      <div class="form__group"
+           :class="{ 'form__group--error': errors.has('password') && submitted }">
         <label for="password" class="form__label">Contraseña:</label>
         <div class="form__input-group">
           <span class="form__input-group__addon"><i class="fa fa-fw fa-lock"/></span>
-          <input name="password" id="password" type="password" class="form__input login__input" v-model="password" placeholder="********" v-validate="'required'">
+          <input name="password"
+                 id="password"
+                 type="password"
+                 placeholder="********"
+                 class="form__input login__input"
+                 v-model="password"
+                 v-validate="'required'">
         </div>
       </div>
       <br>
@@ -47,10 +62,9 @@ export default {
         this.$auth.login(this.usuario, this.password, this.recordar)
           .then((response) => {
             this.$router.push({ name: "home" });
-            console.log(response);
             this.$toastr("success", this.$t("login.success"), `${response.usuario.nombre}`);
           })
-          .catch((err) => {
+          .catch(() => {
             this.$toastr("error", this.$t("login.error"), "Error");
           });
       }

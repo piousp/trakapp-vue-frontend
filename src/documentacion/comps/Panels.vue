@@ -2,9 +2,14 @@
   <section>
     <h1 class="titulo">Páneles</h1>
     <div class="panel">
-      <p class="text">Esto es un panel. Se puede hacer usando la clase <code>panel</code> sobre cualquier elemento</p>
+      <p class="text">
+        Esto es un panel. Se puede hacer usando la clase
+        <code>panel</code> sobre cualquier elemento.
+      </p>
     </div>
-    <p class="text text--big">Los páneles sólo deben usarse para desplegar elementos que deban llamar la atención.</p>
+    <p class="text text--big">
+      Los páneles sólo deben usarse para desplegar elementos que deban llamar la atención.
+    </p>
     <h2 class="h2">Los páneles también pueden tener colores</h2>
     <div class="grid">
       <div class="col-sm-auto">

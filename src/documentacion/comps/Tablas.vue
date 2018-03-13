@@ -2,7 +2,9 @@
   <section>
     <h1 class="titulo">Tablas</h1>
     <h3 class="h3">Bloque</h3>
-    <p class="text">La tabla más básica es un <code>table class="tabla"</code> y tiene como mínimo 2 hijos:</p>
+    <p class="text">
+      La tabla más básica es un <code>table class="tabla"</code>
+    y tiene como mínimo 2 hijos:</p>
     <h4 class="h4">Elementos</h4>
     <ul class="list">
       <li class="list__elem"><code>thead class="tabla__header"</code></li>
@@ -40,8 +42,10 @@
     </table>
     <h4 class="h4">Modificadores</h4>
     <h5 class="h5"><code>table--responsive</code></h5>
-    <p class="text">Es un modificador global de la tabla. Lo que hace es "desarmar" las columnas de la tabla
-    hacia abajo en dispositivos pequeños (como si fuera una lista), con el fin de mejorar la legibilidad de la tabla.</p>
+    <p class="text">Es un modificador global de la tabla.
+    Lo que hace es "desarmar" las columnas de la tabla
+    hacia abajo en dispositivos pequeños (como si fuera una lista),
+    con el fin de mejorar la legibilidad de la tabla.</p>
     <table class="tabla tabla--responsive">
       <thead class="tabla__header">
         <tr>
@@ -77,7 +81,10 @@
     <div class="grid">
       <div class="col-sm-auto">
         <h5 class="h5"><code>tabla__body--clickable</code></h5>
-        <p class="text">Agrega un estilo para los <code>hover</code> de cada fila (<code>tr</code>)</p>
+        <p class="text">
+          Agrega un estilo para los
+          <code>hover</code> de cada fila (<code>tr</code>)
+        </p>
         <table class="tabla">
           <thead class="tabla__header">
             <tr>
@@ -94,8 +101,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -105,8 +116,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -116,8 +131,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -143,8 +162,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -154,8 +177,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -165,8 +192,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -194,8 +225,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -205,8 +240,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -216,8 +255,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -243,8 +286,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -254,8 +301,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -265,8 +316,12 @@
               <td>Esto es un texto de la tabla</td>
               <td>
                 <ul class="tabla__opciones">
-                  <li class="tabla__opciones__elem" tooltip="Editar"><i class="text--cyan fa fa-fw fa-edit"></i></li>
-                  <li class="tabla__opciones__elem" tooltip="Eliminar"><i class="text--tomate fa fa-fw fa-trash"></i></li>
+                  <li class="tabla__opciones__elem" tooltip="Editar">
+                    <i class="text--cyan fa fa-fw fa-edit"/>
+                  </li>
+                  <li class="tabla__opciones__elem" tooltip="Eliminar">
+                    <i class="text--tomate fa fa-fw fa-trash"/>
+                  </li>
                 </ul>
               </td>
             </tr>
@@ -279,7 +334,12 @@
     <div class="grid">
       <div class="col-sm-auto">
         <h5 class="h5"><code>tr--color</code></h5>
-        <p class="text">Pinta una fila completa de un color. <router-link to="/colores"><i class="fa fa-fw fa-link"></i><span>Ver Colores</span></router-link></p>
+        <p class="text">
+          Pinta una fila completa de un color.
+          <router-link to="/colores">
+            <i class="fa fa-fw fa-link"/><span>Ver Colores</span>
+          </router-link>
+        </p>
         <table class="tabla">
           <thead class="tabla__header">
             <tr>
@@ -309,7 +369,12 @@
       </div>
       <div class="col-sm-auto">
         <h5 class="h5"><code>td--color</code></h5>
-        <p class="text">Pinta una celda de un color. <router-link to="/colores"><i class="fa fa-fw fa-link"></i><span>Ver Colores</span></router-link></p>
+        <p class="text">
+          Pinta una celda de un color.
+          <router-link to="/colores">
+            <i class="fa fa-fw fa-link"/><span>Ver Colores</span>
+          </router-link>
+        </p>
         <table class="tabla">
           <thead class="tabla__header">
             <tr>
