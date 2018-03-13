@@ -2,8 +2,10 @@
   <section>
     <h1 class="titulo">Colores</h1>
     <p class="h4">El sistema usa una serie de colores estándar para cualquier elemento.</p>
-    <p class="text">Si fuese necesario crear nuevos colores (por ejemplo, para usar los colores del cliente),
-    es necesario crear todos los elementos (botones, forms, tablas, etc) para mantener una consistencia
+    <p class="text">Si fuese necesario crear nuevos colores (por ejemplo,
+    para usar los colores del cliente),
+    es necesario crear todos los elementos (botones, forms, tablas, etc)
+    para mantener una consistencia
     de apariencia en el software.</p>
     <div class="grid grid--bleed">
       <div class="col-sm-2">
@@ -87,7 +89,10 @@
     </div>
     <h2 class="h2 subtitulo">Fondos (Backgrounds)</h2>
     <p class="text text--big">Los fondos se pueden aplicar a cualquier elemento.</p>
-    <p class="text">Lo único que cambian es el color del background. El color de la letra no se modifica.</p>
+    <p class="text">
+      Lo único que cambian es el
+      color del background. El color de la letra no se modifica.
+    </p>
     <p class="text">La clase es <code>fondo--&lt;color&gt;</code></p>
     <div class="grid">
       <div class="col-sm-2 fondo--negro">

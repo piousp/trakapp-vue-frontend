@@ -7,6 +7,7 @@
   top: 0;
   width: 100%;
   z-index: 8;
+  overflow: auto;
 }
 
 .modal {
@@ -15,11 +16,10 @@
   animation-duration: .45s !important;
   background: $blanco;
   border-radius: 5px;
-  left: 25%;
-  position: fixed;
-  top: 25%;
+  margin: 5% auto;
   width: 50%;
   z-index: 9;
+  background-color: #fefefe;
 }
 
 %modal-padding {

@@ -1,35 +1,35 @@
 <template lang="html">
   <nav class="navbar">
     <div class="navbar__left">
-      <i class="navbar__left__menu far fa-bars fa-2x" v-on:click="mostrarMenu"></i>
-      <img src="/static/Ciris-contraforma.png" height="32">
+      <i class="navbar__left__menu far fa-bars fa-2x" @click="mostrarMenu"/>
+      <img class="navbar__left__logo" src="/static/Ciris-contraforma.png">
     </div>
     <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
       <div class="navbar__right__elem">
-        <i v-bind:class="titulo.meta.icono"></i>
-        <span class="text text--negro4">{{titulo.meta.titulo}}</span>
+        <i :class="titulo.meta.icono"/>
+        <span class="text text--negro4">{{ titulo.meta.titulo }}</span>
       </div>
-      <div class="navbar__right__botones navbar__right__elem"></div>
+      <div class="navbar__right__botones navbar__right__elem"/>
       <popover name="default" class="popover">
         <div slot="face" class="navbar__popover">
-          <i class="far fa-fw fa-user-circle"></i>
-          <span>{{nombreUsuario}}</span>
-          <i class="fas fa-fw fa-caret-down"></i>
+          <i class="far fa-fw fa-user-circle"/>
+          <span>{{ nombreUsuario }}</span>
+          <i class="fas fa-fw fa-caret-down"/>
         </div>
         <div slot="content">
           <ul class="popover__list">
             <router-link class="popover__list__item" tag="li" :to="{ name: 'parametros' }">
-              <i class="fal fa-fw fa-cog"></i>
+              <i class="fal fa-fw fa-cog"/>
               <span>Configuración</span>
             </router-link>
-            <li class="popover__list__item" v-on:click="logout">
-              <i class="fal fa-fw fa-sign-out"></i>
+            <li class="popover__list__item" @click="logout">
+              <i class="fal fa-fw fa-sign-out"/>
               <span>Cerrar sesión</span>
             </li>
-            <li class="popover__list__divider"></li>
+            <li class="popover__list__divider"/>
             <li class="text--small text--italic navbar__version">
-              <i class="fal fa-fw fa-tags"></i>
-              <span>Versión: {{version}}</span>
+              <i class="fal fa-fw fa-tags"/>
+              <span>Versión: {{ version }}</span>
             </li>
           </ul>
         </div>
@@ -43,28 +43,28 @@ import popover from "vue-popover";
 import pkg from "../../package.json";
 
 export default {
+  components: {
+    popover,
+  },
   data,
+  computed: {
+    nombreUsuario,
+    version,
+  },
+  watch: {
+    $route: route,
+  },
   methods: {
     mostrarMenu() {
       this.$parent.$emit("mostrarMenu");
     },
-    logout
+    logout,
   },
-  watch: {
-    $route: route
-  },
-  components: {
-    popover
-  },
-  computed: {
-    nombreUsuario,
-    version
-  }
 };
 
 function data() {
   return {
-    titulo: this.$router.currentRoute
+    titulo: this.$router.currentRoute,
   };
 }
 
@@ -78,7 +78,7 @@ function logout() {
 }
 
 function nombreUsuario() {
-  const usuario = this.$auth.usuario;
+  const { usuario } = this.$auth;
   return `${usuario.nombre}`;
 }
 
@@ -120,7 +120,7 @@ function version() {
     }
   }
 
-  .navbar__left__menu{
+  .navbar__left__menu {
     color: $blanco;
     text-shadow: 0 1px 1px $sombra1;
     cursor: pointer;
@@ -129,6 +129,15 @@ function version() {
       display: none;
     }
   }
+
+  .navbar__left__logo {
+    height: 32px;
+    display: none;
+    @media (min-width: $reflex-md ) {
+      display: block;
+    }
+  }
+
   .navbar__right {
     text-align: center;
     color: $negro4;
@@ -162,36 +171,6 @@ function version() {
     width: 200px;
   }
 
-  .navbar__logo {
-    padding: 5px;
-    height: 100%;
-    .fa {
-      color: $negro4;
-      display: inherit;
-    }
-    img {
-      display: none;
-    }
-    span {
-      display: none
-    }
-    @media (min-width: $reflex-md ) {
-      img {
-        display: inherit;
-        position: absolute;
-        left: 12px;
-      }
-      span {
-        display: inherit;
-        left: 46px;
-        top: 12px;
-        position: absolute;
-      }
-      .fa {
-        display: none;
-      }
-    }
-  }
   .navbar__menu__interno{
     padding: 0 .5em;
     display: flex;

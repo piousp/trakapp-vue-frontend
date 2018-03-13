@@ -1,9 +1,9 @@
 <template>
   <section>
-    <full-calendar :events="cargarTareas" :config="config" />
+    <full-calendar class="text" :events="cargarTareas" :config="config" />
     <div class="backdrop" v-if="modalVisible">
       <div class="modal">
-        <div class="modal__header">
+        <div class="modal__header text--center">
           <div class="modal__header__titulo">
             <i class="fal fa-fw fa-calendar"/>
             {{ tarea.title || 'Nueva tarea' }}
@@ -42,7 +42,10 @@
         <div class="modal__footer">
           <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
           <button type="button" class="boton boton--guardar" @click="aceptarModal(tarea)"/>
-          <button type="button" class="boton boton--eliminar" @click="eliminarTarea(tarea)" v-show="tarea._id"/>
+          <button type="button"
+                  class="boton boton--eliminar"
+                  @click="eliminarTarea(tarea)"
+                  v-show="tarea._id"/>
         </div>
       </div>
     </div>
