@@ -78,8 +78,8 @@ export default {
     background-attachment: fixed;
     background-size: cover;
     @media (min-width: $reflex-md ) {
-      margin-left: 200px;
-      margin-top: 52px;
+      padding-left: 200px;
+      padding-top: 52px;
     }
   }
 
