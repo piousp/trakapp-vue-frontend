@@ -34,6 +34,19 @@
   padding: .5em;
 }
 
+.modal__header__cerrar {
+  &::before {
+    content: "\0274c";
+  }
+  &:hover {
+    color: $negro2;
+  }
+  font-size: 1.3em;
+  float: right;
+  color: $gris8;
+  cursor: pointer;
+}
+
 .modal__header__titulo {
   @extend %serif;
   @extend %modal-padding;
