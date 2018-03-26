@@ -6,7 +6,7 @@
     </div>
     <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
       <div class="navbar__right__elem">
-        <i :class="titulo.meta.icono"/>
+        <i class="fa fa-fw" :class="titulo.meta.icono"/>
         <span class="text text--negro4">{{ titulo.meta.titulo }}</span>
       </div>
       <div class="navbar__right__botones navbar__right__elem"/>
@@ -149,6 +149,22 @@ function version() {
 
     @media (min-width: $reflex-md ) {
       text-align: left;
+    }
+  }
+
+  .botones-pagina{
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    height: 52px;
+    padding-left: 50px;
+    padding-top: 7px;
+    top: 0;
+    left: 0;
+    z-index: 3;
+
+    @media (min-width: $reflex-md ) {
+      padding-left: $ancho-menu;
     }
   }
 

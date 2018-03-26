@@ -2,8 +2,7 @@
   <section>
     <div class="botones-pagina">
       <router-link tag="button"
-                   class="boton
-      boton--nuevo"
+                   class="boton boton--nuevo"
                    :to="{name: 'empleadoform'}"/>
     </div>
     <div v-if="empleados.cant > 0">
@@ -51,7 +50,8 @@
   </section>
 </template>
 <script>//
-import _ from "lodash";
+import reject from "lodash/reject";
+import noop from "lodash/noop";
 import swal from "sweetalert2";
 import empleadoApi from "./empleadoApi.js";
 
@@ -81,23 +81,28 @@ function eliminar(empleado) {
         .eliminar(empleado._id)
         .then(() => {
           this.$toastr("success", "El empleado ha sido eliminado", "Éxito");
-          this.empleados.docs = _.reject(this.empleados.docs, obs =>
-            obs._id === empleado._id);
+          this.empleados.docs = reject(this.empleados.docs, obs => [obs._id, empleado._id]);
           this.empleados.cant -= 1;
+          return this.empleados;
         })
         .catch((err) => {
           this.$toastr("error", err, "Error");
         });
     }
-    return null;
-  });
+    return noop;
+  })
+    .catch((err) => {
+      this.$toastr("error", err, "Error");
+    });
 }
 
 function beforeRouteEnter(to, from, next) {
-  empleadoApi.listar(0, 10).then((resp) => {
-    next((vm) => {
+  empleadoApi.listar(0, 10)
+    .then(resp => next((vm) => {
       vm.empleados = resp;
+    }))
+    .catch((err) => {
+      this.$toastr("error", err, "Error");
     });
-  });
 }
 </script>

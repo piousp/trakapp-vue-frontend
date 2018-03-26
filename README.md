@@ -6,6 +6,26 @@
 npm install
 ```
 
+## Cómo clonar el proyecto
+Hay 2 opciones: la regular y luego pasos extra, o con bandera.
+
+### Regular
+Se clona como siempre:
+``` bash
+git clone git@gitlab.com:ciris-base/frontend-vuejs.git
+```
+Y luego de clonado, se deben ejecutar estos pasos dentro del repo:
+``` bash
+git submodule init
+git submodule update
+```
+
+### Con bandera
+Se clona como siempre pero se agrega una bandera al comando:
+``` bash
+git clone git@gitlab.com:ciris-base/frontend-vuejs.git --recurse-submodules
+```
+
 ## Scripts de ejecución
 ### Bump
 Realiza un aumento de version (major, minor, patch) y hace un commit
@@ -22,13 +42,13 @@ npm run lint
 ### Tests (Unidad)
 Ejecuta todos los tests que se encuentren dentro de `src`. Los archivos debe tener un nombre que cumpla con el siguiente regex: `\w+\.spec\.js`, o humanamente: `xxxx.spec.js`
 ``` bash
-npm run test
+npm test
 ```
 
 ### Correr para desarrollo
 Ejecuta el linter y reinicia el proceso al encontrar cambios en el código
 ``` bash
-npm run dev
+npm start
 ```
 
 ### Transpilar para producción

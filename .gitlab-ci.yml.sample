@@ -1,6 +1,7 @@
 before_script:
   - . ~/.nvm/nvm.sh
   - nvm use 8.9.4
+  - npm install -g forever
 
 cache:
   paths:
@@ -14,9 +15,10 @@ deploy_desarrollo:
   script:
     - npm install
     - npm run build
-    - rsync -rlDv --delete dist /software/base/frontend
+    - rsync -rlDv --delete * /software/lab-carlos-araya/backend/
+    - sh /software/lab-carlos-araya/backend/produccion.sh
   environment:
     name: desarrollo
-    url: ciriscr.com
+    url: ciriscr.com:3001
   only:
   - desarrollo

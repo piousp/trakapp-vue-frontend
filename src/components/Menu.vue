@@ -1,6 +1,8 @@
 <template>
   <ul class="menu">
-    <li v-for="(ruta, index) in rutas" :key="ruta.meta.titulo" class="menu__item">
+    <li class="menu__item"
+        v-for="(ruta, index) in rutas"
+        :key="ruta.meta.titulo">
       <div class="menu__item__content"
            @click="accionar(ruta, index)"
            v-if="ruta.meta ? !ruta.meta.esconder : true">
@@ -12,8 +14,8 @@
            @blur="cerrar" :tabindex="index + 1">
         <h1 class="menu__hijos__title">{{ ruta.meta.titulo }}</h1>
         <ul>
-          <li class="menu__hijos__item"
-              tag="li"
+          <li tag="li"
+              class="menu__hijos__item"
               @click="accionar(hijo)"
               v-for="hijo in ruta.children"
               :key="hijo.meta.titulo"

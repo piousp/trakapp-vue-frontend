@@ -2,7 +2,10 @@
   <section class="login">
     <form class="login__body" novalidate @submit.stop.prevent="login()">
       <div class="text--center">
-        <h1 class="h1 text--blanco"><i class="fal fa-crosshairs"/> Rastreador</h1>
+        <h1 class="h1 text--blanco">
+          <i class="fa fa-fw fa-flask"/>
+          Rastreador
+        </h1>
       </div>
       <div class="form__group"
            :class="{ 'form__group--error': errors.has('usuario') && submitted }">
@@ -11,9 +14,9 @@
           <span class="form__input-group__addon"><i class="fa fa-fw fa-user"/></span>
           <input name="usuario"
                  id="usuario"
+                 placeholder="Digite su usuario. Ej: usuario@dominio.com"
                  type="text"
                  class="form__input login__input"
-                 placeholder="usuario@dominio.com"
                  v-model="usuario"
                  v-validate="'required'"
                  @input="usuario = usuario.toLowerCase()">
@@ -25,9 +28,9 @@
         <div class="form__input-group">
           <span class="form__input-group__addon"><i class="fa fa-fw fa-lock"/></span>
           <input name="password"
+                 placeholder="Digite su contraseña"
                  id="password"
                  type="password"
-                 placeholder="********"
                  class="form__input login__input"
                  v-model="password"
                  v-validate="'required'">
@@ -45,6 +48,9 @@
 </template>
 
 <script>
+import D from "debug";
+
+const debug = D("Login.vue");
 export default {
   data() {
     return {
@@ -61,10 +67,13 @@ export default {
       if (!this.errors.any()) {
         this.$auth.login(this.usuario, this.password, this.recordar)
           .then((response) => {
+            debug(response);
             this.$router.push({ name: "home" });
             this.$toastr("success", this.$t("login.success"), `${response.usuario.nombre}`);
+            return response;
           })
-          .catch(() => {
+          .catch((err) => {
+            debug(err);
             this.$toastr("error", this.$t("login.error"), "Error");
           });
       }
