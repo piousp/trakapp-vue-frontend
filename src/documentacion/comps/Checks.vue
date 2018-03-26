@@ -5,68 +5,68 @@
       <div class="col-md-auto">
         <pre class="html">
           <code style="display: block;">
-Para un checkbox regular
-El id del input y el for del label DEBEN ser iguales!
-&lt;div class="checkbox"&gt;
-&lt;input type="checkbox" id="checkbox" checked="true"&gt;
-&lt;label class="form__label" for="checkbox"&gt;
-  Input form normal
-&lt;/label&gt;
-&lt;/div&gt;
+            Para un checkbox regular
+            El id del input y el for del label DEBEN ser iguales!
+            &lt;div class="checkbox"&gt;
+            &lt;input type="checkbox" id="checkbox" checked="true"&gt;
+            &lt;label class="form__label" for="checkbox"&gt;
+            Input form normal
+            &lt;/label&gt;
+            &lt;/div&gt;
 
-Para un checkbox de color, la clase es checkbox--color
-&lt;div class="checkbox checkbox--morado"&gt;
-&lt;input type="checkbox" id="checkbox" checked="true"&gt;
-&lt;label class="form__label" for="checkbox"&gt;
-  Input form normal
-&lt;/label&gt;
-&lt;/div&gt;
+            Para un checkbox de color, la clase es checkbox--color
+            &lt;div class="checkbox checkbox--morado"&gt;
+            &lt;input type="checkbox" id="checkbox" checked="true"&gt;
+            &lt;label class="form__label" for="checkbox"&gt;
+            Input form normal
+            &lt;/label&gt;
+            &lt;/div&gt;
           </code>
         </pre>
       </div>
       <div class="col-md-auto">
         <pre class="html">
           <code style="display: block;">
-Para un switch regular
-El id del input y el for del label DEBEN ser iguales!
-&lt;div class="switch"&gt;
-&lt;input type="checkbox" id="checkbox" checked="true"&gt;
-&lt;label class="form__label" for="checkbox"&gt;
-  Input form normal
-&lt;/label&gt;
-&lt;/div&gt;
+            Para un switch regular
+            El id del input y el for del label DEBEN ser iguales!
+            &lt;div class="switch"&gt;
+            &lt;input type="checkbox" id="checkbox" checked="true"&gt;
+            &lt;label class="form__label" for="checkbox"&gt;
+            Input form normal
+            &lt;/label&gt;
+            &lt;/div&gt;
 
-//Para un switch de color, la clase es switch--color
-&lt;div class="switch switch--morado"&gt;
-&lt;input type="checkbox" id="checkbox" checked="true"&gt;
-&lt;label class="form__label" for="checkbox"&gt;
-  Input form normal
-&lt;/label&gt;
-&lt;/div&gt;
+            //Para un switch de color, la clase es switch--color
+            &lt;div class="switch switch--morado"&gt;
+            &lt;input type="checkbox" id="checkbox" checked="true"&gt;
+            &lt;label class="form__label" for="checkbox"&gt;
+            Input form normal
+            &lt;/label&gt;
+            &lt;/div&gt;
           </code>
         </pre>
       </div>
       <div class="col-md-auto">
         <pre class="html">
           <code style="display: block;">
-Para un radio-button regular
-El id del input y el for del label DEBEN ser iguales!
-Los radio buttons deben llevar el mismo <code>name</code> para que sea un grupo
+            Para un radio-button regular
+            El id del input y el for del label DEBEN ser iguales!
+            Los radio buttons deben llevar el mismo <code>name</code> para que sea un grupo
 
-&lt;div class="radio"&gt;
-&lt;input type="radio" name="grupo" id="radio" checked="true"&gt;
-&lt;label class="form__label" for="radio"&gt;
-  Input form normal
-&lt;/label&gt;
-&lt;/div&gt;
+            &lt;div class="radio"&gt;
+            &lt;input type="radio" name="grupo" id="radio" checked="true"&gt;
+            &lt;label class="form__label" for="radio"&gt;
+            Input form normal
+            &lt;/label&gt;
+            &lt;/div&gt;
 
-//Para un radio de color, la clase es radio--color
-&lt;div class="radio radio--morado"&gt;
-&lt;input type="radio" id="radio" checked="true"&gt;
-&lt;label class="form__label" for="radio"&gt;
-  Input form normal
-&lt;/label&gt;
-&lt;/div&gt;
+            //Para un radio de color, la clase es radio--color
+            &lt;div class="radio radio--morado"&gt;
+            &lt;input type="radio" id="radio" checked="true"&gt;
+            &lt;label class="form__label" for="radio"&gt;
+            Input form normal
+            &lt;/label&gt;
+            &lt;/div&gt;
           </code>
         </pre>
       </div>

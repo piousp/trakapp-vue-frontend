@@ -4,13 +4,18 @@
       "modules": false,
       "targets": {
         "browsers": ["> 5%", "last 5 versions", "not ie <= 8"]
-      }
+      },
+      "cacheDirectory": true
     }]
   ],
   "env": {
     "test": {
       "presets": ["env"],
       "plugins": ["istanbul"]
+    },
+    "production": {
+      "plugins": ["envify"],
+      "presets": ["minify"]
     }
   }
 }

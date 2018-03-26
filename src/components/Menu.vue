@@ -1,14 +1,25 @@
 <template>
   <ul class="menu">
-    <li v-for="(ruta, index) in rutas" class="menu__item">
-      <div class="menu__item__content" @click="accionar(ruta, index)" v-if="ruta.meta ? !ruta.meta.esconder : true">
+    <li class="menu__item"
+        v-for="(ruta, index) in rutas"
+        :key="ruta.meta.titulo">
+      <div class="menu__item__content"
+           @click="accionar(ruta, index)"
+           v-if="ruta.meta ? !ruta.meta.esconder : true">
         <i :class="ruta.meta ? ruta.meta.icono : ''"/>
         <span>{{ ruta.meta.titulo }}</span>
       </div>
-      <div class="menu__hijos" :class="{'menu__hijos--active': ruta.name === estirado}" @blur="cerrar" :tabindex="index + 1">
+      <div class="menu__hijos"
+           :class="{'menu__hijos--active': ruta.name === estirado}"
+           @blur="cerrar" :tabindex="index + 1">
         <h1 class="menu__hijos__title">{{ ruta.meta.titulo }}</h1>
         <ul>
-          <li tag="li" @click="accionar(hijo)" v-for="hijo in ruta.children" class="menu__hijos__item" v-if="hijo.meta ? !hijo.meta.esconder : true">
+          <li tag="li"
+              class="menu__hijos__item"
+              @click="accionar(hijo)"
+              v-for="hijo in ruta.children"
+              :key="hijo.meta.titulo"
+              v-if="hijo.meta ? !hijo.meta.esconder : true">
             <i :class="hijo.meta ? hijo.meta.icono : ''"/>
             <span>{{ hijo.meta.titulo }}</span>
           </li>
