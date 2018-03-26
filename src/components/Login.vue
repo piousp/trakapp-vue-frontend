@@ -74,7 +74,7 @@ export default {
           })
           .catch((err) => {
             debug(err);
-            this.$toastr("error", this.$t("login.error"));
+            this.$toastr("error", this.$t("login.error"), "Error");
           });
       }
     },

@@ -3,23 +3,32 @@
     <form class="form" novalidate>
       <div class="botones-pagina">
         <router-link :to="{name: 'empleadolist'}" class="boton boton--volver"/>
-        <button type="button"
-                v-if="empleado._id && editando" class="boton boton--cancelar" @click="cancelar"/>
-        <button type="button"
-                v-if="empleado._id && !editando"
-                class="boton boton--editar" @click="editar(empleado)"/>
-        <button type="button"
-                v-if="editando" class="boton boton--guardar" @click="guardar(empleado)"/>
+        <button
+          type="button"
+          class="boton boton--cancelar"
+          v-if="empleado._id && editando"
+          @click="cancelar"/>
+        <button
+          type="button"
+          class="boton boton--editar"
+          v-if="empleado._id && !editando"
+          @click="editar(empleado)"/>
+        <button
+          type="button"
+          class="boton boton--guardar"
+          v-if="editando"
+          @click="guardar(empleado)"/>
       </div>
 
       <div class="form__group"
            :class="{ 'form__group--error': errors.has('nombre') && submitted }">
         <label class="form__label">Nombre</label>
-        <input class="form__input"
-               v-model="empleado.nombre"
-               :disabled="!editando"
-               v-validate="'required'"
-               name="nombre">
+        <input
+          name="nombre"
+          class="form__input"
+          v-model="empleado.nombre"
+          :disabled="!editando"
+          v-validate="'required'" >
       </div>
 
       <div class="form__group"

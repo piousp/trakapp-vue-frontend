@@ -2,6 +2,7 @@
   <nav class="navbar">
     <div class="navbar__left">
       <i class="navbar__left__menu far fa-bars fa-2x" @click="mostrarMenu"/>
+      <img class="navbar__left__logo" src="/static/Ciris-contraforma.png">
     </div>
     <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
       <div class="navbar__right__elem">
@@ -100,7 +101,7 @@ function version() {
     left: 0;
     height: 52px;
     width: 100%;
-    z-index: 2;
+    z-index: 5;
 
     @media (min-width: $reflex-md ) {
       position: fixed;
@@ -119,7 +120,7 @@ function version() {
     }
   }
 
-  .navbar__left__menu{
+  .navbar__left__menu {
     color: $blanco;
     text-shadow: 0 1px 1px $sombra1;
     cursor: pointer;
@@ -128,6 +129,15 @@ function version() {
       display: none;
     }
   }
+
+  .navbar__left__logo {
+    height: 32px;
+    display: none;
+    @media (min-width: $reflex-md ) {
+      display: block;
+    }
+  }
+
   .navbar__right {
     text-align: center;
     color: $negro4;
@@ -177,36 +187,6 @@ function version() {
     width: 200px;
   }
 
-  .navbar__logo {
-    padding: 5px;
-    height: 100%;
-    .fa {
-      color: $negro4;
-      display: inherit;
-    }
-    img {
-      display: none;
-    }
-    span {
-      display: none
-    }
-    @media (min-width: $reflex-md ) {
-      img {
-        display: inherit;
-        position: absolute;
-        left: 12px;
-      }
-      span {
-        display: inherit;
-        left: 46px;
-        top: 12px;
-        position: absolute;
-      }
-      .fa {
-        display: none;
-      }
-    }
-  }
   .navbar__menu__interno{
     padding: 0 .5em;
     display: flex;
