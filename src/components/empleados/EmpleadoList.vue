@@ -2,8 +2,7 @@
   <section>
     <div class="botones-pagina">
       <router-link tag="button"
-                   class="boton
-      boton--nuevo"
+                   class="boton boton--nuevo"
                    :to="{name: 'empleadoform'}"/>
     </div>
     <div v-if="empleados.cant > 0">
@@ -16,12 +15,21 @@
           </tr>
         </thead>
         <tbody class="tabla__body tabla__body--clickable tabla__body--striped">
-          <tr v-for="empleado in empleados.docs">
-            <router-link tag="td" :to="{name: 'empleadoform', params: {id: empleado._id}}">{{ empleado.nombre }}</router-link>
-            <router-link tag="td" :to="{name: 'empleadoform', params: {id: empleado._id}}">{{ empleado.apellidos }}</router-link>
+          <tr v-for="empleado in empleados.docs" :key="empleado._id">
+            <router-link tag="td"
+                         :to="{name: 'empleadoform', params: {id: empleado._id}}">
+              {{ empleado.nombre }}
+            </router-link>
+            <router-link tag="td"
+                         :to="{name: 'empleadoform', params: {id: empleado._id}}">
+              {{ empleado.apellidos }}
+            </router-link>
             <td>
               <ul class="tabla__opciones">
-                <router-link tag="li" class="tabla__opciones__elem" tooltip="Editar" :to="{name: 'empleadoform', params: {id: empleado._id, edit: true}}">
+                <router-link tag="li"
+                             class="tabla__opciones__elem"
+                             tooltip="Editar"
+                             :to="{name: 'empleadoform', params: {id: empleado._id, edit: true}}">
                   <i class="text--cyan fa fa-fw fa-edit"/>
                 </router-link>
                 <li class="tabla__opciones__elem" tooltip="Eliminar" @click="eliminar(empleado)">
@@ -42,9 +50,10 @@
   </section>
 </template>
 <script>//
-import _ from "lodash";
-import empleadoApi from "./empleadoApi.js";
+import reject from "lodash/reject";
+import noop from "lodash/noop";
 import swal from "sweetalert2";
+import empleadoApi from "./empleadoApi.js";
 
 export default {
   data,
@@ -72,22 +81,28 @@ function eliminar(empleado) {
         .eliminar(empleado._id)
         .then(() => {
           this.$toastr("success", "El empleado ha sido eliminado", "Éxito");
-          this.empleados.docs = _.reject(this.empleados.docs, obs =>
-            obs._id === empleado._id);
+          this.empleados.docs = reject(this.empleados.docs, obs => [obs._id, empleado._id]);
           this.empleados.cant -= 1;
+          return this.empleados;
         })
         .catch((err) => {
           this.$toastr("error", err, "Error");
         });
     }
-  });
+    return noop;
+  })
+    .catch((err) => {
+      this.$toastr("error", err, "Error");
+    });
 }
 
 function beforeRouteEnter(to, from, next) {
-  empleadoApi.listar(0, 10).then((resp) => {
-    next((vm) => {
+  empleadoApi.listar(0, 10)
+    .then(resp => next((vm) => {
       vm.empleados = resp;
+    }))
+    .catch((err) => {
+      this.$toastr("error", err, "Error");
     });
-  });
 }
 </script>

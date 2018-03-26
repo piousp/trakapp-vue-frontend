@@ -19,7 +19,8 @@
 </template>
 
 <script>
-import _ from "lodash";
+import map from "lodash/map";
+import findIndex from "lodash/findIndex";
 import empleadoApi from "../empleados/empleadoApi";
 
 function data() {
@@ -31,17 +32,22 @@ function data() {
 
 function beforeRouteEnter(to, from, next) {
   next((vm) => {
-    empleadoApi.listar(0, 0).then((empleados) => {
-      vm.empleados = _.map(empleados.docs, (e) => {
-        e.opened = false;
-        return e;
+    empleadoApi.listar(0, 0)
+      .then((empleados) => {
+        vm.empleados = map(empleados.docs, (e) => {
+          e.opened = false;
+          return e;
+        });
+        return vm.empleados;
+      })
+      .catch((err) => {
+        this.$toastr("error", err, "Error");
       });
-    });
   });
 }
 
 function actualizarPosicion(e) {
-  const i = _.findIndex(this.empleados, { _id: e._id });
+  const i = findIndex(this.empleados, { _id: e._id });
   this.empleados[i].position = generarCoords(e.position.lat, e.position.lng);
 }
 
@@ -50,16 +56,21 @@ function generarCoords(lat, lng) {
 }
 
 function mounted() {
-  this.$refs.map.$mapCreated.then((objMapa) => {
-    const mapaCargado = objMapa.addListener("tilesloaded", () => {
-      mapaCargado.remove();
-      const bounds = new google.maps.LatLngBounds();
-      this.empleados.forEach((emp) => {
-        bounds.extend(emp.position);
+  this.$refs.map.$mapCreated
+    .then((objMapa) => {
+      const mapaCargado = objMapa.addListener("tilesloaded", () => {
+        mapaCargado.remove();
+        const bounds = new google.maps.LatLngBounds();
+        this.empleados.forEach((emp) => {
+          bounds.extend(emp.position);
+        });
+        objMapa.fitBounds(bounds);
       });
-      objMapa.fitBounds(bounds);
+      return mapaCargado;
+    })
+    .catch((err) => {
+      this.$toastr("error", err, "Error");
     });
-  });
 }
 
 export default {
