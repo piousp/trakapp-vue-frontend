@@ -53,7 +53,8 @@
 </template>
 
 <script>
-import _ from "lodash";
+import reject from "lodash/reject";
+import findIndex from "lodash/findIndex";
 import { FullCalendar } from "vue-full-calendar";
 import agendaApi from "./agendaApi";
 import empleadoApi from "../empleados/empleadoApi";
@@ -108,29 +109,26 @@ function moverTarea(tarea) {
 
 function aceptarModal(tarea) {
   const self = this;
-  return self.guardarTarea(tarea).then(() => {
-    self.cerrarModal();
-  });
+  return self.guardarTarea(tarea).then(() => self.cerrarModal());
 }
 
 function guardarTarea(tarea) {
   const self = this;
   return agendaApi.guardar(tarea).then((resp) => {
-    const i = _.findIndex(self.tareas, { _id: tarea._id });
+    const i = findIndex(self.tareas, { _id: tarea._id });
     if (i < 0) {
       tarea._id = resp._id;
-      self.tareas.push(tarea);
-    } else {
-      self.tareas.splice(i, 1, tarea);
+      return self.tareas.push(tarea);
     }
+    return self.tareas.splice(i, 1, tarea);
   });
 }
 
 function eliminarTarea(tarea) {
   const self = this;
   return agendaApi.eliminar(tarea._id).then(() => {
-    self.tareas = _.reject(self.tareas, { _id: tarea._id });
-    self.cerrarModal();
+    self.tareas = reject(self.tareas, { _id: tarea._id });
+    return self.cerrarModal();
   });
 }
 
@@ -146,9 +144,7 @@ function parsearTarea(tarea) {
 }
 
 function cargarTareas(inicio, fin, tz, cb) {
-  return agendaApi.listar(inicio.format(), fin.format()).then((resp) => {
-    cb(resp.docs);
-  });
+  return agendaApi.listar(inicio.format(), fin.format()).then(resp => cb(resp.docs));
 }
 
 function beforeRouteEnter(to, from, next) {
@@ -157,9 +153,10 @@ function beforeRouteEnter(to, from, next) {
       agendaApi.listar(),
       empleadoApi.listar(),
     ];
-    Promise.all(promesas).then(([tareas, empleados]) => {
+    return Promise.all(promesas).then(([tareas, empleados]) => {
       vm.tareas = tareas.docs;
       vm.empleados = empleados.docs;
+      return null;
     });
   });
 }

@@ -15,10 +15,10 @@
              v-for="msj in mensajes" :key="msj._id">
           <div class="chat__dialogo__msj text">
             <p>{{ msj.texto }}</p>
-            <p class="text--small">
-              <i class="fal fa-clock"/>&nbsp;<span>{{ msj.fechaEnvio | fecha('HH:mm') }}</span>
-            </p>
           </div>
+          <p class="text text--small chat__dialogo__hora">
+            {{ msj.fechaEnvio | fecha('DD/MM/YYYY HH:mm') }}
+          </p>
         </div>
       </div>
       <div class="chat__input">
@@ -42,6 +42,9 @@
               <i class="float--right far fa-fw fa-comment-alt"/>
             </li>
           </ul>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="boton boton--cancelar" @click="mostrarModal = false"/>
         </div>
       </div>
     </div>
@@ -75,6 +78,7 @@ function enviar(txt) {
     msj._id = resp._id;
     this.mensajes.push(msj);
     this.mensaje = {};
+    return null;
   });
 }
 
@@ -85,10 +89,11 @@ function buscarUsuarios() {
 function cargarMensajes(id) {
   this.$router.push({ name: "chat", params: { receptor: id } });
   this.idReceptor = id;
-  chatApi.listar(this.idEmisor, id).then((msjs) => {
-    this.mensajes = msjs.docs;
-  });
   this.cerrarModal();
+  return chatApi.listar(this.idEmisor, id).then((msjs) => {
+    this.mensajes = msjs.docs;
+    return null;
+  });
 }
 
 function cerrarModal() {
@@ -103,9 +108,10 @@ function beforeRouteEnter(to, from, next) {
       vm.idReceptor = idReceptor;
       promesas.push(chatApi.listar(vm.$auth.usuario._id, idReceptor));
     }
-    Promise.all(promesas).then(([empleados, mensajes]) => {
+    return Promise.all(promesas).then(([empleados, mensajes]) => {
       vm.empleados = empleados.docs;
-      vm.mensajes = mensajes.docs;
+      vm.mensajes = mensajes ? mensajes.docs : [];
+      return null;
     });
   });
 }
@@ -127,7 +133,7 @@ export default {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: #f0f4f4;
+  background-color: $gris-fondo;
   padding-top: 1em;
 }
 .chat__dialogo {
@@ -135,12 +141,14 @@ export default {
 }
 .chat__dialogo__msj {
   min-width: 80px;
-  background: #fff;
+  background: $celeste;
   display: inline-block;
   min-width: 80px;
-  padding: 1em;
-  margin-bottom: 1em;
+  padding: .5em;
+  color: $blanco;
+  border-radius: 5px;
 }
+
 .chat__dialogo__msj--yo {
   text-align: right;
 }
