@@ -31,14 +31,21 @@
           v-validate="'required'" >
       </div>
 
-      <div class="form__group"
-           :class="{ 'form__group--error': errors.has('apellidos') && submitted }">
+      <div class="form__group">
         <label class="form__label">Apellidos</label>
         <input class="form__input"
                v-model="empleado.apellidos"
+               :disabled="!editando">
+      </div>
+
+      <div class="form__group"
+           :class="{ 'form__group--error': errors.has('correo') && submitted }">
+        <label class="form__label">Correo electrónico</label>
+        <input class="form__input"
+               v-model="empleado.correo"
                :disabled="!editando"
-               v-validate="'required'"
-               name="apellidos">
+               v-validate="'required|email'"
+               name="correo">
       </div>
 
     </form>

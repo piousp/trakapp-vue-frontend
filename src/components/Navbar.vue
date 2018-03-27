@@ -161,7 +161,7 @@ function version() {
     padding-top: 7px;
     top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 5;
 
     @media (min-width: $reflex-md ) {
       padding-left: $ancho-menu;

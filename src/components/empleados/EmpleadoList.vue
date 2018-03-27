@@ -11,6 +11,7 @@
           <tr>
             <th>Nombre</th>
             <th>Apellidos</th>
+            <th>Correo</th>
             <th/>
           </tr>
         </thead>
@@ -23,6 +24,10 @@
             <router-link tag="td"
                          :to="{name: 'empleadoform', params: {id: empleado._id}}">
               {{ empleado.apellidos }}
+            </router-link>
+            <router-link tag="td"
+                         :to="{name: 'empleadoform', params: {id: empleado._id}}">
+              {{ empleado.correo }}
             </router-link>
             <td>
               <ul class="tabla__opciones">
