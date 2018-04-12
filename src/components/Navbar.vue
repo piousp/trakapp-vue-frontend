@@ -155,7 +155,7 @@ function version() {
   .botones-pagina{
     text-align: center;
     position: fixed;
-    width: 100%;
+    width: 95%;
     height: 52px;
     padding-left: 50px;
     padding-top: 7px;
@@ -178,6 +178,7 @@ function version() {
 
   .popover{
     position:inherit !important;
+    z-index: 9;
   }
 
   .popover__container{
