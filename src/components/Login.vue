@@ -50,7 +50,7 @@
 <script>
 import D from "debug";
 
-const debug = D("Login.vue");
+const debug = D("ciris:Login.vue");
 export default {
   data() {
     return {
