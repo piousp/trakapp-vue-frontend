@@ -1,6 +1,6 @@
 <template>
   <section class="login">
-    <form class="login__body" novalidate @submit.stop.prevent="login()">
+    <form class="login__body" novalidate @submit.stop.prevent="registrarse()">
       <img src="/static/Ciris-color.png" alt="Logo" class="img--center">
       <div class="text--center">
         <h1 class="h3 text--azul">
@@ -12,44 +12,84 @@
       </p>
       <div class="grid">
         <div class="col-md-6">
-          <div class="form__group">
+          <form-group :error="errors.has(ids.nombre) && submitted">
             <label :for="ids.nombre" class="form__label">Nombre</label>
-            <input class="form__input" :id="ids.nombre" required>
-          </div>
+            <input class="form__input"
+                   :id="ids.nombre"
+                   :name="ids.nombre"
+                   required
+                   placeholder="Pablo"
+                   v-model="usuario.nombre"
+                   v-validate="'required'"
+            >
+          </form-group>
         </div>
         <div class="col-md-6">
-          <div class="form__group">
+          <form-group :error="errors.has(ids.apellidos) && submitted">
             <label :for="ids.apellidos" class="form__label">Apellidos</label>
-            <input class="form__input" :id="ids.apellidos" required>
-          </div>
+            <input class="form__input"
+                   :id="ids.apellidos"
+                   :name="ids.apellidos"
+                   placeholder="Flores Paris"
+                   required
+                   v-model="usuario.apellidos"
+                   v-validate="'required'"
+            >
+          </form-group>
         </div>
       </div>
       <div class="grid">
         <div class="col-md-6">
-          <div class="form__group">
+          <form-group :error="errors.has(ids.correo) && submitted">
             <label :for="ids.correo" class="form__label">Correo</label>
-            <input class="form__input" :id="ids.correo" type="email" required>
-          </div>
+            <input
+              class="form__input"
+              :id="ids.correo"
+              :name="ids.correo"
+              type="email"
+              placeholder="allan.perez@ciriscr.com"
+              required
+              v-model="usuario.correo"
+              v-validate="'required|email'"
+            >
+          </form-group>
         </div>
         <div class="col-md-6">
-          <div class="form__group">
+          <form-group :error="errors.has(ids.password) && submitted">
             <label :for="ids.password" class="form__label">Password</label>
-            <input class="form__input" :id="ids.password" required>
-          </div>
+            <input class="form__input"
+                   type="password"
+                   :id="ids.password"
+                   :name="ids.password"
+                   required
+                   v-model="usuario.password"
+                   v-validate="'required'"
+            >
+          </form-group>
         </div>
       </div>
       <div class="grid">
         <div class="col-md-6">
-          <div class="form__group">
+          <form-group>
             <label :for="ids.empresa" class="form__label">Empresa</label>
-            <input class="form__input" :id="ids.empresa">
-          </div>
+            <input
+              class="form__input"
+              :id="ids.empresa"
+              v-model="usuario.empresa"
+            >
+          </form-group>
         </div>
         <div class="col-md-6">
-          <div class="form__group">
+          <form-group :error="errors.has(ids.sitioweb) && submitted">
             <label :for="ids.sitioweb" class="form__label">Sitio Web</label>
-            <input class="form__input" :id="ids.sitioweb" type="url">
-          </div>
+            <input class="form__input"
+                   :id="ids.sitioweb"
+                   :name="ids.sitioweb"
+                   type="url"
+                   v-model="usuario.sitioweb"
+                   v-validate="'url'"
+            >
+          </form-group>
         </div>
       </div>
       <br>
@@ -66,37 +106,27 @@
 <script>
 import D from "debug";
 
-const debug = D("Login.vue");
+const debug = D("ciris:Registro.vue");
+
 export default {
   data,
   created,
   methods: {
-    login() {
-      this.submitted = true;
-      this.$validator.validateAll();
-      if (!this.errors.any()) {
-        this.$auth.login(this.usuario, this.password, this.recordar)
-          .then((response) => {
-            debug(response);
-            this.$router.push({ name: "home" });
-            this.$toastr("success", this.$t("login.success"), `${response.usuario.nombre}`);
-            return response;
-          })
-          .catch((err) => {
-            debug(err);
-            this.$toastr("error", this.$t("login.error"), "Error");
-          });
-      }
-    },
+    registrarse,
   },
 };
 
 function data() {
   return {
     ids: {},
-    usuario: "",
-    password: "",
-    recordar: true,
+    usuario: {
+      nombre: "",
+      apellidos: "",
+      correo: "",
+      password: "",
+      empresa: "",
+      sitioweb: "",
+    },
     submitted: false,
   };
 }
@@ -104,12 +134,27 @@ function data() {
 function created() {
   this.ids = {
     nombre: `nombre-${id()}`,
-    apelidos: `apellidos-${id()}`,
+    apellidos: `apellidos-${id()}`,
     correo: `correo-${id()}`,
     password: `password-${id()}`,
     empresa: `empresa-${id()}`,
     sitioweb: `sitioweb-${id()}`,
   };
+}
+
+async function registrarse() {
+  this.submitted = true;
+  const valido = await this.$validator.validateAll();
+  if (valido) {
+    try {
+      const resp = await this.$auth.registro(this.usuario);
+      debug(resp);
+      this.$toastr("success", "Cuenta creada", "OK");
+    } catch (e) {
+      debug(e);
+      this.$toastr("error", "Error al crear la cuenta", "Error");
+    }
+  }
 }
 
 function id() {
@@ -151,29 +196,5 @@ function id() {
   }
 }
 
-.login__label {
-  font-size: 90%;
-  font-weight: bolder;
-}
-
-.login__boton {
-  margin-top: 15px;
-  width: 96%;
-}
-
-@media (min-width: 992px) {
-
-  .login__label {
-    font-size: 90%;
-    font-weight: bolder;
-    justify-content: flex-end;
-    text-align: right;
-  }
-}
-
-.login__input {
-  background: transparent;
-  color: $blanco;
-}
 
 </style>
