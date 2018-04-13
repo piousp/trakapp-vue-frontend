@@ -19,7 +19,8 @@
     "plugin:vue/recommended"
   ],
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaVersion": 8
   },
   "rules": {
     "semi": ["error", "always"],

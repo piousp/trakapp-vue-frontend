@@ -1,12 +1,16 @@
+import D from "debug";
+
+const debug = D("ciris:auth.js");
+
 const Auth = {
   install(Vue, axios, options) {
-    Vue.auth = { // eslint-disable-line
+    Vue.auth = {
       usuario: {},
-
-      login(login, password, recuerdame) {
+      registro: registro(axios),
+      login(cred, password, recuerdame) {
         return axios
           .post(`${axios.defaults.baseUrl}/api/auth/login`, {
-            login,
+            login: cred,
             password,
           })
           .then((resp) => {
@@ -14,28 +18,25 @@ const Auth = {
             storage.setItem(options.pkg, JSON.stringify(resp.data));
             this.usuario = resp.data.usuario;
             this.usuario.estaAutenticado = true;
-
-            /* Se desactivó el lint porque axios no tiene una función para agregar los headers,
-            sólo reasignando la variable como sale en la documentación */
-            axios.defaults.headers.common.Authorization = `Bearer ${resp.data.token}`; // eslint-disable-line
+            axios.defaults.headers.common.Authorization = `Bearer ${resp.data.token}`;
             return resp.data;
           });
       },
-
       logout() {
         sessionStorage.removeItem(options.pkg);
         localStorage.removeItem(options.pkg);
         this.usuario.estaAutenticado = false;
       },
-
       checkAuth() {
+        debug("checkAuth");
         const credenciales =
           JSON.parse(localStorage.getItem(options.pkg)) ||
           JSON.parse(sessionStorage.getItem(options.pkg));
+        debug("Credenciales", credenciales);
         if (credenciales) {
           this.usuario = credenciales.usuario;
           this.usuario.estaAutenticado = !!credenciales.token;
-            axios.defaults.headers.common.Authorization = `Bearer ${credenciales.token}`; // eslint-disable-line
+          axios.defaults.headers.common.Authorization = `Bearer ${credenciales.token}`;
         }
       },
     };
@@ -49,5 +50,11 @@ const Auth = {
     });
   },
 };
+
+
+function registro(axios) {
+  return obj => axios
+    .post(`${axios.defaults.baseUrl}/api/registro`, obj);
+}
 
 export default Auth;

@@ -3,6 +3,7 @@ import Router from "vue-router";
 import union from "lodash/union";
 import Home from "../components/Home.vue";
 import Login from "../components/Login.vue";
+import Registro from "../components/Registro.vue";
 import RutasMapa from "../components/mapa/rutas.js";
 import RutasEmpleados from "../components/empleados/rutas.js";
 import RutasAgenda from "../components/agenda/rutas.js";
@@ -24,6 +25,14 @@ const router = new Router({
       path: "/login",
       name: "login",
       component: Login,
+      meta: {
+        esPublica: true,
+      },
+    },
+    {
+      path: "/registro",
+      name: "registro",
+      component: Registro,
       meta: {
         esPublica: true,
       },
