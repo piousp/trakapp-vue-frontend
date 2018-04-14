@@ -105,6 +105,7 @@
 
 <script>
 import D from "debug";
+import noop from "lodash/noop";
 
 const debug = D("ciris:Registro.vue");
 
@@ -142,19 +143,23 @@ function created() {
   };
 }
 
-async function registrarse() {
+function registrarse() {
   this.submitted = true;
-  const valido = await this.$validator.validateAll();
-  if (valido) {
-    try {
-      const resp = await this.$auth.registro(this.usuario);
-      debug(resp);
-      this.$toastr("success", "Cuenta creada", "OK");
-    } catch (e) {
-      debug(e);
-      this.$toastr("error", "Error al crear la cuenta", "Error");
+  return this.$validator.validateAll().then((valido) => {
+    if (valido) {
+      this.$auth.registro(this.usuario)
+        .then((resp) => {
+          debug(resp);
+          this.$toastr("success", "Cuenta creada", "OK");
+          return noop;
+        })
+        .catch((err) => {
+          debug(err);
+          this.$toastr("error", "Error al crear la cuenta", "Error");
+        });
     }
-  }
+    return noop;
+  });
 }
 
 function id() {

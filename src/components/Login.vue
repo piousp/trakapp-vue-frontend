@@ -70,22 +70,28 @@ function created() {
   };
 }
 
-async function login() {
+function login() {
   this.submitted = true;
-  const valido = await this.$validator.validateAll();
-  if (valido) {
-    try {
-      const resp = await this.$auth.login(this.usuario, this.password, this.recordar);
-      debug(resp);
-      this.$router.push({ name: "home" });
-      this.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
-      return resp;
-    } catch (err) {
-      debug(err);
-      this.$toastr("error", this.$t("login.error"), "Error");
+  return this.$validator.validateAll().then((valido) => {
+    if (valido) {
+      return this.$auth.login(this.usuario, this.password, this.recordar)
+        .then((resp) => {
+          debug(resp);
+          this.$router.push({ name: "home" });
+          this.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
+          return resp;
+        })
+        .catch((err) => {
+          debug(err);
+          if (err.response.status < 500) {
+            this.$toastr("info", "Credenciales inválidos", "Usuario inválido");
+          } else {
+            this.$toastr("error", this.$t("login.error"), "Error");
+          }
+        });
     }
-  }
-  return noop;
+    return noop;
+  });
 }
 </script>
 
