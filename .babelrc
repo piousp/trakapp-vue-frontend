@@ -8,12 +8,6 @@
       "cacheDirectory": true
     }]
   ],
-  "plugins": [
-    ["transform-runtime", {
-      "polyfill": false,
-      "regenerator": true
-    }]
-  ],
   "env": {
     "test": {
       "presets": ["env"],

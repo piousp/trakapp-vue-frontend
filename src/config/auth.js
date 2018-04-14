@@ -54,7 +54,7 @@ const Auth = {
 
 function registro(axios) {
   return obj => axios
-    .post(`${axios.defaults.baseUrl}/api/registro`, obj);
+    .post(`${axios.defaults.baseUrl}/api/auth/registro`, obj);
 }
 
 export default Auth;

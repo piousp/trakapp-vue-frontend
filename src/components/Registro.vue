@@ -93,6 +93,10 @@
         </div>
       </div>
       <br>
+      <p class="text text--right">
+        ¿Ya tienes cuenta? Click <router-link to="login">aquí</router-link>
+        para ingresar
+      </p>
       <div class="text--center">
         <button class="boton boton--azul boton--xl" type="submit">
           <i class="fas fa-fw fa-building"/>
@@ -105,6 +109,7 @@
 
 <script>
 import D from "debug";
+import noop from "lodash/noop";
 
 const debug = D("ciris:Registro.vue");
 
@@ -142,19 +147,27 @@ function created() {
   };
 }
 
-async function registrarse() {
+function registrarse() {
   this.submitted = true;
-  const valido = await this.$validator.validateAll();
-  if (valido) {
-    try {
-      const resp = await this.$auth.registro(this.usuario);
-      debug(resp);
-      this.$toastr("success", "Cuenta creada", "OK");
-    } catch (e) {
-      debug(e);
-      this.$toastr("error", "Error al crear la cuenta", "Error");
+  return this.$validator.validateAll().then((valido) => {
+    if (valido) {
+      this.$auth.registro(this.usuario)
+        .then((resp) => {
+          debug(resp);
+          this.$toastr("success", "Cuenta creada", "OK");
+          return noop;
+        })
+        .catch((err) => {
+          debug(err);
+          if (err.response.status === 409) {
+            this.$toastr("info", "El usuario ya existe", "Error");
+          } else {
+            this.$toastr("error", "Error al crear la cuenta", "Error");
+          }
+        });
     }
-  }
+    return noop;
+  });
 }
 
 function id() {
