@@ -93,6 +93,10 @@
         </div>
       </div>
       <br>
+      <p class="text text--right">
+        ¿Ya tienes cuenta? Click <router-link to="login">aquí</router-link>
+        para ingresar
+      </p>
       <div class="text--center">
         <button class="boton boton--azul boton--xl" type="submit">
           <i class="fas fa-fw fa-building"/>

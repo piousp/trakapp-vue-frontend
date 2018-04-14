@@ -29,6 +29,10 @@
                v-validate="'required'">
       </form-group>
       <br>
+      <p class="text text--right">
+        ¿No tienes cuenta? Click <router-link to="registro">aquí</router-link>
+        para registrarse
+      </p>
       <div class="text--center">
         <button class="boton boton--azul boton--l" type="submit">
           <i class="fa fa-fw fa-sign-in"/>
