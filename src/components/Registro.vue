@@ -155,7 +155,11 @@ function registrarse() {
         })
         .catch((err) => {
           debug(err);
-          this.$toastr("error", "Error al crear la cuenta", "Error");
+          if (err.response.status === 409) {
+            this.$toastr("info", "El usuario ya existe", "Error");
+          } else {
+            this.$toastr("error", "Error al crear la cuenta", "Error");
+          }
         });
     }
     return noop;
