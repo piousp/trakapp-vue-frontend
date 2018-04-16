@@ -76,10 +76,8 @@ function mounted() {
 export default {
   data,
   beforeRouteEnter,
-  socket: {
-    events: {
-      actualizarPosicion,
-    },
+  sockets: {
+    actualizarPosicion,
   },
   mounted,
 };
