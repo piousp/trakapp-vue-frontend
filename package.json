@@ -1,6 +1,6 @@
 {
   "name": "rastreador",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "UI del rastreador",
   "author": "Ciris Informatic Solutions <ventas@ciriscr.com>",
   "scripts": {
@@ -36,7 +36,7 @@
     "vue-popover": "1.6.0",
     "vue-progressbar": "0.7.3",
     "vue-router": "3.0.1",
-    "vue-websocket": "0.2.2",
+    "vue-socket.io": "2.1.1-b",
     "vue2-google-maps": "0.8.10",
     "vuejs-datepicker": "0.9.24"
   },
@@ -89,7 +89,7 @@
   },
   "engines": {
     "node": "~8.9.x",
-    "npm": "~5.7.x",
+    "npm": "~5.6.x",
     "cpu": [
       "x64",
       "ia32"

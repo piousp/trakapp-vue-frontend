@@ -56,8 +56,29 @@
 import reject from "lodash/reject";
 import findIndex from "lodash/findIndex";
 import { FullCalendar } from "vue-full-calendar";
+import D from "debug";
 import agendaApi from "./agendaApi";
 import empleadoApi from "../empleados/empleadoApi";
+
+const debug = D("ciris:Agenda.vue");
+
+export default {
+  components: {
+    FullCalendar,
+  },
+  data,
+  methods: {
+    abrirModal,
+    cerrarModal,
+    guardarTarea,
+    aceptarModal,
+    editarModal,
+    moverTarea,
+    eliminarTarea,
+    cargarTareas,
+  },
+  beforeRouteEnter,
+};
 
 function data() {
   return {
@@ -113,8 +134,10 @@ function aceptarModal(tarea) {
 }
 
 function guardarTarea(tarea) {
+  debug("Guardando tarea");
   const self = this;
   return agendaApi.guardar(tarea).then((resp) => {
+    debug("Respuesta de guardado de tarea", resp);
     const i = findIndex(self.tareas, { _id: tarea._id });
     if (i < 0) {
       tarea._id = resp._id;
@@ -144,40 +167,21 @@ function parsearTarea(tarea) {
 }
 
 function cargarTareas(inicio, fin, tz, cb) {
-  return agendaApi.listar(inicio.format(), fin.format()).then(resp => cb(resp.docs));
+  debug("cargarTareas");
+  return agendaApi.listar(inicio.format(), fin.format())
+    .then((resp) => {
+      debug("cargarTareas resp", resp);
+      return cb(resp.docs);
+    });
 }
 
 function beforeRouteEnter(to, from, next) {
-  next((vm) => {
-    const promesas = [
-      agendaApi.listar(),
-      empleadoApi.listar(),
-    ];
-    return Promise.all(promesas).then(([tareas, empleados]) => {
-      vm.tareas = tareas.docs;
-      vm.empleados = empleados.docs;
-      return null;
-    });
-  });
+  debug("beforeRouteEnter");
+  next(vm => empleadoApi.listar().then((empleados) => {
+    vm.empleados = empleados.docs;
+    return null;
+  }));
 }
-
-export default {
-  components: {
-    FullCalendar,
-  },
-  data,
-  methods: {
-    abrirModal,
-    cerrarModal,
-    guardarTarea,
-    aceptarModal,
-    editarModal,
-    moverTarea,
-    eliminarTarea,
-    cargarTareas,
-  },
-  beforeRouteEnter,
-};
 </script>
 
 <style lang="scss">

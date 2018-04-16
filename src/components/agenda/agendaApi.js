@@ -1,6 +1,10 @@
+import D from "debug";
 import axios from "../../config/axios";
 
+const debug = D("ciris:agendaApi.js");
+
 function listar(fechaInicio, fechaFin) {
+  debug("Llamando al listar", "fechaInicio", fechaInicio, "fechaFin", fechaFin);
   const query = {
     params: {
       fechaInicio,
