@@ -69,26 +69,18 @@
         </div>
       </div>
       <div class="grid">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <form-group>
-            <label :for="ids.empresa" class="form__label">Empresa</label>
-            <input
-              class="form__input"
-              :id="ids.empresa"
-              v-model="usuario.empresa"
-            >
-          </form-group>
-        </div>
-        <div class="col-md-6">
-          <form-group :error="errors.has(ids.sitioweb) && submitted">
-            <label :for="ids.sitioweb" class="form__label">Sitio Web</label>
-            <input class="form__input"
-                   :id="ids.sitioweb"
-                   :name="ids.sitioweb"
-                   type="url"
-                   v-model="usuario.sitioweb"
-                   v-validate="'url'"
-            >
+            <div class="checkbox checkbox--morado">
+              <input type="checkbox"
+                     :id="ids.empresarial"
+                     :name="ids.empresarial"
+                     v-model="usuario.empresarial"
+                     checked="false">
+              <label class="form__label" :for="ids.empresarial">
+                Estoy creando una cuenta empresarial
+              </label>
+            </div>
           </form-group>
         </div>
       </div>
@@ -129,8 +121,7 @@ function data() {
       apellidos: "",
       correo: "",
       password: "",
-      empresa: "",
-      sitioweb: "",
+      empresarial: false,
     },
     submitted: false,
   };
@@ -142,8 +133,7 @@ function created() {
     apellidos: `apellidos-${id()}`,
     correo: `correo-${id()}`,
     password: `password-${id()}`,
-    empresa: `empresa-${id()}`,
-    sitioweb: `sitioweb-${id()}`,
+    empresarial: `empresarial-${id()}`,
   };
 }
 
@@ -155,7 +145,9 @@ function registrarse() {
         .then((resp) => {
           debug(resp);
           this.$toastr("success", "Cuenta creada", "OK");
-          return noop;
+          this.$router.push({ name: "home" });
+          this.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
+          return resp;
         })
         .catch((err) => {
           debug(err);
