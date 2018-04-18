@@ -1,6 +1,6 @@
 <template>
   <section>
-    <full-calendar class="text" :events="cargarTareas" :config="config" />
+    <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"/>
     <div class="backdrop" v-if="modalVisible">
       <div class="modal">
         <div class="modal__header text--center">
@@ -54,7 +54,7 @@
 
 <script>
 import reject from "lodash/reject";
-import findIndex from "lodash/findIndex";
+import map from "lodash/map";
 import { FullCalendar } from "vue-full-calendar";
 import D from "debug";
 import agendaApi from "./agendaApi";
@@ -82,7 +82,6 @@ export default {
 
 function data() {
   return {
-    tareas: [],
     modalVisible: false,
     config: {
       locale: "es",
@@ -92,7 +91,6 @@ function data() {
       eventClick: this.editarModal,
       eventDrop: this.moverTarea,
       eventResize: this.moverTarea,
-      eventColor: "#2196f3",
       buttonText: {
         month: "Mes",
         week: "Semana",
@@ -106,7 +104,7 @@ function data() {
 }
 
 function editarModal(tarea) {
-  this.tarea = parsearTarea(tarea);
+  this.tarea = tarea;
   this.modalVisible = true;
 }
 
@@ -136,14 +134,14 @@ function aceptarModal(tarea) {
 function guardarTarea(tarea) {
   debug("Guardando tarea");
   const self = this;
-  return agendaApi.guardar(tarea).then((resp) => {
+  return agendaApi.guardar(parsearTarea(tarea)).then((resp) => {
     debug("Respuesta de guardado de tarea", resp);
-    const i = findIndex(self.tareas, { _id: tarea._id });
-    if (i < 0) {
-      tarea._id = resp._id;
-      return self.tareas.push(tarea);
+    if (tarea._id) {
+      self.$refs.calendario.fireMethod("updateEvent", tarea);
+      return self.cerrarModal();
     }
-    return self.tareas.splice(i, 1, tarea);
+    self.$refs.calendario.fireMethod("renderEvent", resp);
+    return tarea;
   });
 }
 
@@ -171,8 +169,15 @@ function cargarTareas(inicio, fin, tz, cb) {
   return agendaApi.listar(inicio.format(), fin.format())
     .then((resp) => {
       debug("cargarTareas resp", resp);
-      return cb(resp.docs);
+      const tareas = map(resp.docs, agregarClassName);
+      debug(tareas);
+      return cb(tareas);
     });
+}
+
+function agregarClassName(tarea) {
+  tarea.className = "fondo--verde";
+  return tarea;
 }
 
 function beforeRouteEnter(to, from, next) {
