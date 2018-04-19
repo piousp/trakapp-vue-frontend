@@ -54,9 +54,9 @@
 
 <script>
 import reject from "lodash/reject";
-import map from "lodash/map";
 import { FullCalendar } from "vue-full-calendar";
 import D from "debug";
+import obtenerColor from "./colores.js";
 import agendaApi from "./agendaApi";
 import empleadoApi from "../empleados/empleadoApi";
 
@@ -132,14 +132,16 @@ function aceptarModal(tarea) {
 }
 
 function guardarTarea(tarea) {
-  debug("Guardando tarea");
+  debug("Guardando tarea", tarea);
   const self = this;
   return agendaApi.guardar(parsearTarea(tarea)).then((resp) => {
     debug("Respuesta de guardado de tarea", resp);
     if (tarea._id) {
+      tarea.color = obtenerColor(tarea.empleado);
       self.$refs.calendario.fireMethod("updateEvent", tarea);
       return self.cerrarModal();
     }
+    resp.color = obtenerColor(tarea.empleado);
     self.$refs.calendario.fireMethod("renderEvent", resp);
     return tarea;
   });
@@ -169,15 +171,11 @@ function cargarTareas(inicio, fin, tz, cb) {
   return agendaApi.listar(inicio.format(), fin.format())
     .then((resp) => {
       debug("cargarTareas resp", resp);
-      const tareas = map(resp.docs, agregarClassName);
-      debug(tareas);
-      return cb(tareas);
+      return cb(resp.docs.map((tarea) => {
+        tarea.color = obtenerColor(tarea.empleado);
+        return tarea;
+      }));
     });
-}
-
-function agregarClassName(tarea) {
-  tarea.className = "fondo--verde";
-  return tarea;
 }
 
 function beforeRouteEnter(to, from, next) {
