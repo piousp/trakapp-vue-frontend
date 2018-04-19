@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import reject from "lodash/reject";
 import { FullCalendar } from "vue-full-calendar";
 import D from "debug";
 import obtenerColor from "./colores.js";
@@ -80,7 +79,6 @@ export default {
     guardarTarea,
     aceptarModal,
     editarModal,
-    moverTarea,
     eliminarTarea,
     cargarTareas,
     obtenerColor,
@@ -97,8 +95,8 @@ function data() {
       allDaySlot: false,
       select: this.abrirModal,
       eventClick: this.editarModal,
-      eventDrop: this.moverTarea,
-      eventResize: this.moverTarea,
+      eventDrop: this.guardarTarea,
+      eventResize: this.guardarTarea,
       buttonText: {
         month: "Mes",
         week: "Semana",
@@ -129,11 +127,6 @@ function cerrarModal() {
   this.modalVisible = false;
 }
 
-function moverTarea(tarea) {
-  const tareaMod = parsearTarea(tarea);
-  this.guardarTarea(tareaMod);
-}
-
 function aceptarModal(tarea) {
   const self = this;
   return self.guardarTarea(tarea).then(() => self.cerrarModal());
@@ -142,18 +135,13 @@ function aceptarModal(tarea) {
 function guardarTarea(tarea) {
   debug("Guardando tarea", tarea);
   const self = this;
-  const colores = obtenerColor(tarea.empleado);
-  return agendaApi.guardar(parsearTarea(tarea)).then((resp) => {
+  return agendaApi.guardar(limpiarParaGuardar(tarea)).then((resp) => {
     debug("Respuesta de guardado de tarea", resp);
     if (tarea._id) {
-      resp.color = colores.fondo;
-      resp.textColor = colores.texto;
-      self.$refs.calendario.fireMethod("updateEvent", tarea);
+      self.$refs.calendario.fireMethod("updateEvent", agregarCamposCalendario(tarea));
       return self.cerrarModal();
     }
-    resp.color = colores.fondo;
-    resp.textColor = colores.texto;
-    self.$refs.calendario.fireMethod("renderEvent", resp);
+    self.$refs.calendario.fireMethod("renderEvent", agregarCamposCalendario(resp));
     return tarea;
   });
 }
@@ -161,12 +149,20 @@ function guardarTarea(tarea) {
 function eliminarTarea(tarea) {
   const self = this;
   return agendaApi.eliminar(tarea._id).then(() => {
-    self.tareas = reject(self.tareas, { _id: tarea._id });
+    self.$refs.calendario.fireMethod("removeEvents", tarea._id);
     return self.cerrarModal();
   });
 }
 
-function parsearTarea(tarea) {
+function agregarCamposCalendario(tarea) {
+  const colores = obtenerColor(tarea.empleado);
+  tarea.id = tarea._id;
+  tarea.color = colores.fondo;
+  tarea.textColor = colores.texto;
+  return tarea;
+}
+
+function limpiarParaGuardar(tarea) {
   return {
     _id: tarea._id,
     title: tarea.title,
@@ -182,12 +178,7 @@ function cargarTareas(inicio, fin, tz, cb) {
   return agendaApi.listar(inicio.format(), fin.format())
     .then((resp) => {
       debug("cargarTareas resp", resp);
-      return cb(resp.docs.map((tarea) => {
-        const colores = obtenerColor(tarea.empleado);
-        tarea.color = colores.fondo;
-        tarea.textColor = colores.texto;
-        return tarea;
-      }));
+      return cb(resp.docs.map(agregarCamposCalendario));
     });
 }
 
