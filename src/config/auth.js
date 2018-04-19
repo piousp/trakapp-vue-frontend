@@ -42,7 +42,6 @@ const Auth = {
         const credenciales =
           JSON.parse(localStorage.getItem(options.pkg)) ||
           JSON.parse(sessionStorage.getItem(options.pkg));
-        debug("Credenciales", credenciales);
         if (credenciales) {
           this.usuario = credenciales.usuario;
           this.usuario.estaAutenticado = !!credenciales.token;
