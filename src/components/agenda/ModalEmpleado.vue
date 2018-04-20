@@ -12,6 +12,7 @@
             <gmap-map
               class="map-container"
               ref="map"
+              :center="center"
               :zoom="15"
               map-type-id="terrain">
               <gmap-marker
@@ -19,15 +20,32 @@
                 :clickable="false"/>
             </gmap-map>
           </div>
-          <div class="col-6"/>
+          <div class="col-6">
+            <div class="chat">
+              <div class="chat__dialogo">
+                <div :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}"
+                     v-for="msj in mensajes" :key="msj._id">
+                  <div class="chat__dialogo__msj text">
+                    <p>{{ msj.texto }}</p>
+                  </div>
+                  <p class="text text--small chat__dialogo__hora">
+                    {{ msj.fechaEnvio | fecha('DD/MM/YYYY HH:mm') }}
+                  </p>
+                </div>
+              </div>
+              <div class="chat__input">
+                <textarea class="form__input" placeholder="Escriba un mensaje..."
+                          v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
         </div>
       </div>
-      <div class="modal__footer">
-        <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
-      </div>
     </div>
-  </div>
-</template>
+</div></template>
 
 <script>
 export default {
@@ -49,7 +67,10 @@ function ready() {
 function data() {
   return {
     empleado: {},
+    center: { lat: 0, lng: 0 },
     modalVisible: false,
+    mensajes: [],
+    mensaje: {},
   };
 }
 
