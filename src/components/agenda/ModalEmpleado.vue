@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="backdrop" v-if="modalVisible">
+  <div class="backdrop" v-show="modalVisible">
     <div class="modal modal--l">
       <div class="modal__header text--center">
         <div class="modal__header__titulo">
@@ -16,41 +16,26 @@
               :zoom="15"
               map-type-id="terrain">
               <gmap-marker
+                :if="empleado"
                 :position="empleado.position"
                 :clickable="false"/>
             </gmap-map>
           </div>
-          <div class="col-6">
-            <div class="chat">
-              <div class="chat__dialogo">
-                <div :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}"
-                     v-for="msj in mensajes" :key="msj._id">
-                  <div class="chat__dialogo__msj text">
-                    <p>{{ msj.texto }}</p>
-                  </div>
-                  <p class="text text--small chat__dialogo__hora">
-                    {{ msj.fechaEnvio | fecha('DD/MM/YYYY HH:mm') }}
-                  </p>
-                </div>
-              </div>
-              <div class="chat__input">
-                <textarea class="form__input" placeholder="Escriba un mensaje..."
-                          v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)"/>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
         </div>
       </div>
+      <div class="modal__footer">
+        <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
+      </div>
     </div>
-</div></template>
+  </div>
+</template>
 
 <script>
+import D from "debug";
+
+const debug = D("ciris:ModalEmpleado.vue");
 export default {
   data,
-  ready,
   methods: {
     abrirModal,
     cerrarModal,
@@ -60,14 +45,10 @@ export default {
   },
 };
 
-function ready() {
-
-}
-
 function data() {
   return {
     empleado: {},
-    center: { lat: 0, lng: 0 },
+    center: { lat: 9.93, lng: -84.07 },
     modalVisible: false,
     mensajes: [],
     mensaje: {},
@@ -85,12 +66,13 @@ function generarCoords(lat, lng) {
 function abrirModal(empleado) {
   this.modalVisible = true;
   this.empleado = empleado;
+  debug("mounted", this.$refs.map);
   this.$refs.map.$mapCreated
     .then((objMapa) => {
       const mapaCargado = objMapa.addListener("tilesloaded", () => {
         mapaCargado.remove();
         const bounds = new google.maps.LatLngBounds();
-        bounds.extend(this.position);
+        bounds.extend(this.empleado.position);
         objMapa.fitBounds(bounds);
       });
       return mapaCargado;
@@ -99,6 +81,7 @@ function abrirModal(empleado) {
       this.$toastr("error", err, "Error");
     });
 }
+
 
 function cerrarModal() {
   this.modalVisible = false;
