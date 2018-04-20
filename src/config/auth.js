@@ -6,7 +6,17 @@ const Auth = {
   install(Vue, axios, options) {
     Vue.auth = {
       usuario: {},
-      registro: registro(axios),
+      registro(obj) {
+        return axios
+          .post(`${axios.defaults.baseUrl}/api/auth/registro`, obj)
+          .then((resp) => {
+            sessionStorage.setItem(options.pkg, JSON.stringify(resp.data));
+            this.usuario = resp.data.usuario;
+            this.usuario.estaAutenticado = true;
+            axios.defaults.headers.common.Authorization = `Bearer ${resp.data.token}`;
+            return resp.data;
+          });
+      },
       login(cred, password, recuerdame) {
         return axios
           .post(`${axios.defaults.baseUrl}/api/auth/login`, {
@@ -32,7 +42,6 @@ const Auth = {
         const credenciales =
           JSON.parse(localStorage.getItem(options.pkg)) ||
           JSON.parse(sessionStorage.getItem(options.pkg));
-        debug("Credenciales", credenciales);
         if (credenciales) {
           this.usuario = credenciales.usuario;
           this.usuario.estaAutenticado = !!credenciales.token;
@@ -50,11 +59,5 @@ const Auth = {
     });
   },
 };
-
-
-function registro(axios) {
-  return obj => axios
-    .post(`${axios.defaults.baseUrl}/api/auth/registro`, obj);
-}
 
 export default Auth;

@@ -1,6 +1,13 @@
 <template>
   <section>
-    <full-calendar class="text" :events="cargarTareas" :config="config" />
+    <div class="grid">
+      <item class="col-auto text--center" v-for="emp in empleados"
+            :key="emp._id">
+        <span :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
+        <span class="text">{{ emp.nombre }}</span>
+      </item>
+    </div>
+    <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"/>
     <div class="backdrop" v-if="modalVisible">
       <div class="modal">
         <div class="modal__header text--center">
@@ -53,15 +60,34 @@
 </template>
 
 <script>
-import reject from "lodash/reject";
-import findIndex from "lodash/findIndex";
 import { FullCalendar } from "vue-full-calendar";
+import D from "debug";
+import obtenerColor from "./colores.js";
 import agendaApi from "./agendaApi";
 import empleadoApi from "../empleados/empleadoApi";
 
+const debug = D("ciris:Agenda.vue");
+
+export default {
+  components: {
+    FullCalendar,
+  },
+  data,
+  methods: {
+    abrirModal,
+    cerrarModal,
+    guardarTarea,
+    aceptarModal,
+    editarModal,
+    eliminarTarea,
+    cargarTareas,
+    obtenerColor,
+  },
+  beforeRouteEnter,
+};
+
 function data() {
   return {
-    tareas: [],
     modalVisible: false,
     config: {
       locale: "es",
@@ -69,9 +95,8 @@ function data() {
       allDaySlot: false,
       select: this.abrirModal,
       eventClick: this.editarModal,
-      eventDrop: this.moverTarea,
-      eventResize: this.moverTarea,
-      eventColor: "#2196f3",
+      eventDrop: this.guardarTarea,
+      eventResize: this.guardarTarea,
       buttonText: {
         month: "Mes",
         week: "Semana",
@@ -85,7 +110,7 @@ function data() {
 }
 
 function editarModal(tarea) {
-  this.tarea = parsearTarea(tarea);
+  this.tarea = tarea;
   this.modalVisible = true;
 }
 
@@ -102,37 +127,42 @@ function cerrarModal() {
   this.modalVisible = false;
 }
 
-function moverTarea(tarea) {
-  const tareaMod = parsearTarea(tarea);
-  this.guardarTarea(tareaMod);
-}
-
 function aceptarModal(tarea) {
   const self = this;
   return self.guardarTarea(tarea).then(() => self.cerrarModal());
 }
 
 function guardarTarea(tarea) {
+  debug("Guardando tarea", tarea);
   const self = this;
-  return agendaApi.guardar(tarea).then((resp) => {
-    const i = findIndex(self.tareas, { _id: tarea._id });
-    if (i < 0) {
-      tarea._id = resp._id;
-      return self.tareas.push(tarea);
+  return agendaApi.guardar(limpiarParaGuardar(tarea)).then((resp) => {
+    debug("Respuesta de guardado de tarea", resp);
+    if (tarea._id) {
+      self.$refs.calendario.fireMethod("updateEvent", agregarCamposCalendario(tarea));
+      return self.cerrarModal();
     }
-    return self.tareas.splice(i, 1, tarea);
+    self.$refs.calendario.fireMethod("renderEvent", agregarCamposCalendario(resp));
+    return tarea;
   });
 }
 
 function eliminarTarea(tarea) {
   const self = this;
   return agendaApi.eliminar(tarea._id).then(() => {
-    self.tareas = reject(self.tareas, { _id: tarea._id });
+    self.$refs.calendario.fireMethod("removeEvents", tarea._id);
     return self.cerrarModal();
   });
 }
 
-function parsearTarea(tarea) {
+function agregarCamposCalendario(tarea) {
+  const colores = obtenerColor(tarea.empleado);
+  tarea.id = tarea._id;
+  tarea.color = colores.fondo;
+  tarea.textColor = colores.texto;
+  return tarea;
+}
+
+function limpiarParaGuardar(tarea) {
   return {
     _id: tarea._id,
     title: tarea.title,
@@ -144,42 +174,29 @@ function parsearTarea(tarea) {
 }
 
 function cargarTareas(inicio, fin, tz, cb) {
-  return agendaApi.listar(inicio.format(), fin.format()).then(resp => cb(resp.docs));
+  debug("cargarTareas");
+  return agendaApi.listar(inicio.format(), fin.format())
+    .then((resp) => {
+      debug("cargarTareas resp", resp);
+      return cb(resp.docs.map(agregarCamposCalendario));
+    });
 }
 
 function beforeRouteEnter(to, from, next) {
-  next((vm) => {
-    const promesas = [
-      agendaApi.listar(),
-      empleadoApi.listar(),
-    ];
-    return Promise.all(promesas).then(([tareas, empleados]) => {
-      vm.tareas = tareas.docs;
-      vm.empleados = empleados.docs;
-      return null;
-    });
-  });
+  debug("beforeRouteEnter");
+  next(vm => empleadoApi.listar().then((empleados) => {
+    vm.empleados = empleados.docs;
+    return null;
+  }));
 }
-
-export default {
-  components: {
-    FullCalendar,
-  },
-  data,
-  methods: {
-    abrirModal,
-    cerrarModal,
-    guardarTarea,
-    aceptarModal,
-    editarModal,
-    moverTarea,
-    eliminarTarea,
-    cargarTareas,
-  },
-  beforeRouteEnter,
-};
 </script>
 
 <style lang="scss">
 @import "../../../node_modules/fullcalendar/dist/fullcalendar.css";
+
+.colorEmpleado{
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
 </style>
