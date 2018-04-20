@@ -4,6 +4,9 @@ const debug = D("ciris:auth.js");
 
 const Auth = {
   install(Vue, axios, options) {
+    function identificarSocket(usuario) {
+      Vue.prototype.$socket.emit("sesionIniciada", usuario);
+    }
     Vue.auth = {
       usuario: {},
       registro(obj) {
@@ -14,6 +17,7 @@ const Auth = {
             this.usuario = resp.data.usuario;
             this.usuario.estaAutenticado = true;
             axios.defaults.headers.common.Authorization = `Bearer ${resp.data.token}`;
+            identificarSocket(resp.data.usuario);
             return resp.data;
           });
       },
@@ -29,6 +33,7 @@ const Auth = {
             this.usuario = resp.data.usuario;
             this.usuario.estaAutenticado = true;
             axios.defaults.headers.common.Authorization = `Bearer ${resp.data.token}`;
+            identificarSocket(resp.data.usuario);
             return resp.data;
           });
       },
@@ -46,6 +51,7 @@ const Auth = {
           this.usuario = credenciales.usuario;
           this.usuario.estaAutenticado = !!credenciales.token;
           axios.defaults.headers.common.Authorization = `Bearer ${credenciales.token}`;
+          identificarSocket(this.usuario);
         }
       },
     };
