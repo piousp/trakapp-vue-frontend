@@ -23,6 +23,15 @@ import map from "lodash/map";
 import findIndex from "lodash/findIndex";
 import empleadoApi from "../empleados/empleadoApi";
 
+export default {
+  data,
+  beforeRouteEnter,
+  sockets: {
+    actualizarPosicion,
+  },
+  mounted,
+};
+
 function data() {
   return {
     center: { lat: 0, lng: 0 },
@@ -72,15 +81,6 @@ function mounted() {
       this.$toastr("error", err, "Error");
     });
 }
-
-export default {
-  data,
-  beforeRouteEnter,
-  sockets: {
-    actualizarPosicion,
-  },
-  mounted,
-};
 </script>
 
 <style lang="scss">
