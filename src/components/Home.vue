@@ -26,7 +26,6 @@ function data() {
 }
 
 function created() {
-  this.$auth.checkAuth();
   this.$on("mostrarMenu", () => {
     this.estaMostrado = !this.estaMostrado;
   });

@@ -75,8 +75,8 @@ function enviar(txt) {
     receptor: this.idReceptor,
   };
   return chatApi.guardar(msj).then((resp) => {
-    msj._id = resp._id;
-    this.mensajes.push(msj);
+    this.$socket.emit("mensajeEnviado", resp);
+    this.mensajes.push(resp);
     this.mensaje = {};
     return null;
   });
@@ -98,6 +98,10 @@ function cargarMensajes(id) {
 
 function cerrarModal() {
   this.mostrarModal = false;
+}
+
+function recibirMensaje(mensaje) {
+  this.mensajes.push(mensaje);
 }
 
 function beforeRouteEnter(to, from, next) {
@@ -124,6 +128,9 @@ export default {
     cerrarModal,
     cargarMensajes,
   },
+  sockets: {
+    recibirMensaje,
+  },
   beforeRouteEnter,
 };
 </script>
@@ -138,6 +145,7 @@ export default {
 }
 .chat__dialogo {
   overflow-y: auto;
+  padding-bottom: 2em;
 }
 .chat__dialogo__msj {
   min-width: 80px;
