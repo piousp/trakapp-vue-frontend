@@ -21,6 +21,9 @@
                 :clickable="false"/>
             </gmap-map>
           </div>
+          <div class="col-6" ng-if="empleado">
+            <chat-individuo ref="chat"/>
+          </div>
         </div>
       </div>
       <div class="modal__footer">
@@ -64,9 +67,11 @@ function generarCoords(lat, lng) {
 }
 
 function abrirModal(empleado) {
+  debug("Abriendo el modal del empleado", empleado._id);
   this.modalVisible = true;
   this.empleado = empleado;
-  debug("mounted", this.$refs.map);
+  debug(this.$refs.chat);
+  this.$refs.chat.cargarMensajes(empleado._id);
   this.$refs.map.$mapCreated
     .then((objMapa) => {
       const mapaCargado = objMapa.addListener("tilesloaded", () => {
