@@ -1,7 +1,7 @@
 <template lang="html">
   <section>
     <div class="chat">
-      <div class="chat__dialogo">
+      <div class="chat__dialogo" ref="dialogo">
         <div
           :class="{'text--right': msj.emisor === idEmisor}"
           v-for="msj in mensajes" :key="msj._id">
@@ -9,7 +9,7 @@
                :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}">
             <p>{{ msj.texto }}</p>
           </div>
-          <p class="text text--small chat__dialogo__hora">
+          <p class="text text--extra-small chat__dialogo__hora">
             {{ msj.fechaEnvio | fecha('DD/MM/YYYY HH:mm') }}
           </p>
         </div>
@@ -67,9 +67,14 @@ function enviar(txt) {
 }
 
 function cargarMensajes(id) {
+  debug("Cargando los mensajes del chat");
   this.idReceptor = id;
   return chatApi.listar(this.idEmisor, this.idReceptor).then((msjs) => {
     this.mensajes = msjs.docs;
+    this.$nextTick(() => {
+      debug("$nextTick, haciendo scroll del elemento");
+      this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight;
+    });
     return null;
   });
 }
@@ -87,15 +92,13 @@ function recibirMensaje(mensaje) {
   justify-content: space-between;
 }
 .chat__input {
-  bottom: 0;
   width: 100%;
   background-color: $gris-fondo;
-  padding-top: 1em;
 }
 .chat__dialogo {
   overflow-y: auto;
-  padding-bottom: 2em;
   flex-grow: 2;
+  height: 260px
 }
 .chat__dialogo__msj {
   min-width: 80px;
