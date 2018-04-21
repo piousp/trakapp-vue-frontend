@@ -195,6 +195,7 @@ function cargarTareas(inicio, fin, tz, cb) {
 function beforeRouteEnter(to, from, next) {
   debug("beforeRouteEnter");
   next(vm => empleadoApi.listar().then((empleados) => {
+    debug("Empleados", empleados);
     vm.empleados = empleados.docs;
     return null;
   }));

@@ -67,7 +67,7 @@ function generarCoords(lat, lng) {
 }
 
 function abrirModal(empleado) {
-  debug("Abriendo el modal del empleado", empleado._id);
+  debug("Abriendo el modal del empleado", empleado);
   this.modalVisible = true;
   this.empleado = empleado;
   debug(this.$refs.chat);

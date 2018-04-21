@@ -2,9 +2,11 @@
   <section>
     <div class="chat">
       <div class="chat__dialogo">
-        <div :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}"
-             v-for="msj in mensajes" :key="msj._id">
-          <div class="chat__dialogo__msj text">
+        <div
+          :class="{'text--right': msj.emisor === idEmisor}"
+          v-for="msj in mensajes" :key="msj._id">
+          <div class="chat__dialogo__msj text"
+               :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}">
             <p>{{ msj.texto }}</p>
           </div>
           <p class="text text--small chat__dialogo__hora">
@@ -97,15 +99,15 @@ function recibirMensaje(mensaje) {
 }
 .chat__dialogo__msj {
   min-width: 80px;
-  background: $celeste;
+  background: $verde-vivo;
   display: inline-block;
   min-width: 80px;
   padding: .5em;
-  color: $blanco;
+  color: $negro2;
   border-radius: 5px;
 }
 
 .chat__dialogo__msj--yo {
-  text-align: right;
+  background: $grisc;
 }
 </style>
