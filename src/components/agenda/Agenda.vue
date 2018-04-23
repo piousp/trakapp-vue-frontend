@@ -1,12 +1,15 @@
 <template>
   <section>
     <div class="grid">
-      <item class="col-auto text--center" v-for="emp in empleados"
-            :key="emp._id">
-        <span :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
-        <span class="text">{{ emp.nombre }}</span>
-      </item>
+      <div class="col-auto text--center" v-for="emp in empleados"
+           :key="emp._id">
+        <div class="boton boton--blanco boton--s" @click="$refs.modalempleado.abrirModal(emp)">
+          <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
+          <span class="text">{{ emp.nombre }}</span>
+        </div>
+      </div>
     </div>
+    <modal-empleado ref="modalempleado"/>
     <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"/>
     <div class="backdrop" v-if="modalVisible">
       <div class="modal">
@@ -65,16 +68,19 @@ import D from "debug";
 import obtenerColor from "./colores.js";
 import agendaApi from "./agendaApi";
 import empleadoApi from "../empleados/empleadoApi";
+import ModalEmpleado from "./ModalEmpleado.vue";
 
 const debug = D("ciris:Agenda.vue");
 
 export default {
   components: {
     FullCalendar,
+    "modal-empleado": ModalEmpleado,
   },
   data,
   methods: {
     abrirModal,
+    abrirModalEmpleado,
     cerrarModal,
     guardarTarea,
     aceptarModal,
@@ -107,6 +113,10 @@ function data() {
     tarea: {},
     empleados: [],
   };
+}
+
+function abrirModalEmpleado(empleado) {
+  this.empleadoModal = empleado;
 }
 
 function editarModal(tarea) {
@@ -185,6 +195,7 @@ function cargarTareas(inicio, fin, tz, cb) {
 function beforeRouteEnter(to, from, next) {
   debug("beforeRouteEnter");
   next(vm => empleadoApi.listar().then((empleados) => {
+    debug("Empleados", empleados);
     vm.empleados = empleados.docs;
     return null;
   }));
@@ -198,5 +209,9 @@ function beforeRouteEnter(to, from, next) {
   display: inline-block;
   height: 10px;
   width: 10px;
+}
+
+.boton-empleado{
+
 }
 </style>
