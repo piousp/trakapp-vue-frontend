@@ -69,24 +69,23 @@ function generarCoords(coordinates) {
 }
 
 function abrirModal(empleado) {
-  debug("Abriendo el modal del empleado", empleado);
   this.modalVisible = true;
   this.empleado = empleado;
-  debug(this.$refs.chat);
+  if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
+    this.empleado.ubicacion = generarCoords(this.empleado.ubicacion.pos.coordinates);
+  }
+  debug("Abriendo el modal del empleado", empleado);
   this.$refs.chat.cargarMensajes(empleado._id);
   this.$refs.map.$mapCreated
     .then((objMapa) => {
-      const mapaCargado = objMapa.addListener("tilesloaded", () => {
-        mapaCargado.remove();
-        const bounds = new google.maps.LatLngBounds();
-        if (get(this.ubicacion, "pos.coordinates", null)) {
-          bounds.extend(generarCoords(this.empleado.ubicacion.pos.coordinates));
-        }
-        objMapa.fitBounds(bounds);
-      });
-      return mapaCargado;
+      const bounds = new google.maps.LatLngBounds();
+      bounds.extend(this.empleado.ubicacion);
+      objMapa.fitBounds(bounds);
+      objMapa.panTo(this.empleado.ubicacion);
+      return objMapa;
     })
     .catch((err) => {
+      debug(err);
       this.$toastr("error", err, "Error");
     });
 }
