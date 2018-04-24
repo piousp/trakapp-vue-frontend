@@ -17,7 +17,7 @@
               map-type-id="terrain">
               <gmap-marker
                 :if="empleado"
-                :position="empleado.position"
+                :position="empleado.ubicacion"
                 :clickable="false"/>
             </gmap-map>
           </div>
@@ -35,6 +35,7 @@
 
 <script>
 import D from "debug";
+import get from "lodash/get";
 
 const debug = D("ciris:ModalEmpleado.vue");
 export default {
@@ -59,11 +60,12 @@ function data() {
 }
 
 function actualizarPosicion(e) {
-  this.empleado.position = generarCoords(e.position.lat, e.position.lng);
+  debug("actualizarPosicion", e);
+  this.empleado.ubicacion = generarCoords(e.ubicacion.pos.coordinates);
 }
 
-function generarCoords(lat, lng) {
-  return new google.maps.LatLng(lat, lng);
+function generarCoords(coordinates) {
+  return new google.maps.LatLng(coordinates[1], coordinates[0]);
 }
 
 function abrirModal(empleado) {
@@ -77,7 +79,9 @@ function abrirModal(empleado) {
       const mapaCargado = objMapa.addListener("tilesloaded", () => {
         mapaCargado.remove();
         const bounds = new google.maps.LatLngBounds();
-        bounds.extend(this.empleado.position);
+        if (get(this.ubicacion, "pos.coordinates", null)) {
+          bounds.extend(generarCoords(this.empleado.ubicacion.pos.coordinates));
+        }
         objMapa.fitBounds(bounds);
       });
       return mapaCargado;
