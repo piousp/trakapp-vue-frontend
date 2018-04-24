@@ -4,7 +4,7 @@
       <img src="/static/Ciris-color.png" alt="Logo" class="img--center">
       <div class="text--center">
         <h1 class="h3 text--azul">
-          ¡Registrese para usar las características del rastreador!
+          ¡Registrese para usar las características de Trakapp!
         </h1>
       </div>
       <p class="text text--center">
