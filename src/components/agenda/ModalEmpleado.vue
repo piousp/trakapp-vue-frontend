@@ -17,7 +17,7 @@
               map-type-id="terrain">
               <gmap-marker
                 :if="empleado"
-                :position="empleado.position"
+                :position="empleado.ubicacion"
                 :clickable="false"/>
             </gmap-map>
           </div>
@@ -35,6 +35,7 @@
 
 <script>
 import D from "debug";
+import get from "lodash/get";
 
 const debug = D("ciris:ModalEmpleado.vue");
 export default {
@@ -59,30 +60,32 @@ function data() {
 }
 
 function actualizarPosicion(e) {
-  this.empleado.position = generarCoords(e.position.lat, e.position.lng);
+  debug("actualizarPosicion", e);
+  this.empleado.ubicacion = generarCoords(e.ubicacion.pos.coordinates);
 }
 
-function generarCoords(lat, lng) {
-  return new google.maps.LatLng(lat, lng);
+function generarCoords(coordinates) {
+  return new google.maps.LatLng(coordinates[1], coordinates[0]);
 }
 
 function abrirModal(empleado) {
-  debug("Abriendo el modal del empleado", empleado);
   this.modalVisible = true;
   this.empleado = empleado;
-  debug(this.$refs.chat);
+  if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
+    this.empleado.ubicacion = generarCoords(this.empleado.ubicacion.pos.coordinates);
+  }
+  debug("Abriendo el modal del empleado", empleado);
   this.$refs.chat.cargarMensajes(empleado._id);
   this.$refs.map.$mapCreated
     .then((objMapa) => {
-      const mapaCargado = objMapa.addListener("tilesloaded", () => {
-        mapaCargado.remove();
-        const bounds = new google.maps.LatLngBounds();
-        bounds.extend(this.empleado.position);
-        objMapa.fitBounds(bounds);
-      });
-      return mapaCargado;
+      const bounds = new google.maps.LatLngBounds();
+      bounds.extend(this.empleado.ubicacion);
+      objMapa.fitBounds(bounds);
+      objMapa.panTo(this.empleado.ubicacion);
+      return objMapa;
     })
     .catch((err) => {
+      debug(err);
       this.$toastr("error", err, "Error");
     });
 }

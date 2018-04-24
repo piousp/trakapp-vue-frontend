@@ -9,7 +9,7 @@
       <gmap-marker
         :key="index"
         v-for="(e, index) in empleados"
-        :position="e.position"
+        :position="e.ubicacion"
         :clickable="true"
         @click="e.opened=!e.opened">
         <info-window :opened="e.opened">{{ e.nombre }} {{ e.apellidos }}</info-window>
@@ -19,9 +19,14 @@
 </template>
 
 <script>
+import D from "debug";
 import map from "lodash/map";
+import compact from "lodash/compact";
+import get from "lodash/get";
 import findIndex from "lodash/findIndex";
 import empleadoApi from "../empleados/empleadoApi";
+
+const debug = D("ciris:Mapa.vue");
 
 export default {
   data,
@@ -40,38 +45,48 @@ function data() {
 }
 
 function beforeRouteEnter(to, from, next) {
+  const self = this;
+  debug("beforeRouteEnter");
   next((vm) => {
     empleadoApi.listar(0, 0)
       .then((empleados) => {
         vm.empleados = map(empleados.docs, (e) => {
-          e.opened = false;
-          return e;
+          if (get(e.ubicacion, "pos.coordinates", null)) {
+            e.opened = false;
+            e.ubicacion = generarCoords(e.ubicacion.pos.coordinates);
+            return e;
+          }
+          return null;
         });
+        vm.empleados = compact(vm.empleados);
+        debug("empleados", vm.empleados);
         return vm.empleados;
       })
       .catch((err) => {
-        this.$toastr("error", err, "Error");
+        self.$toastr("error", err, "Error");
       });
   });
 }
 
 function actualizarPosicion(e) {
+  debug("actualizarPosicion", e);
   const i = findIndex(this.empleados, { _id: e._id });
-  this.empleados[i].position = generarCoords(e.position.lat, e.position.lng);
+  this.empleados[i].ubicacion = generarCoords(e.ubicacion.pos.coordinates);
 }
 
-function generarCoords(lat, lng) {
-  return new google.maps.LatLng(lat, lng);
+function generarCoords(coordinates) {
+  return new google.maps.LatLng(coordinates[1], coordinates[0]);
 }
 
 function mounted() {
+  const self = this;
   this.$refs.map.$mapCreated
     .then((objMapa) => {
       const mapaCargado = objMapa.addListener("tilesloaded", () => {
         mapaCargado.remove();
         const bounds = new google.maps.LatLngBounds();
-        this.empleados.forEach((emp) => {
-          bounds.extend(emp.position);
+        self.empleados.forEach((emp) => {
+          bounds.extend(emp.ubicacion);
         });
         objMapa.fitBounds(bounds);
       });

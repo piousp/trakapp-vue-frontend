@@ -4,7 +4,7 @@
       <div class="text--center">
         <h1 class="h1 text--azul">
           <i class="fa fa-fw fa-flask"/>
-          Rastreador
+          Trakapp
         </h1>
       </div>
       <form-group :error="errors.has(ids.correo) && submitted">

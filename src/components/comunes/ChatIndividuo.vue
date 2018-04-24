@@ -16,7 +16,8 @@
       </div>
       <div class="chat__input">
         <textarea class="form__input" placeholder="Escriba un mensaje..."
-                  v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)"/>
+                  v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)"
+        />
       </div>
     </div>
   </section>
@@ -25,6 +26,7 @@
 <script>
 import D from "debug";
 import moment from "moment";
+import noop from "lodash/noop";
 import chatApi from "../chat/chatApi.js";
 
 const debug = D("ciris:comunes/ChatIndividuo.vue");
@@ -34,6 +36,7 @@ export default {
   methods: {
     enviar,
     cargarMensajes,
+    arreglarScroll,
   },
   sockets: {
     recibirMensaje,
@@ -49,6 +52,11 @@ function data() {
   };
 }
 
+function isBlank(txt) {
+  const str = txt.trim();
+  return (!str || /^\s*$/.test(str));
+}
+
 function enviar(txt) {
   const msj = {
     texto: txt,
@@ -56,11 +64,15 @@ function enviar(txt) {
     emisor: this.idEmisor,
     receptor: this.idReceptor,
   };
-  debug("Enviando el texto", msj);
+  if (isBlank(txt)) {
+    return noop;
+  }
+  debug("Enviando el texto", isBlank(txt));
   return chatApi.guardar(msj).then((resp) => {
     debug("Mensaje guardado");
     this.$socket.emit("mensajeEnviado", resp);
     this.mensajes.push(resp);
+    this.arreglarScroll();
     this.mensaje = {};
     return null;
   });
@@ -71,16 +83,21 @@ function cargarMensajes(id) {
   this.idReceptor = id;
   return chatApi.listar(this.idEmisor, this.idReceptor).then((msjs) => {
     this.mensajes = msjs.docs;
-    this.$nextTick(() => {
-      debug("$nextTick, haciendo scroll del elemento");
-      this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight;
-    });
+    this.arreglarScroll();
     return null;
+  });
+}
+
+function arreglarScroll() {
+  this.$nextTick(() => {
+    debug("$nextTick, haciendo scroll del elemento");
+    this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight;
   });
 }
 
 function recibirMensaje(mensaje) {
   this.mensajes.push(mensaje);
+  this.arreglarScroll();
 }
 </script>
 
