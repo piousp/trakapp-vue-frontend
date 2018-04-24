@@ -1,24 +1,29 @@
 before_script:
   - . ~/.nvm/nvm.sh
   - nvm use 8.9.4
-  - npm install -g forever
 
 cache:
   paths:
     - node_modules/
 
 stages:
+  - test
   - deploy
+
+lintear:
+  stage: test
+  script:
+    - npm install
+    - npm run lint
 
 deploy_desarrollo:
   stage: deploy
   script:
     - npm install
     - npm run build
-    - rsync -rlDv --delete * /software/lab-carlos-araya/backend/
-    - sh /software/lab-carlos-araya/backend/produccion.sh
+    - rsync -rlDv --delete * /software/trakapp/frontend/
   environment:
     name: desarrollo
-    url: ciriscr.com:3001
+    url: trakapp.ciriscr.com
   only:
   - desarrollo
