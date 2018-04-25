@@ -27,7 +27,7 @@ Vue.use(VueWebsocket, Vue.axios.defaults.baseUrl);
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "AIzaSyC15TkWYaTzDMlb1B2NIAn9pUuB5mY1fZE",
+    key: "AIzaSyDn5jFd9F1zSo3XhhCD5r5bf3AQnpph5kI",
     libraries: "weather,geometry,visualization",
   },
 });
