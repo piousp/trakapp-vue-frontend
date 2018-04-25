@@ -62,6 +62,7 @@ function data() {
 function actualizarPosicion(e) {
   debug("actualizarPosicion", e);
   this.empleado.ubicacion = generarCoords(e.ubicacion.pos.coordinates);
+  this.$refs.map.panTo(this.empleado.ubicacion);
 }
 
 function generarCoords(coordinates) {
@@ -96,7 +97,7 @@ function cerrarModal() {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .map-container {
   height: 300px;
 }

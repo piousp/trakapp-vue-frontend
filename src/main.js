@@ -30,6 +30,7 @@ Vue.use(VueGoogleMaps, {
     key: "AIzaSyDn5jFd9F1zSo3XhhCD5r5bf3AQnpph5kI",
     libraries: "weather,geometry,visualization",
   },
+  autobindAllEvents: true,
 });
 
 Vue.component("datepicker", Datepicker);
