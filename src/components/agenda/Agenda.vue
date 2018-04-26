@@ -128,7 +128,6 @@ export default {
 function data() {
   return {
     modalVisible: false,
-    lugar: null,
     config: {
       locale: "es",
       timezone: "local",
@@ -151,7 +150,6 @@ function data() {
 }
 
 function buscarLugar(lugar) {
-  this.lugar = lugar;
   this.tarea.ubicacion = {
     type: "Point",
     coordinates: [lugar.geometry.location.lng(), lugar.geometry.location.lat()],
@@ -168,8 +166,15 @@ function abrirModalEmpleado(empleado) {
 }
 
 function editarModal(tarea) {
+  debug("Editando tarea", tarea);
   this.tarea = tarea;
   this.modalVisible = true;
+  setTimeout(() => {
+    this.$refs.map.panTo({
+      lat: this.tarea.ubicacion.coordinates[1],
+      lng: this.tarea.ubicacion.coordinates[0],
+    });
+  }, 1000);
 }
 
 function abrirModal(inicio, fin) {
@@ -230,6 +235,7 @@ function limpiarParaGuardar(tarea) {
     end: tarea.end,
     empleado: tarea.empleado,
     descripcion: tarea.descripcion,
+    ubicacion: tarea.ubicacion,
   };
 }
 
