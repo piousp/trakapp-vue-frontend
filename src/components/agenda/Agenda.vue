@@ -169,6 +169,7 @@ function editarModal(tarea) {
   debug("Editando tarea", tarea);
   this.tarea = tarea;
   this.modalVisible = true;
+  // Hay que esperar a que el mapa cargue. No hay forma de hacer un watch sobre $refs.
   setTimeout(() => {
     this.$refs.map.panTo({
       lat: this.tarea.ubicacion.coordinates[1],
