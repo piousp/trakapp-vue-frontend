@@ -8,10 +8,14 @@
       "cacheDirectory": true
     }]
   ],
+  "plugins": ["envify"],
   "env": {
     "test": {
       "presets": ["env"],
       "plugins": ["istanbul"]
+    },
+    "development": {
+      "plugins": ["envify"],
     },
     "production": {
       "plugins": ["envify"],
