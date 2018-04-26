@@ -26,11 +26,13 @@
               <div class="col-6">
                 <form-group>
                   <label class="form__label">Título</label>
-                  <input class="form__input" v-model="tarea.title" :disabled="tarea.activa === false">
+                  <input class="form__input" v-model="tarea.title"
+                         :disabled="tarea.activa === false">
                 </form-group>
                 <div class="form-group">
                   <label class="form__label">Asignar a</label>
-                  <select class="form__input" v-model="tarea.empleado" :disabled="tarea.activa === false">
+                  <select class="form__input" v-model="tarea.empleado"
+                          :disabled="tarea.activa === false">
                     <option v-for="emp in empleados" :value="emp._id" :key="emp._id">
                       {{ emp.nombre }} {{ emp.apellidos }}
                     </option>
