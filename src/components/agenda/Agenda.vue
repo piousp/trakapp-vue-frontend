@@ -17,6 +17,7 @@
           <div class="modal__header__titulo">
             <i class="fal fa-fw fa-calendar"/>
             {{ tarea.title || 'Nueva tarea' }}
+            <span class="text--italic text--gris8" v-if="tarea.activa === false">Finalizada</span>
           </div>
         </div>
         <div class="modal__body">
@@ -25,11 +26,11 @@
               <div class="col-6">
                 <form-group>
                   <label class="form__label">Título</label>
-                  <input class="form__input" v-model="tarea.title">
+                  <input class="form__input" v-model="tarea.title" :disabled="tarea.activa === false">
                 </form-group>
                 <div class="form-group">
                   <label class="form__label">Asignar a</label>
-                  <select class="form__input" v-model="tarea.empleado">
+                  <select class="form__input" v-model="tarea.empleado" :disabled="tarea.activa === false">
                     <option v-for="emp in empleados" :value="emp._id" :key="emp._id">
                       {{ emp.nombre }} {{ emp.apellidos }}
                     </option>
@@ -37,7 +38,9 @@
                 </div>
                 <form-group>
                   <label class="form__label">Descripción</label>
-                  <textarea class="form__input" rows="3" v-model="tarea.descripcion"/>
+                  <textarea class="form__input" rows="3"
+                            v-model="tarea.descripcion"
+                            :disabled="tarea.activa === false"/>
                 </form-group>
                 <div class="grid grid--bleed">
                   <div class="col-6">
@@ -58,19 +61,19 @@
                 <form-group>
                   <label class="form__label">Ubicación</label>
                   <gmap-autocomplete class="form__input"
+                                     :disabled="tarea.activa === false"
                                      :options="{componentRestrictions: {country: 'cr'}}"
                                      @place_changed="buscarLugar"/>
                 </form-group>
-
                 <gmap-map
-                  class="map-container"
+                  class="mapa-agenda"
                   ref="map"
                   :center="mapCenter"
                   :zoom="14"
                   map-type-id="terrain">
                   <gmap-marker
                     v-if="tarea.ubicacion && tarea.ubicacion.coordinates"
-                    :draggable="true"
+                    :draggable="tarea.activa !== false"
                     :position="{
                       lat: tarea.ubicacion.coordinates[1],
                       lng: tarea.ubicacion.coordinates[0]
@@ -225,6 +228,8 @@ function agregarCamposCalendario(tarea) {
   tarea.id = tarea._id;
   tarea.color = colores.fondo;
   tarea.textColor = colores.texto;
+  tarea.className = tarea.activa === false ? "tarea--finalizada" : "";
+  debug("Tarea modificada para el calendario", tarea);
   return tarea;
 }
 
@@ -259,7 +264,8 @@ function beforeRouteEnter(to, from, next) {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+@import "../../sass/base/colores";
 @import "../../../node_modules/fullcalendar/dist/fullcalendar.css";
 
 .colorEmpleado{
@@ -268,8 +274,13 @@ function beforeRouteEnter(to, from, next) {
   width: 10px;
 }
 
-.map-container{
+.mapa-agenda{
   height: 300px;
   width: 100%;
+}
+
+.tarea--finalizada{
+  text-decoration:line-through !important;
+  text-decoration-color: $rojo-opaco !important;
 }
 </style>
