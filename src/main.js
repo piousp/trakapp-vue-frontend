@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from "vue";
+import "moment/locale/es";
 import Datepicker from "vuejs-datepicker";
 import VeeValidate from "vee-validate";
 import VueI18n from "vue-i18n";
@@ -28,7 +29,7 @@ Vue.use(VueWebsocket, Vue.axios.defaults.baseUrl);
 Vue.use(VueGoogleMaps, {
   load: {
     key: "AIzaSyDn5jFd9F1zSo3XhhCD5r5bf3AQnpph5kI",
-    libraries: "weather,geometry,visualization",
+    libraries: "geometry,visualization,places",
   },
   autobindAllEvents: true,
 });
