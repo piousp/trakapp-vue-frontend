@@ -56,6 +56,20 @@ import moment from "moment";
 import empleadoApi from "../empleados/empleadoApi";
 import chatApi from "./chatApi";
 
+export default {
+  data,
+  methods: {
+    enviar,
+    buscarUsuarios,
+    cerrarModal,
+    cargarMensajes,
+  },
+  sockets: {
+    recibirMensaje,
+  },
+  beforeRouteEnter,
+};
+
 function data() {
   return {
     empleados: [],
@@ -119,45 +133,6 @@ function beforeRouteEnter(to, from, next) {
     });
   });
 }
-
-export default {
-  data,
-  methods: {
-    enviar,
-    buscarUsuarios,
-    cerrarModal,
-    cargarMensajes,
-  },
-  sockets: {
-    recibirMensaje,
-  },
-  beforeRouteEnter,
-};
 </script>
 <style lang="scss">
-@import "../../sass/base/colores";
-.chat__input {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: $gris-fondo;
-  padding-top: 1em;
-}
-.chat__dialogo {
-  overflow-y: auto;
-  padding-bottom: 2em;
-}
-.chat__dialogo__msj {
-  min-width: 80px;
-  background: $celeste;
-  display: inline-block;
-  min-width: 80px;
-  padding: .5em;
-  color: $blanco;
-  border-radius: 5px;
-}
-
-.chat__dialogo__msj--yo {
-  text-align: right;
-}
 </style>

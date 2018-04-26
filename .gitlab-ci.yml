@@ -1,0 +1,27 @@
+before_script:
+  - . ~/.nvm/nvm.sh
+  - nvm use 8.9.4
+
+stages:
+  - test
+  - deploy
+
+lintear:
+  stage: test
+  script:
+    - npm install
+    - npm run lint
+
+deploy_desarrollo:
+  stage: deploy
+  script:
+    - git submodule init
+    - git submodule update
+    - npm install
+    - npm run build
+    - rsync -rlDv --delete * /software/trakapp/frontend/
+  environment:
+    name: desarrollo
+    url: trakapp.ciriscr.com
+  only:
+  - desarrollo
