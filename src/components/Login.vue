@@ -2,10 +2,7 @@
   <section class="login">
     <form class="login__body" novalidate @submit.stop.prevent="login()">
       <div class="text--center">
-        <h1 class="h1 text--azul">
-          <i class="fa fa-fw fa-flask"/>
-          Trakapp
-        </h1>
+        <img src="/static/logo.png" class="logo-login img--center" alt="Trakapp Logo">
       </div>
       <form-group :error="errors.has(ids.correo) && submitted">
         <label :for="ids.correo" class="form__label">Correo:</label>
@@ -34,7 +31,7 @@
         para registrarse
       </p>
       <div class="text--center">
-        <button class="boton boton--azul boton--l" type="submit">
+        <button class="boton boton--verde boton--l" type="submit">
           <i class="fa fa-fw fa-sign-in"/>
           Iniciar sesión
         </button>
@@ -156,6 +153,11 @@ function login() {
 .login__input {
   background: transparent;
   color: $blanco;
+}
+
+.logo-login{
+  max-width: 100%;
+  height: 220px;
 }
 
 </style>

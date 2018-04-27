@@ -2,7 +2,7 @@
   <nav class="navbar">
     <div class="navbar__left">
       <i class="navbar__left__menu far fa-bars fa-2x" @click="mostrarMenu"/>
-      <img class="navbar__left__logo" src="/static/Ciris-contraforma.png">
+      <img class="navbar__left__logo" src="/static/icono.png">
     </div>
     <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
       <div class="navbar__right__elem">
@@ -90,6 +90,7 @@ function version() {
 
 <style lang="scss">
   @import "../sass/base/colores";
+  @import "../sass/tema/colores";
   @import "../sass/base/helpers";
   @import "../sass/tema/globales";
   $ancho-menu: 200px;
@@ -108,7 +109,7 @@ function version() {
     }
   }
   .navbar__left {
-    background: $azul;
+    background: $negro2;
     display: block;
     height: 52px;
     width: 50px;

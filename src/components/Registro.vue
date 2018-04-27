@@ -1,9 +1,9 @@
 <template>
   <section class="login">
     <form class="login__body" novalidate @submit.stop.prevent="registrarse()">
-      <img src="/static/Ciris-color.png" alt="Logo" class="img--center">
+      <img src="/static/logo.png" class="logo-login img--center" alt="Trakapp Logo">
       <div class="text--center">
-        <h1 class="h3 text--azul">
+        <h1 class="h3 text--verde">
           ¡Registrese para usar las características de Trakapp!
         </h1>
       </div>
@@ -90,7 +90,7 @@
         para ingresar
       </p>
       <div class="text--center">
-        <button class="boton boton--azul boton--xl" type="submit">
+        <button class="boton boton--verde boton--xl" type="submit">
           <i class="fas fa-fw fa-building"/>
           ¡Registrarse!
         </button>
@@ -199,6 +199,11 @@ function id() {
     padding: 1em;
     width: 45%;
   }
+}
+
+.logo-login{
+  max-width: 100%;
+  height: 220px;
 }
 
 
