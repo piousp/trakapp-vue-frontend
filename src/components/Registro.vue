@@ -1,15 +1,15 @@
 <template>
   <section class="login">
     <form class="login__body" novalidate @submit.stop.prevent="registrarse()">
-      <img src="/static/logo.png" class="logo-login img--center" alt="Trakapp Logo">
-      <div class="text--center">
-        <h1 class="h3 text--verde">
-          ¡Registrese para usar las características de Trakapp!
-        </h1>
-      </div>
+      <img src="/static/logo.png" class="logo-login img-center" alt="Trakapp Logo">
+      <div class="text--center"/>
       <p class="text text--center">
         Por favor rellene los campos con los datos solicitados
       </p>
+      <input type="text" style="display:none">
+      <!-- Esto es EL HACK para que el autocomplete del browser se confunda y no me joda el form -->
+      <input type="password" name="hack-password" id="hack-password"
+             style="opacity:0;position:absolute;height:0;">
       <div class="grid">
         <div class="col-md-6">
           <form-group :error="errors.has(ids.nombre) && submitted">
@@ -23,13 +23,12 @@
                    v-validate="'required'"
             >
           </form-group>
-        </div>
-        <div class="col-md-6">
           <form-group :error="errors.has(ids.apellidos) && submitted">
             <label :for="ids.apellidos" class="form__label">Apellidos</label>
             <input class="form__input"
                    :id="ids.apellidos"
                    :name="ids.apellidos"
+                   value=""
                    placeholder="Flores Paris"
                    required
                    v-model="usuario.apellidos"
@@ -37,8 +36,6 @@
             >
           </form-group>
         </div>
-      </div>
-      <div class="grid">
         <div class="col-md-6">
           <form-group :error="errors.has(ids.correo) && submitted">
             <label :for="ids.correo" class="form__label">Correo</label>
@@ -53,23 +50,18 @@
               v-validate="'required|email'"
             >
           </form-group>
-        </div>
-        <div class="col-md-6">
           <form-group :error="errors.has(ids.password) && submitted">
             <label :for="ids.password" class="form__label">Password</label>
             <input class="form__input"
                    type="password"
                    :id="ids.password"
                    :name="ids.password"
+                   value=""
                    required
                    v-model="usuario.password"
                    v-validate="'required'"
             >
           </form-group>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-md-12">
           <form-group>
             <div class="checkbox checkbox--morado">
               <input type="checkbox"
@@ -81,6 +73,54 @@
                 Estoy creando una cuenta empresarial
               </label>
             </div>
+          </form-group>
+        </div>
+      </div>
+      <div class="grid" v-if="usuario.empresarial">
+        <div class="col-md-6">
+          <form-group :error="errors.has(ids.empresa) && submitted">
+            <label :for="ids.empresa" class="form__label">Empresa</label>
+            <input class="form__input"
+                   :id="ids.empresa"
+                   :name="ids.empresa"
+                   placeholder="Trakapp S.A."
+                   required
+                   v-model="usuario.cuenta.nombre"
+                   v-validate="'required'"
+            >
+          </form-group>
+          <form-group :error="errors.has(ids.correoEmpresa) && submitted">
+            <label :for="ids.correoEmpresa" class="form__label">Correo contacto</label>
+            <input class="form__input"
+                   type="email"
+                   :id="ids.correoEmpresa"
+                   :name="ids.correoEmpresa"
+                   placeholder="info@trakapp.com"
+                   required
+                   v-model="usuario.cuenta.correo"
+                   v-validate="'required|email'"
+            >
+          </form-group>
+        </div>
+        <div class="col-md-6">
+          <form-group :error="errors.has(ids.cedula) && submitted">
+            <label :for="ids.cedula" class="form__label">Cédula</label>
+            <input type="text"
+                   class="form__input"
+                   :id="ids.cedula"
+                   :name="ids.cedula"
+                   placeholder="3101625445"
+                   v-model="usuario.cuenta.cedula"
+            >
+          </form-group>
+          <form-group :error="errors.has(ids.direccion) && submitted">
+            <label :for="ids.direccion" class="form__label">Dirección</label>
+            <textarea cols="30" rows="2" class="form__input"
+                      :id="ids.direccion"
+                      :name="ids.direccion"
+                      placeholder="Trakapp S.A."
+                      v-model="usuario.cuenta.direccion"
+            />
           </form-group>
         </div>
       </div>
@@ -122,6 +162,7 @@ function data() {
       correo: "",
       password: "",
       empresarial: false,
+      cuenta: {},
     },
     submitted: false,
   };
@@ -134,6 +175,10 @@ function created() {
     correo: `correo-${id()}`,
     password: `password-${id()}`,
     empresarial: `empresarial-${id()}`,
+    empresa: `empresa-${id()}`,
+    correoEmpresa: `correoEmpresa-${id()}`,
+    direccion: `direccion-${id()}`,
+    cedula: `cedula-${id()}`,
   };
 }
 
