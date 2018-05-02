@@ -12,40 +12,77 @@
     <modal-empleado ref="modalempleado"/>
     <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"/>
     <div class="backdrop" v-if="modalVisible">
-      <div class="modal">
+      <div class="modal modal--l">
         <div class="modal__header text--center">
           <div class="modal__header__titulo">
             <i class="fal fa-fw fa-calendar"/>
             {{ tarea.title || 'Nueva tarea' }}
+            <span class="text--italic text--gris8" v-if="tarea.activa === false">Finalizada</span>
           </div>
         </div>
         <div class="modal__body">
           <form>
-            <div class="form__group">
-              <label class="form__label">Título</label>
-              <input class="form__input" v-model="tarea.title">
-            </div>
-            <div class="grid grid--padding">
-              <div class="col-md-6 form__group">
-                <label class="form__label">Desde</label>
-                <input class="form__input" v-model="tarea.start">
+            <div class="grid">
+              <div class="col-6">
+                <form-group>
+                  <label class="form__label">Título</label>
+                  <input class="form__input" v-model="tarea.title"
+                         :disabled="tarea.activa === false">
+                </form-group>
+                <div class="form-group">
+                  <label class="form__label">Asignar a</label>
+                  <select class="form__input" v-model="tarea.empleado"
+                          :disabled="tarea.activa === false">
+                    <option v-for="emp in empleados" :value="emp._id" :key="emp._id">
+                      {{ emp.nombre }} {{ emp.apellidos }}
+                    </option>
+                  </select>
+                </div>
+                <form-group>
+                  <label class="form__label">Descripción</label>
+                  <textarea class="form__input" rows="3"
+                            v-model="tarea.descripcion"
+                            :disabled="tarea.activa === false"/>
+                </form-group>
+                <div class="grid grid--bleed">
+                  <div class="col-6">
+                    <form-group>
+                      <label class="form__label">Desde</label>
+                      <p class="form__input">{{ tarea.start | fecha("LLL") }}</p>
+                    </form-group>
+                  </div>
+                  <div class="col-6">
+                    <form-group>
+                      <label class="form__label">Hasta</label>
+                      <p class="form__input">{{ tarea.end | fecha("LLL") }}</p>
+                    </form-group>
+                  </div>
+                </div>
               </div>
-              <div class="col-md-6 form__group">
-                <label class="form__label">Hasta</label>
-                <input class="form__input" v-model="tarea.end">
+              <div class="col-6">
+                <form-group>
+                  <label class="form__label">Ubicación</label>
+                  <gmap-autocomplete class="form__input"
+                                     :disabled="tarea.activa === false"
+                                     :options="{componentRestrictions: {country: 'cr'}}"
+                                     @place_changed="buscarLugar"/>
+                </form-group>
+                <gmap-map
+                  class="mapa-agenda"
+                  ref="map"
+                  :center="mapCenter"
+                  :zoom="14"
+                  map-type-id="terrain">
+                  <gmap-marker
+                    v-if="tarea.ubicacion && tarea.ubicacion.coordinates"
+                    :draggable="tarea.activa !== false"
+                    :position="{
+                      lat: tarea.ubicacion.coordinates[1],
+                      lng: tarea.ubicacion.coordinates[0]
+                    }
+                  "/>
+                </gmap-map>
               </div>
-            </div>
-            <div class="form__group">
-              <label class="form__label">Asignar a</label>
-              <select class="form__input" v-model="tarea.empleado">
-                <option v-for="emp in empleados" :value="emp._id" :key="emp._id">
-                  {{ emp.nombre }} {{ emp.apellidos }}
-                </option>
-              </select>
-            </div>
-            <div class="form__group">
-              <label class="form__label">Descripción</label>
-              <textarea class="form__input" rows="3" v-model="tarea.descripcion"/>
             </div>
           </form>
         </div>
@@ -88,6 +125,7 @@ export default {
     eliminarTarea,
     cargarTareas,
     obtenerColor,
+    buscarLugar,
   },
   beforeRouteEnter,
 };
@@ -110,9 +148,22 @@ function data() {
         today: "Hoy",
       },
     },
+    mapCenter: { lat: 9.93, lng: -84.07 },
     tarea: {},
     empleados: [],
   };
+}
+
+function buscarLugar(lugar) {
+  this.tarea.ubicacion = {
+    type: "Point",
+    coordinates: [lugar.geometry.location.lng(), lugar.geometry.location.lat()],
+  };
+  debug("Ubicación asignada a tarea", this.tarea);
+  this.$refs.map.panTo({
+    lat: this.tarea.ubicacion.coordinates[1],
+    lng: this.tarea.ubicacion.coordinates[0],
+  });
 }
 
 function abrirModalEmpleado(empleado) {
@@ -120,14 +171,24 @@ function abrirModalEmpleado(empleado) {
 }
 
 function editarModal(tarea) {
+  debug("Editando tarea", tarea);
   this.tarea = tarea;
   this.modalVisible = true;
+  // Hay que esperar a que el mapa cargue. No hay forma de hacer un watch sobre $refs.
+  setTimeout(() => {
+    this.$refs.map.panTo({
+      lat: this.tarea.ubicacion.coordinates[1],
+      lng: this.tarea.ubicacion.coordinates[0],
+    });
+  }, 1000);
 }
 
 function abrirModal(inicio, fin) {
+  debug("Abriendo el modal de tareas");
   this.tarea = {
     start: inicio,
     end: fin,
+    ubicacion: {},
   };
   this.modalVisible = true;
 }
@@ -169,6 +230,8 @@ function agregarCamposCalendario(tarea) {
   tarea.id = tarea._id;
   tarea.color = colores.fondo;
   tarea.textColor = colores.texto;
+  tarea.className = tarea.activa === false ? "tarea--finalizada" : "";
+  debug("Tarea modificada para el calendario", tarea);
   return tarea;
 }
 
@@ -180,6 +243,7 @@ function limpiarParaGuardar(tarea) {
     end: tarea.end,
     empleado: tarea.empleado,
     descripcion: tarea.descripcion,
+    ubicacion: tarea.ubicacion,
   };
 }
 
@@ -203,6 +267,7 @@ function beforeRouteEnter(to, from, next) {
 </script>
 
 <style lang="scss">
+@import "../../sass/base/colores";
 @import "../../../node_modules/fullcalendar/dist/fullcalendar.css";
 
 .colorEmpleado{
@@ -211,7 +276,13 @@ function beforeRouteEnter(to, from, next) {
   width: 10px;
 }
 
-.boton-empleado{
+.mapa-agenda{
+  height: 300px;
+  width: 100%;
+}
 
+.tarea--finalizada{
+  text-decoration:line-through !important;
+  text-decoration-color: $rojo-opaco !important;
 }
 </style>

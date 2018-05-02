@@ -2,9 +2,12 @@
   <section>
     <div class="chat">
       <div class="chat__dialogo" ref="dialogo">
+        <div class="text--center">
+          <i v-show="cargando" class="fas fa-circle-notch fa-spin fa-2x text--gris6"/>
+        </div>
         <div
           :class="{'text--right': msj.emisor === idEmisor}"
-          v-for="msj in mensajes" :key="msj._id">
+          v-for="msj in mensajes.docs" :key="msj._id">
           <div class="chat__dialogo__msj text"
                :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}">
             <p>{{ msj.texto }}</p>
@@ -25,7 +28,6 @@
 
 <script>
 import D from "debug";
-import moment from "moment";
 import noop from "lodash/noop";
 import chatApi from "../chat/chatApi.js";
 
@@ -33,6 +35,7 @@ const debug = D("ciris:comunes/ChatIndividuo.vue");
 
 export default {
   data,
+  mounted,
   methods: {
     enviar,
     cargarMensajes,
@@ -45,10 +48,12 @@ export default {
 
 function data() {
   return {
-    mensajes: [],
+    mensajes: { docs: [], cant: 0 },
     mensaje: {},
     idEmisor: this.$auth.usuario._id,
     idReceptor: "",
+    limiteItems: 20,
+    cargando: false,
   };
 }
 
@@ -60,7 +65,6 @@ function isBlank(txt) {
 function enviar(txt) {
   const msj = {
     texto: txt,
-    fechaEnvio: moment(),
     emisor: this.idEmisor,
     receptor: this.idReceptor,
   };
@@ -71,7 +75,8 @@ function enviar(txt) {
   return chatApi.guardar(msj).then((resp) => {
     debug("Mensaje guardado");
     this.$socket.emit("mensajeEnviado", resp);
-    this.mensajes.push(resp);
+    this.mensajes.docs.push(resp);
+    this.mensajes.cant += 1;
     this.arreglarScroll();
     this.mensaje = {};
     return null;
@@ -81,8 +86,8 @@ function enviar(txt) {
 function cargarMensajes(id) {
   debug("Cargando los mensajes del chat");
   this.idReceptor = id;
-  return chatApi.listar(this.idEmisor, this.idReceptor).then((msjs) => {
-    this.mensajes = msjs.docs;
+  return chatApi.listar(this.idEmisor, this.idReceptor, 0, this.limiteItems).then((msjs) => {
+    this.mensajes = msjs;
     this.arreglarScroll();
     return null;
   });
@@ -96,8 +101,26 @@ function arreglarScroll() {
 }
 
 function recibirMensaje(mensaje) {
-  this.mensajes.push(mensaje);
+  this.mensajes.docs.push(mensaje);
+  this.mensajes.cant += 1;
   this.arreglarScroll();
+}
+
+function mounted() {
+  this.$refs.dialogo.onscroll = () => {
+    if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
+      this.cargando = true;
+      const pagina = this.mensajes.cant / this.limiteItems;
+      return chatApi
+        .listar(this.idEmisor, this.idReceptor, pagina, this.limiteItems)
+        .then((msjs) => {
+          this.mensajes.docs = msjs.docs.concat(this.mensajes.docs);
+          this.cargando = false;
+          return msjs;
+        });
+    }
+    return null;
+  };
 }
 </script>
 

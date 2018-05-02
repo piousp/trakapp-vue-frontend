@@ -68,6 +68,7 @@ function cerrar() {
 <style lang="scss">
 @import "../sass/tema/globales";
 @import "../sass/base/colores";
+@import "../sass/tema/colores";
 @import "../sass/base/fondos";
 @import "../sass/base/helpers";
 @import "../sass/base/tipografia";
@@ -88,12 +89,13 @@ $ancho-menu-movil: 160px;
   font-size: .9em;
 
   &:hover{
-    background: transparentize($magenta, .1);
+    background: transparentize($lima-tema, .1);
+    color: $negro2;
   }
 
   &.router-link-active {
-    @extend .text--blanco;
-    background: transparentize($magenta, .5);
+    @extend .text--negro2;
+    background: transparentize($lima-tema, .5);
     cursor: default;
   }
 
@@ -113,7 +115,7 @@ $ancho-menu-movil: 160px;
 }
 
 .menu__hijos {
-  border-right: 3px solid $magenta;
+  border-right: 3px solid $lima-tema;
   cursor: default;
   display: none;
   height: 0;
@@ -164,7 +166,7 @@ $ancho-menu-movil: 160px;
   padding: .5em 1em;
 
   &:hover {
-    background: transparentize($magenta, .8);
+    background: transparentize($lima-tema, .8);
   }
 
   .fa {
