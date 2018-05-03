@@ -75,6 +75,7 @@
                   ref="map"
                   :center="mapCenter"
                   :zoom="14"
+                  :options="{ disableDefaultUI : true }"
                   map-type-id="terrain">
                   <gmap-marker
                     v-if="tarea.ubicacion && tarea.ubicacion.coordinates"

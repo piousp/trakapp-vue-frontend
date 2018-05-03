@@ -72,13 +72,13 @@ function enviar(txt) {
     return noop;
   }
   debug("Enviando el texto", isBlank(txt));
+  this.mensaje = {};
+  this.mensajes.docs.push(msj);
+  this.mensajes.cant += 1;
+  this.arreglarScroll();
   return chatApi.guardar(msj).then((resp) => {
     debug("Mensaje guardado");
     this.$socket.emit("mensajeEnviado", resp);
-    this.mensajes.docs.push(resp);
-    this.mensajes.cant += 1;
-    this.arreglarScroll();
-    this.mensaje = {};
     return null;
   });
 }

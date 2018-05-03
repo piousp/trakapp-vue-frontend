@@ -9,15 +9,19 @@
       <div class="modal__body">
         <div class="grid">
           <div class="col-6">
+            <p class="text">
+              Última vez: {{ empleado.ubicacion.lastUpdate | fecha("DD/MM/YYYY HH:mm") }}
+            </p>
             <gmap-map
               class="map-container"
               ref="map"
               :center="center"
               :zoom="15"
+              :options="{ disableDefaultUI : true }"
               map-type-id="terrain">
               <gmap-marker
                 :if="empleado"
-                :position="empleado.ubicacion"
+                :position="empleado.ubicacion.pos"
                 :clickable="false"/>
             </gmap-map>
           </div>
@@ -51,7 +55,7 @@ export default {
 
 function data() {
   return {
-    empleado: {},
+    empleado: { ubicacion: {} },
     center: { lat: 9.93, lng: -84.07 },
     modalVisible: false,
     mensajes: [],
@@ -61,8 +65,11 @@ function data() {
 
 function actualizarPosicion(e) {
   debug("actualizarPosicion", e);
-  this.empleado.ubicacion = generarCoords(e.ubicacion.pos.coordinates);
-  this.$refs.map.panTo(this.empleado.ubicacion);
+  this.empleado.ubicacion = {
+    lastUpdate: e.ubicacion.lastUpdate,
+    pos: generarCoords(e.ubicacion.pos.coordinates),
+  };
+  this.$refs.map.panTo(this.empleado.ubicacion.pos);
 }
 
 function generarCoords(coordinates) {
@@ -73,16 +80,16 @@ function abrirModal(empleado) {
   this.modalVisible = true;
   this.empleado = empleado;
   if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
-    this.empleado.ubicacion = generarCoords(this.empleado.ubicacion.pos.coordinates);
+    this.empleado.ubicacion.pos = generarCoords(this.empleado.ubicacion.pos.coordinates);
   }
   debug("Abriendo el modal del empleado", empleado);
   this.$refs.chat.cargarMensajes(empleado._id);
   this.$refs.map.$mapCreated
     .then((objMapa) => {
       const bounds = new google.maps.LatLngBounds();
-      bounds.extend(this.empleado.ubicacion);
+      bounds.extend(this.empleado.ubicacion.pos);
       objMapa.fitBounds(bounds);
-      objMapa.panTo(this.empleado.ubicacion);
+      objMapa.panTo(this.empleado.ubicacion.pos);
       return objMapa;
     })
     .catch((err) => {
