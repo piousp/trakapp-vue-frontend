@@ -1,10 +1,10 @@
 import axios from "../../config/axios";
 
-function listar(emisor, receptor, pagina, cantidad) {
+function listar(emisor, receptor, cargados, cantidad) {
   const query = {
     params: {
       emisor,
-      pagina,
+      cargados,
       cantidad,
     },
   };
