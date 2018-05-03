@@ -54,6 +54,14 @@ const Auth = {
           identificarSocket(this.usuario);
         }
       },
+      cambiarContraseña(idRec, nvoPass, movil) {
+        const url = movil ? `${axios.defaults.baseUrl}/api/auth/cambiarContrasena/movil/` : `${axios.defaults.baseUrl}/api/auth/cambiarContrasena/`;
+        return axios
+          .post(`${url}${idRec}`, {
+            password: nvoPass,
+          })
+          .then(resp => resp);
+      },
     };
 
     Object.defineProperties(Vue.prototype, {
