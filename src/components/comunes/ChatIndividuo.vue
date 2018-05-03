@@ -110,12 +110,15 @@ function mounted() {
   this.$refs.dialogo.onscroll = () => {
     if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
       this.cargando = true;
-      const pagina = this.mensajes.cant / this.limiteItems;
       return chatApi
-        .listar(this.idEmisor, this.idReceptor, pagina, this.limiteItems)
+        .listar(this.idEmisor, this.idReceptor, this.mensajes.docs.length, this.limiteItems)
         .then((msjs) => {
+          const heightInicial = this.$refs.dialogo.scrollHeight;
           this.mensajes.docs = msjs.docs.concat(this.mensajes.docs);
           this.cargando = false;
+          this.$nextTick(() => {
+            this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight - heightInicial;
+          });
           return msjs;
         });
     }
