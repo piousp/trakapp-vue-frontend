@@ -7,7 +7,7 @@ const ax = axios.create({
   baseUrl: process.env.API_URL,
 });
 
-Vue.use(VueProgressBar, { thickness: "4px" });
+Vue.use(VueProgressBar, { thickness: "3px" });
 
 ax.interceptors.request.use((config) => {
   Vue.prototype.$Progress.start();

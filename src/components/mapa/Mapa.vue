@@ -5,14 +5,18 @@
       ref="map"
       :center="center"
       :zoom="15"
+      :options="{ disableDefaultUI : true }"
       map-type-id="terrain">
       <gmap-marker
         :key="index"
         v-for="(e, index) in empleados"
-        :position="e.ubicacion"
+        :position="e.ubicacion.pos"
         :clickable="true"
         @click="e.opened=!e.opened">
-        <info-window :opened="e.opened">{{ e.nombre }} {{ e.apellidos }}</info-window>
+        <info-window :opened="e.opened">
+          <p class="text--bold">{{ `${e.nombre} ${e.apellidos}` }}</p>
+          <small>Últ. vez: {{ e.ubicacion.lastUpdate | fecha("DD/MM/YYYY HH:mm") }}</small>
+        </info-window>
       </gmap-marker>
     </gmap-map>
   </section>
@@ -53,7 +57,7 @@ function beforeRouteEnter(to, from, next) {
         vm.empleados = map(empleados.docs, (e) => {
           if (get(e.ubicacion, "pos.coordinates", null)) {
             e.opened = false;
-            e.ubicacion = generarCoords(e.ubicacion.pos.coordinates);
+            e.ubicacion.pos = generarCoords(e.ubicacion.pos.coordinates);
             return e;
           }
           return null;
@@ -71,7 +75,10 @@ function beforeRouteEnter(to, from, next) {
 function actualizarPosicion(e) {
   debug("actualizarPosicion", e);
   const i = findIndex(this.empleados, { _id: e._id });
-  this.empleados[i].ubicacion = generarCoords(e.ubicacion.pos.coordinates);
+  this.empleados[i].ubicacion = {
+    lastUpdate: e.ubicacion.lastUpdate,
+    pos: generarCoords(e.ubicacion.pos.coordinates),
+  };
 }
 
 function generarCoords(coordinates) {
@@ -86,7 +93,7 @@ function mounted() {
         mapaCargado.remove();
         const bounds = new google.maps.LatLngBounds();
         self.empleados.forEach((emp) => {
-          bounds.extend(emp.ubicacion);
+          bounds.extend(emp.ubicacion.pos);
         });
         objMapa.fitBounds(bounds);
       });
