@@ -4,6 +4,7 @@ import union from "lodash/union";
 import Home from "../components/Home.vue";
 import Login from "../components/Login.vue";
 import Registro from "../components/Registro.vue";
+import Recuperacion from "../components/Recuperacion.vue";
 import RutasMapa from "../components/mapa/rutas.js";
 import RutasEmpleados from "../components/empleados/rutas.js";
 import RutasAgenda from "../components/agenda/rutas.js";
@@ -33,6 +34,14 @@ const router = new Router({
       path: "/registro",
       name: "registro",
       component: Registro,
+      meta: {
+        esPublica: true,
+      },
+    },
+    {
+      path: "/recuperacion/:id",
+      name: "recuperacion",
+      component: Recuperacion,
       meta: {
         esPublica: true,
       },
