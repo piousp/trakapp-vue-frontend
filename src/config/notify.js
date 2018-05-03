@@ -18,13 +18,13 @@ const Notificacion = {
 };
 
 function notificar(mensaje, cuerpo) {
-  debug("notificando");
+  debug("notificando", document.hasFocus());
   if (document.hasFocus() === false) {
     const options = {
       body: cuerpo || "Trakapp",
       icon: "/static/icono.png",
     };
-    return new Notification("Prueba de notificación", options);
+    return new Notification(mensaje, options);
   }
   return debug("La página tiene el foco, no hace falta hacer una notificación");
 }

@@ -1,16 +1,19 @@
 <template>
   <section>
     <div class="grid">
-      <div class="col-auto text--center" v-for="emp in empleados"
-           :key="emp._id">
-        <div class="boton boton--blanco boton--s" @click="$refs.modalempleado.abrirModal(emp)">
+      <div class="col-2 panel panel--blanco">
+        <div class="boton boton--blanco boton--s"
+             @click="$refs.modalempleado.abrirModal(emp)"
+             v-for="emp in empleados" :key="emp._id">
           <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
           <span class="text">{{ emp.nombre }}</span>
         </div>
       </div>
+      <div class="col-10">
+        <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"/>
+      </div>
     </div>
     <modal-empleado ref="modalempleado"/>
-    <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"/>
     <div class="backdrop" v-if="modalVisible">
       <div class="modal modal--l">
         <div class="modal__header text--center">
