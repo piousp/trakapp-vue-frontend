@@ -1,44 +1,29 @@
 <template>
   <section class="login">
-    <div v-if="!exito">
+    <div v-if="!exito" class="login__body">
       <form v-if="validarRecuperacion(recuperacion)"
-            class="login__body"
-            novalidate @submit.stop.prevent="recuperar()"
-            style="width: 100% !important; padding-left: 10px; padding-right:10px">
-        <h1 class="text text--uppercase text--center">
-          <i class="fa fa-fw fa-user-plus"/>
-          Recuperar cuenta
-        </h1>
-        <div class="form__group"
-             :class="{ 'form__group--error': errors.has('password') && submitted }">
-          <label for="password"
-                 class="form__label login__label">
-            <span class="text--rojo">*</span>
-            Contraseña:
-          </label>
-          <input name="password"
+            novalidate @submit.stop.prevent="recuperar()">
+        <h1 class="text--center">Recuperar cuenta</h1>
+        <form-group :error="errors.has('password') && submitted">
+          <label for="password" class="form__label">Contraseña:</label>
+          <input type="text"
                  id="password"
-                 type="password"
-                 class="form__input login__input"
+                 name="password"
+                 placeholder="**********"
+                 class="form__input"
                  v-model="password"
-                 placeholder="********"
-                 v-validate="'required'">
-        </div>
-        <div class="form__group"
-             :class="{ 'form__group--error': errors.has('password2') && submitted }">
-          <label for="password2"
-                 class="form__label login__label">
-            <span class="text--rojo">*</span>
-            Confirme la contraseña:
-          </label>
-          <input name="password2"
-                 id="password2"
-                 type="password"
-                 class="form__input login__input"
-                 v-model="password2"
-                 placeholder="********"
                  v-validate="{rules: {regex: password, required: true}}">
-        </div>
+        </form-group>
+        <form-group :error="errors.has('password2') && submitted">
+          <label for="password2" class="form__label">Confirme la contraseña:</label>
+          <input type="text"
+                 id="password2"
+                 name="password2"
+                 placeholder="**********"
+                 class="form__input"
+                 v-model="password2"
+                 v-validate="{rules: {regex: password, required: true}}">
+        </form-group>
         <div class="text--center">
           <button class="boton boton--l boton--musgo" type="submit">
             <i class="fa fa-fw fa-check"/>
@@ -51,7 +36,7 @@
         Parece que este link ya no es válido, por favor genere otra petición de recuperación
       </h1>
     </div>
-    <div v-else>
+    <div v-else class="login__body">
       <h1 style="width: 100% !important"
           class="login__body text text--uppercase text--center">
         El cambio se efectuó exitosamente, ya puede cerrar esta ventana.
@@ -64,7 +49,7 @@ import moment from "moment";
 import isEmpty from "lodash/isEmpty";
 import axios from "../config/axios";
 
-const debug = require("debug")("app:login");
+const debug = require("debug")("ciris:Recuperacion.vue");
 
 export default {
   data,
@@ -97,7 +82,7 @@ function recuperar() {
     .validateAll()
     .then((result) => {
       if (result) {
-        this.$auth.cambiarContraseña(this.recuperacion._id, this.password, true).then((resp) => {
+        this.$auth.cambiarContrasena(this.recuperacion._id, this.password, true).then((resp) => {
           if (isEmpty(resp)) {
             return this.$toastr("error", "Ocurrio un error cambiando la contraseña, intente nuevamente", "Error");
           }
