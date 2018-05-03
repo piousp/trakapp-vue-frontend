@@ -11,6 +11,7 @@ import VueToastr from "@deveodk/vue-toastr";
 import App from "./App.vue";
 import router from "./config/router";
 import Auth from "./config/auth.js";
+import Notify from "./config/notify.js";
 import axios from "./config/axios.js";
 import messages from "./i18n";
 import "./config/filtros.js";
@@ -22,6 +23,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VueToastr);
 Vue.use(VeeValidate);
+Vue.use(Notify);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
 Vue.use(VueWebsocket, Vue.axios.defaults.baseUrl);
