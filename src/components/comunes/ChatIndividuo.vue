@@ -101,6 +101,7 @@ function arreglarScroll() {
 }
 
 function recibirMensaje(mensaje) {
+  this.$notify(mensaje.texto);
   this.mensajes.docs.push(mensaje);
   this.mensajes.cant += 1;
   this.arreglarScroll();

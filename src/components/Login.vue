@@ -78,7 +78,7 @@ function login() {
       return this.$auth.login(this.usuario, this.password, this.recordar)
         .then((resp) => {
           debug(resp);
-          this.$router.push({ name: "home" });
+          this.$router.push({ name: "agenda" });
           this.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
           return resp;
         })
