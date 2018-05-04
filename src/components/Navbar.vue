@@ -18,7 +18,7 @@
         </div>
         <div slot="content">
           <ul class="popover__list">
-            <router-link class="popover__list__item" tag="li" :to="{ name: 'parametros' }">
+            <router-link class="popover__list__item" tag="li" :to="{ name: 'configuracion' }">
               <i class="fal fa-fw fa-cog"/>
               <span>Configuración</span>
             </router-link>

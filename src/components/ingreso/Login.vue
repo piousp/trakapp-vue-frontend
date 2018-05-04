@@ -43,7 +43,7 @@
 <script>
 import D from "debug";
 import noop from "lodash/noop";
-import id from "./ids.js";
+import id from "../ids.js";
 
 const debug = D("ciris:Login.vue");
 export default {
