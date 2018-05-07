@@ -47,7 +47,7 @@
 <script>
 import moment from "moment";
 import isEmpty from "lodash/isEmpty";
-import axios from "../config/axios";
+import axios from "../../config/axios";
 
 const debug = require("debug")("ciris:Recuperacion.vue");
 

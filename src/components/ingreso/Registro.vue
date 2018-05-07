@@ -213,8 +213,8 @@ function id() {
 </script>
 
 <style lang="scss">
-@import "../sass/base/colores";
-@import "../sass/base/helpers";
+@import "../../sass/base/colores";
+@import "../../sass/base/helpers";
 
 .login {
   align-items: center;
