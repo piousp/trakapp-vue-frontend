@@ -6,10 +6,10 @@
           <i v-show="cargando" class="fas fa-circle-notch fa-spin fa-2x text--gris6"/>
         </div>
         <div
-          :class="{'text--right': msj.emisor === idEmisor}"
+          :class="{'text--right': msj.emisor._id === idEmisor}"
           v-for="msj in mensajes.docs" :key="msj._id">
           <div class="chat__dialogo__msj text"
-               :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}">
+               :class="{'chat__dialogo__msj--yo': msj.emisor._id === idEmisor}">
             <p>{{ msj.texto }}</p>
           </div>
           <p class="text text--extra-small chat__dialogo__hora">
@@ -18,8 +18,8 @@
         </div>
       </div>
       <div class="chat__input">
-        <textarea class="form__input" placeholder="Escriba un mensaje..."
-                  v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)"
+        <textarea class="form__input" placeholder="Escriba un mensaje..." :disabled="cargando"
+                  v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)" ref="chatInput"
         />
       </div>
     </div>
@@ -40,6 +40,7 @@ export default {
     enviar,
     cargarMensajes,
     arreglarScroll,
+    agregarMensaje,
   },
   sockets: {
     recibirMensaje,
@@ -67,18 +68,22 @@ function enviar(txt) {
     texto: txt,
     emisor: this.idEmisor,
     receptor: this.idReceptor,
+    modelo: "usuario",
   };
   if (isBlank(txt)) {
     return noop;
   }
   debug("Enviando el texto", isBlank(txt));
-  this.mensaje = {};
-  this.mensajes.docs.push(msj);
-  this.mensajes.cant += 1;
-  this.arreglarScroll();
+  this.cargando = true;
   return chatApi.guardar(msj).then((resp) => {
     debug("Mensaje guardado");
     this.$socket.emit("mensajeEnviado", resp);
+    this.agregarMensaje();
+    this.mensaje = {};
+    this.cargando = false;
+    setTimeout(() => {
+      this.$refs.chatInput.focus();
+    }, 10);
     return null;
   });
 }
@@ -86,9 +91,10 @@ function enviar(txt) {
 function cargarMensajes(id) {
   debug("Cargando los mensajes del chat");
   this.idReceptor = id;
-  return chatApi.listar(this.idEmisor, this.idReceptor, 0, this.limiteItems).then((msjs) => {
+  return chatApi.listarPrivado(this.idEmisor, this.idReceptor, 0, this.limiteItems).then((msjs) => {
     this.mensajes = msjs;
     this.arreglarScroll();
+    this.$refs.chatInput.focus();
     return null;
   });
 }
@@ -101,6 +107,10 @@ function arreglarScroll() {
 }
 
 function recibirMensaje(mensaje) {
+  this.agregarMensaje(mensaje);
+}
+
+function agregarMensaje(mensaje) {
   this.mensajes.docs.push(mensaje);
   this.mensajes.cant += 1;
   this.arreglarScroll();
@@ -111,7 +121,7 @@ function mounted() {
     if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
       this.cargando = true;
       return chatApi
-        .listar(this.idEmisor, this.idReceptor, this.mensajes.docs.length, this.limiteItems)
+        .listarPrivado(this.idEmisor, this.idReceptor, this.mensajes.docs.length, this.limiteItems)
         .then((msjs) => {
           const heightInicial = this.$refs.dialogo.scrollHeight;
           this.mensajes.docs = msjs.docs.concat(this.mensajes.docs);
@@ -127,33 +137,4 @@ function mounted() {
 }
 </script>
 
-<style lang="scss">
-@import "../../sass/base/colores";
-.chat {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.chat__input {
-  width: 100%;
-  background-color: $gris-fondo;
-}
-.chat__dialogo {
-  overflow-y: auto;
-  flex-grow: 2;
-  height: 260px
-}
-.chat__dialogo__msj {
-  min-width: 80px;
-  background: $verde-vivo;
-  display: inline-block;
-  min-width: 80px;
-  padding: .5em;
-  color: $negro2;
-  border-radius: 5px;
-}
-
-.chat__dialogo__msj--yo {
-  background: $grisc;
-}
-</style>
+<style lang="scss" src="./_chatEstilos.scss"></style>

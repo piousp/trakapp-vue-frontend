@@ -1,19 +1,17 @@
 <template>
   <section>
-    <div class="botones-pagina">
-      <button
-        type="button"
-        class="boton boton--verde"
-        @click="buscarUsuarios">
-        <i class="far fa-fw fa-search"/>
-        Usuarios
-      </button>
-    </div>
-    <div class="chat" v-if="idReceptor">
-      <div class="chat__dialogo">
-        <div :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}"
-             v-for="msj in mensajes" :key="msj._id">
-          <div class="chat__dialogo__msj text">
+    <div class="chat">
+      <div class="chat__dialogo" ref="chat">
+        <div class="text--center">
+          <i v-show="cargando" class="fas fa-circle-notch fa-spin fa-2x text--gris6"/>
+        </div>
+        <div :class="{'text--right': msj.emisor._id === idEmisor}"
+             v-for="msj in mensajes.docs" :key="msj._id">
+          <div class="chat__dialogo__msj text"
+               :class="{'chat__dialogo__msj--yo': msj.emisor._id === idEmisor}">
+            <p v-show="msj.emisor._id !== idEmisor" class="text--blanco text--bold">
+              {{ msj.emisor.nombre }}:
+            </p>
             <p>{{ msj.texto }}</p>
           </div>
           <p class="text text--small chat__dialogo__hora">
@@ -27,112 +25,92 @@
       </div>
     </div>
 
-    <div class="backdrop" v-show="mostrarModal">
-      <div class="modal">
-        <div class="modal__header text--center">
-          <span class="modal__header__cerrar" @click="cerrarModal"/>
-          <div class="modal__header__titulo">
-            <i class="fal fa-fw fa-user"/>Usuarios
-          </div>
-        </div>
-        <div class="modal__body">
-          <ul class="lista" v-for="emp in empleados" :key="emp._id">
-            <li @click="cargarMensajes(emp._id)">
-              <span>{{ emp.nombre }} {{ emp.apellidos }}</span>
-              <i class="float--right far fa-fw fa-comment-alt"/>
-            </li>
-          </ul>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="boton boton--cancelar" @click="mostrarModal = false"/>
-        </div>
-      </div>
-    </div>
   </section>
 </template>
 
 <script>
-import moment from "moment";
-import empleadoApi from "../empleados/empleadoApi";
 import chatApi from "./chatApi";
 
 export default {
   data,
+  mounted,
   methods: {
     enviar,
-    buscarUsuarios,
-    cerrarModal,
-    cargarMensajes,
+    iniciarPaginacion,
+    arreglarScroll,
   },
   sockets: {
-    recibirMensaje,
+    recibirBroadcast,
   },
-  beforeRouteEnter,
 };
 
 function data() {
   return {
-    empleados: [],
     mensajes: [],
     mensaje: {},
-    mostrarModal: false,
     idEmisor: this.$auth.usuario._id,
-    idReceptor: null,
+    limiteItems: 20,
+    cargando: false,
   };
 }
 
 function enviar(txt) {
   const msj = {
     texto: txt,
-    fechaEnvio: moment(),
     emisor: this.idEmisor,
-    receptor: this.idReceptor,
+    modelo: "usuario",
   };
   return chatApi.guardar(msj).then((resp) => {
-    this.$socket.emit("mensajeEnviado", resp);
-    this.mensajes.push(resp);
+    this.$socket.emit("broadcastEnviado", resp);
+    this.mensajes.docs.push(resp);
+    this.mensajes.cant += 1;
     this.mensaje = {};
+    this.arreglarScroll();
     return null;
   });
 }
 
-function buscarUsuarios() {
-  this.mostrarModal = true;
+function recibirBroadcast(mensaje) {
+  this.mensajes.docs.push(mensaje);
+  this.mensajes.cant += 1;
+  this.arreglarScroll();
 }
 
-function cargarMensajes(id) {
-  this.$router.push({ name: "chat", params: { receptor: id } });
-  this.idReceptor = id;
-  this.cerrarModal();
-  return chatApi.listar(this.idEmisor, id).then((msjs) => {
-    this.mensajes = msjs.docs;
-    return null;
+function arreglarScroll() {
+  this.$nextTick(() => {
+    this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight;
   });
 }
 
-function cerrarModal() {
-  this.mostrarModal = false;
-}
-
-function recibirMensaje(mensaje) {
-  this.mensajes.push(mensaje);
-}
-
-function beforeRouteEnter(to, from, next) {
-  next((vm) => {
-    const idReceptor = to.params.receptor;
-    const promesas = [empleadoApi.listar()];
-    if (idReceptor) {
-      vm.idReceptor = idReceptor;
-      promesas.push(chatApi.listar(vm.$auth.usuario._id, idReceptor));
+function iniciarPaginacion() {
+  this.$refs.chat.onscroll = () => {
+    if (this.$refs.chat.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
+      this.cargando = true;
+      return chatApi
+        .listarPublico(this.mensajes.docs.length, this.limiteItems)
+        .then((msjs) => {
+          const heightInicial = this.$refs.chat.scrollHeight;
+          this.mensajes.docs = msjs.docs.concat(this.mensajes.docs);
+          this.cargando = false;
+          this.$nextTick(() => {
+            this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight - heightInicial;
+          });
+          return msjs;
+        });
     }
-    return Promise.all(promesas).then(([empleados, mensajes]) => {
-      vm.empleados = empleados.docs;
-      vm.mensajes = mensajes ? mensajes.docs : [];
-      return null;
+    return null;
+  };
+}
+
+function mounted() {
+  return chatApi
+    .listarPublico(0, this.limiteItems)
+    .then((msjs) => {
+      this.mensajes = msjs;
+      this.arreglarScroll();
+      this.iniciarPaginacion();
+      return msjs;
     });
-  });
 }
 </script>
-<style lang="scss">
-</style>
+<style lang="scss" src="../comunes/_chatEstilos.scss"></style>

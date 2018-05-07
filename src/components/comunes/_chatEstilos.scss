@@ -1,0 +1,30 @@
+
+@import "../../sass/base/colores";
+.chat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.chat__input {
+  width: 100%;
+  background-color: $gris-fondo;
+}
+.chat__dialogo {
+  overflow-y: auto;
+  flex-grow: 2;
+  height: 260px
+}
+.chat__dialogo__msj {
+  min-width: 80px;
+  background: $verde;
+  display: inline-block;
+  min-width: 80px;
+  padding: .5em;
+  color: $blanco;
+  border-radius: 5px;
+}
+
+.chat__dialogo__msj--yo {
+  background: $grisc;
+  color: $negro2;
+}
