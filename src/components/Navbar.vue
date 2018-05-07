@@ -18,9 +18,9 @@
         </div>
         <div slot="content">
           <ul class="popover__list">
-            <router-link class="popover__list__item" tag="li" :to="{ name: 'configuracion' }">
-              <i class="fal fa-fw fa-cog"/>
-              <span>Configuración</span>
+            <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
+              <i class="fal fa-fw fa-user"/>
+              <span>Mi Perfil</span>
             </router-link>
             <li class="popover__list__item" @click="logout">
               <i class="fal fa-fw fa-sign-out"/>

@@ -1,13 +1,13 @@
-import Configuracion from "./Configuracion.vue";
+import Perfil from "./Perfil.vue";
 
 export default [
   {
-    path: "/configuracion",
-    name: "configuracion",
-    component: Configuracion,
+    path: "/perfil",
+    name: "perfil",
+    component: Perfil,
     meta: {
-      titulo: "Configuración",
-      icono: "fal fa-fw fa-cogs",
+      titulo: "Perfil",
+      icono: "fal fa-fw fa-user",
     },
   },
 ];
