@@ -5,10 +5,6 @@
       <img class="navbar__left__logo" src="/static/icono.png">
     </div>
     <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
-      <div class="navbar__right__elem">
-        <i class="fa fa-fw" :class="titulo.meta.icono"/>
-        <span class="text text--negro4">{{ titulo.meta.titulo }}</span>
-      </div>
       <div class="navbar__right__botones navbar__right__elem"/>
       <popover name="default" class="popover">
         <div slot="face" class="navbar__popover">
