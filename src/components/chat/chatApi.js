@@ -1,6 +1,6 @@
 import axios from "../../config/axios";
 
-function listar(emisor, receptor, cargados, cantidad) {
+function listarPrivado(cargados, cantidad, emisor, receptor) {
   const query = {
     params: {
       emisor,
@@ -9,7 +9,19 @@ function listar(emisor, receptor, cargados, cantidad) {
     },
   };
   return axios
-    .get(`${axios.defaults.baseUrl}/api/mensaje/${receptor}`, query)
+    .get(`${axios.defaults.baseUrl}/api/mensaje/privado/${receptor}`, query)
+    .then(resp => resp.data);
+}
+
+function listarPublico(cargados, cantidad) {
+  const query = {
+    params: {
+      cargados,
+      cantidad,
+    },
+  };
+  return axios
+    .get(`${axios.defaults.baseUrl}/api/mensaje/publico`, query)
     .then(resp => resp.data);
 }
 
@@ -25,7 +37,8 @@ function guardar(obj) {
 }
 
 const chatApi = {
-  listar,
+  listarPrivado,
+  listarPublico,
   guardar,
 };
 
