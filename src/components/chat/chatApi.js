@@ -1,6 +1,6 @@
 import axios from "../../config/axios";
 
-function listarPrivado(emisor, receptor, cargados, cantidad) {
+function listarPrivado(cargados, cantidad, emisor, receptor) {
   const query = {
     params: {
       emisor,
