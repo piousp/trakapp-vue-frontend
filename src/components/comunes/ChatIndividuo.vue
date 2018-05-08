@@ -6,10 +6,11 @@
           <i v-show="cargando" class="fas fa-circle-notch fa-spin fa-2x text--gris6"/>
         </div>
         <div
-          :class="{'text--right': msj.emisor === idEmisor}"
+          :class="{'text--right': msj.emisor._id === idEmisor}"
           v-for="msj in mensajes.docs" :key="msj._id">
           <div class="chat__dialogo__msj text"
-               :class="{'chat__dialogo__msj--yo': msj.emisor === idEmisor}">
+               :class="{'chat__dialogo__msj--yo': msj.emisor._id === idEmisor}">
+            <p v-show="!privado" class="text--bold">{{ msj.emisor.nombre }}:</p>
             <p>{{ msj.texto }}</p>
           </div>
           <p class="text text--extra-small chat__dialogo__hora">
@@ -18,8 +19,8 @@
         </div>
       </div>
       <div class="chat__input">
-        <textarea class="form__input" placeholder="Escriba un mensaje..."
-                  v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)"
+        <textarea class="form__input" placeholder="Escriba un mensaje..." :disabled="cargando"
+                  v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)" ref="chatInput"
         />
       </div>
     </div>
@@ -34,15 +35,25 @@ import chatApi from "../chat/chatApi.js";
 const debug = D("ciris:comunes/ChatIndividuo.vue");
 
 export default {
+  props: {
+    privado: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
   data,
   mounted,
   methods: {
     enviar,
     cargarMensajes,
     arreglarScroll,
+    agregarMensaje,
+    listar,
   },
   sockets: {
-    recibirMensaje,
+    recibirMensaje: agregarMensaje,
+    recibirBroadcast: agregarMensaje,
   },
 };
 
@@ -66,19 +77,25 @@ function enviar(txt) {
   const msj = {
     texto: txt,
     emisor: this.idEmisor,
-    receptor: this.idReceptor,
+    modelo: "usuario",
   };
+  if (this.privado) {
+    msj.receptor = this.idReceptor;
+  }
   if (isBlank(txt)) {
     return noop;
   }
   debug("Enviando el texto", isBlank(txt));
-  this.mensaje = {};
-  this.mensajes.docs.push(msj);
-  this.mensajes.cant += 1;
-  this.arreglarScroll();
+  this.cargando = true;
   return chatApi.guardar(msj).then((resp) => {
     debug("Mensaje guardado");
-    this.$socket.emit("mensajeEnviado", resp);
+    this.$socket.emit(this.privado ? "mensajeEnviado" : "broadcastEnviado", resp);
+    this.agregarMensaje(resp, true);
+    this.mensaje = {};
+    this.cargando = false;
+    setTimeout(() => {
+      this.$refs.chatInput.focus();
+    }, 10);
     return null;
   });
 }
@@ -86,9 +103,10 @@ function enviar(txt) {
 function cargarMensajes(id) {
   debug("Cargando los mensajes del chat");
   this.idReceptor = id;
-  return chatApi.listar(this.idEmisor, this.idReceptor, 0, this.limiteItems).then((msjs) => {
+  return this.listar().then((msjs) => {
     this.mensajes = msjs;
     this.arreglarScroll();
+    this.$refs.chatInput.focus();
     return null;
   });
 }
@@ -100,19 +118,27 @@ function arreglarScroll() {
   });
 }
 
-function recibirMensaje(mensaje) {
+function agregarMensaje(mensaje) {
   this.$notify(mensaje.texto);
   this.mensajes.docs.push(mensaje);
   this.mensajes.cant += 1;
   this.arreglarScroll();
 }
 
+function listar() {
+  if (this.privado) {
+    return chatApi
+      .listarPrivado(this.mensajes.docs.length, this.limiteItems, this.idEmisor, this.idReceptor);
+  }
+  return chatApi
+    .listarPublico(this.mensajes.docs.length, this.limiteItems);
+}
+
 function mounted() {
   this.$refs.dialogo.onscroll = () => {
     if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
       this.cargando = true;
-      return chatApi
-        .listar(this.idEmisor, this.idReceptor, this.mensajes.docs.length, this.limiteItems)
+      return this.listar()
         .then((msjs) => {
           const heightInicial = this.$refs.dialogo.scrollHeight;
           this.mensajes.docs = msjs.docs.concat(this.mensajes.docs);
@@ -129,6 +155,7 @@ function mounted() {
 </script>
 
 <style lang="scss">
+
 @import "../../sass/base/colores";
 .chat {
   display: flex;
@@ -146,15 +173,16 @@ function mounted() {
 }
 .chat__dialogo__msj {
   min-width: 80px;
-  background: $verde-vivo;
+  background: $verde;
   display: inline-block;
   min-width: 80px;
   padding: .5em;
-  color: $negro2;
+  color: $blanco;
   border-radius: 5px;
 }
 
 .chat__dialogo__msj--yo {
   background: $grisc;
+  color: $negro2;
 }
 </style>
