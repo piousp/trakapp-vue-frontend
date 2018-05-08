@@ -43,7 +43,7 @@
 <script>
 import D from "debug";
 import noop from "lodash/noop";
-import id from "./ids.js";
+import id from "../ids.js";
 
 const debug = D("ciris:Login.vue");
 export default {
@@ -78,7 +78,7 @@ function login() {
       return this.$auth.login(this.usuario, this.password, this.recordar)
         .then((resp) => {
           debug(resp);
-          this.$router.push({ name: "home" });
+          this.$router.push({ name: "agenda" });
           this.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
           return resp;
         })

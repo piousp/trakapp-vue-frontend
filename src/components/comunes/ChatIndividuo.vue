@@ -90,7 +90,7 @@ function enviar(txt) {
   return chatApi.guardar(msj).then((resp) => {
     debug("Mensaje guardado");
     this.$socket.emit(this.privado ? "mensajeEnviado" : "broadcastEnviado", resp);
-    this.agregarMensaje(resp);
+    this.agregarMensaje(resp, true);
     this.mensaje = {};
     this.cargando = false;
     setTimeout(() => {
@@ -119,6 +119,7 @@ function arreglarScroll() {
 }
 
 function agregarMensaje(mensaje) {
+  this.$notify(mensaje.texto);
   this.mensajes.docs.push(mensaje);
   this.mensajes.cant += 1;
   this.arreglarScroll();
