@@ -5,10 +5,6 @@
       <img class="navbar__left__logo" src="/static/icono.png">
     </div>
     <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
-      <div class="navbar__right__elem">
-        <i class="fa fa-fw" :class="titulo.meta.icono"/>
-        <span class="text text--negro4">{{ titulo.meta.titulo }}</span>
-      </div>
       <div class="navbar__right__botones navbar__right__elem"/>
       <popover name="default" class="popover">
         <div slot="face" class="navbar__popover">
@@ -19,8 +15,12 @@
         <div slot="content">
           <ul class="popover__list">
             <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
-              <i class="fal fa-fw fa-user"/>
+              <i class="fal fa-fw fa-user-cog"/>
               <span>Mi Perfil</span>
+            </router-link>
+            <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
+              <i class="fal fa-fw fa-warehouse-alt"/>
+              <span>Configurar Cuenta</span>
             </router-link>
             <li class="popover__list__item" @click="logout">
               <i class="fal fa-fw fa-sign-out"/>

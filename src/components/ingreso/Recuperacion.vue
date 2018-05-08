@@ -12,7 +12,7 @@
                  placeholder="**********"
                  class="form__input"
                  v-model="password"
-                 v-validate="{rules: {regex: password, required: true}}">
+                 v-validate="{rules: {is: password2, required: true}}">
         </form-group>
         <form-group :error="errors.has('password2') && submitted">
           <label for="password2" class="form__label">Confirme la contraseña:</label>
@@ -22,7 +22,7 @@
                  placeholder="**********"
                  class="form__input"
                  v-model="password2"
-                 v-validate="{rules: {regex: password, required: true}}">
+                 v-validate="{rules: {is: password, required: true}}">
         </form-group>
         <div class="text--center">
           <button class="boton boton--l boton--musgo" type="submit">
@@ -121,7 +121,7 @@ function beforeRouteEnter(to, from, next) {
   if (to.params.id) {
     obtener(to.params.id).then(resp => next((vm) => {
       vm.recuperacion = resp;
-    })).catch(err => console.log(err));
+    })).catch(err => debug(err));
   } else {
     next();
   }

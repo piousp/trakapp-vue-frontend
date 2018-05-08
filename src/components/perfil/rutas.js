@@ -1,4 +1,5 @@
 import Perfil from "./Perfil.vue";
+import Cuenta from "./Cuenta.vue";
 
 export default [
   {
@@ -7,7 +8,16 @@ export default [
     component: Perfil,
     meta: {
       titulo: "Perfil",
-      icono: "fal fa-fw fa-user",
+      icono: "fal fa-fw fa-user-cog",
+    },
+  },
+  {
+    path: "/cuenta",
+    name: "cuenta",
+    component: Cuenta,
+    meta: {
+      titulo: "Cuenta",
+      icono: "fal fa-fw fa-warehouse-alt",
     },
   },
 ];
