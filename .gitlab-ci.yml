@@ -15,8 +15,6 @@ lintear:
 deploy_desarrollo:
   stage: deploy
   script:
-    - git submodule init
-    - git submodule update
     - npm install
     - npm run build
     - rsync -rlDv --delete * /software/trakapp/frontend/
