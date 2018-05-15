@@ -2,7 +2,7 @@
   <section>
     <div class="grid">
       <div class="col-2 panel panel--blanco">
-        <lista-empleados @abrir="(emp) => { $refs.modalempleado.abrirModal(emp) }"/>
+        <lista-empleados/>
       </div>
       <div class="col-10">
         <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"
@@ -10,7 +10,6 @@
                        @event-selected="(evt) => { $refs.modaltarea.editarModal(evt) }"/>
       </div>
     </div>
-    <modal-empleado ref="modalempleado"/>
     <modal-tarea ref="modaltarea"
                  @aceptar="(t) => { aceptarTarea(t) }"
                  @eliminar="(t) => { eliminarTarea(t) }"/>
@@ -23,7 +22,6 @@ import D from "debug";
 import obtenerColor from "./colores.js";
 import agendaApi from "./agendaApi";
 import ListaEmpleados from "./ListaEmpleados.vue";
-import ModalEmpleado from "./ModalEmpleado.vue";
 import ModalTarea from "./ModalTarea.vue";
 
 const debug = D("ciris:Agenda.vue");
@@ -31,7 +29,6 @@ const debug = D("ciris:Agenda.vue");
 export default {
   components: {
     FullCalendar,
-    "modal-empleado": ModalEmpleado,
     "modal-tarea": ModalTarea,
     "lista-empleados": ListaEmpleados,
   },
@@ -61,7 +58,6 @@ function data() {
         today: "Hoy",
       },
     },
-    empleados: [],
   };
 }
 
@@ -76,11 +72,9 @@ function guardarTarea(tarea) {
   return agendaApi.guardar(limpiarParaGuardar(tarea)).then((resp) => {
     debug("Respuesta de guardado de tarea", resp);
     if (tarea._id) {
-      self.$refs.calendario.fireMethod("updateEvent", agregarCamposCalendario(tarea));
-      return self.cerrarModal();
+      return self.$refs.calendario.fireMethod("updateEvent", agregarCamposCalendario(tarea));
     }
-    self.$refs.calendario.fireMethod("renderEvent", agregarCamposCalendario(resp));
-    return tarea;
+    return self.$refs.calendario.fireMethod("renderEvent", agregarCamposCalendario(resp));
   });
 }
 
