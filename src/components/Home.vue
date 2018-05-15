@@ -1,10 +1,5 @@
 <template>
   <div class="layout">
-    <div class="layout__menu"
-         tabindex="0"
-         :class="{'layout__menu--active': estaMostrado}">
-      <directorio/>
-    </div>
     <div class="layout__content">
       <navbar/>
       <div class="layout__padding">
@@ -44,42 +39,17 @@ export default {
   @import "../sass/base/helpers";
   @import "../sass/tema/globales";
   html, body{
-    background: $gris-fondo;
+    background: url("/static/fondo.jpg");
+    background-attachment: fixed;
+    background-size: cover;
   }
 
   .layout {
     height: 100%;
-    background: $gris-fondo;
-  }
-
-  .layout__menu{
-    background: $negro2;
-    box-shadow: inset -1px 0 0 $negro;
-    z-index: 3;
-    position: fixed;
-    height: 100%;
-    top: 52px;
-    display: none;
-    width: 160px;
-    outline:none;
-
-    @media (min-width: $reflex-md ) {
-      display: inherit;
-      width: 200px;
-    }
-  }
-
-  .layout__menu--active {
-    display: inherit !important;
   }
 
   .layout__content{
-    background-attachment: fixed;
-    background-size: cover;
-    @media (min-width: $reflex-md ) {
-      padding-left: 200px;
-      padding-top: 52px;
-    }
+    padding-top: 90px;
   }
 
   .layout__padding {
