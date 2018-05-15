@@ -1,6 +1,6 @@
 {
   "name": "trakapp",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "UI del rastreador",
   "author": "Ciris Informatic Solutions <ventas@ciriscr.com>",
   "scripts": {
@@ -37,6 +37,7 @@
     "vue-progressbar": "0.7.3",
     "vue-router": "3.0.1",
     "vue-socket.io": "2.1.1-b",
+    "vue-stash": "2.0.1-beta",
     "vue2-google-maps": "0.8.10",
     "vuejs-datepicker": "0.9.24"
   },

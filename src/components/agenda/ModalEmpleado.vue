@@ -51,11 +51,11 @@ export default {
   sockets: {
     actualizarPosicion,
   },
+  store: ["empleado"],
 };
 
 function data() {
   return {
-    empleado: { ubicacion: {} },
     center: { lat: 9.93, lng: -84.07 },
     modalVisible: false,
     mensajes: [],
@@ -76,14 +76,13 @@ function generarCoords(coordinates) {
   return new google.maps.LatLng(coordinates[1], coordinates[0]);
 }
 
-function abrirModal(empleado) {
+function abrirModal() {
   this.modalVisible = true;
-  this.empleado = empleado;
   if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
     this.empleado.ubicacion.pos = generarCoords(this.empleado.ubicacion.pos.coordinates);
   }
-  debug("Abriendo el modal del empleado", empleado);
-  this.$refs.chat.cargarMensajes(empleado._id);
+  debug("Abriendo el modal del empleado", this.empleado);
+  this.$refs.chat.cargarMensajes(this.empleado._id);
   this.$refs.map.$mapCreated
     .then((objMapa) => {
       const bounds = new google.maps.LatLngBounds();
