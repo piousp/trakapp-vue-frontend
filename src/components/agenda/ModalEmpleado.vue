@@ -51,11 +51,11 @@ export default {
   sockets: {
     actualizarPosicion,
   },
+  store: ["empleado"],
 };
 
 function data() {
   return {
-    empleado: { ubicacion: {} },
     center: { lat: 9.93, lng: -84.07 },
     modalVisible: false,
     mensajes: [],
