@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import Menu from "./Menu.vue";
 import Navbar from "./Navbar.vue";
 
 function data() {
@@ -28,7 +27,7 @@ function created() {
 
 export default {
   name: "App",
-  components: { directorio: Menu, Navbar },
+  components: { Navbar },
   data,
   created,
 };

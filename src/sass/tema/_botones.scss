@@ -42,7 +42,7 @@
 }
 
 .boton--nuevo {
-  @include boton-expecial(".boton--negro4", $kiwi-vivo, "\f15b", ".flipInX", "Nuevo");
+  @include boton-expecial(".boton--cyan", $cyan-pastel, "\f15b", ".flipInX", "Nuevo");
 }
 
 .boton--eliminar {

@@ -5,7 +5,9 @@
         <div class="col-2">
           <img src="/static/logo-hor.png" alt="Logo" class="img-responsive navbar__logo">
         </div>
-        <div class="col-8"/>
+        <div class="col-8">
+          <directorio/>
+        </div>
         <div class="col-2">
           <popover name="default" class="popover">
             <div slot="face" class="navbar__popover">
@@ -45,11 +47,13 @@
 
 <script>//
 import popover from "vue-popover";
+import Menu from "./Menu.vue";
 import pkg from "../../package.json";
 
 export default {
   components: {
     popover,
+    directorio: Menu,
   },
   data,
   computed: {
