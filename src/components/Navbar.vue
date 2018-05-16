@@ -30,7 +30,7 @@
                   <span>Cerrar sesión</span>
                 </li>
                 <li class="popover__list__divider"/>
-                <li class="text--small text--italic navbar__version">
+                <li class="popover__list__item">
                   <i class="fal fa-fw fa-tags"/>
                   <span>Versión: {{ version }}</span>
                 </li>
@@ -140,21 +140,10 @@ function version() {
     z-index: 5;
   }
 
-  .popover{
-    position:inherit !important;
-    z-index: 9;
-  }
-
-  .popover__container{
-    position: absolute;
-    right: -16px;
-    top: 30px;
-    width: 200px;
-  }
-
   .navbar__popover {
     cursor: pointer;
     text-align: right;
+    line-height: 45px;
   }
   .navbar__version {
     padding: 8px 16px;
