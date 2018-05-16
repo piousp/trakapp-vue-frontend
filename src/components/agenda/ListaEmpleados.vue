@@ -1,13 +1,16 @@
 <template>
-  <div class="modal-empleado">
-    <div class="boton boton--blanco boton--s"
-         @click="abrirEmpleado(emp)"
-         v-for="emp in empleados" :key="emp._id">
-      <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
-      <span class="text">{{ emp.nombre }}</span>
-    </div>
+  <section>
+    <ul class="lista lista--clickeable">
+      <li class="lista__item"
+          @click="abrirEmpleado(emp)"
+          v-for="emp in empleados"
+          :key="emp._id">
+        <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
+        <span class="text">{{ emp.nombre }} {{ emp.apellidos }}</span>
+      </li>
+    </ul>
     <modal-empleado ref="modalempleado"/>
-  </div>
+  </section>
 </template>
 
 <script>

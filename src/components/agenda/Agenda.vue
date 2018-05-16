@@ -1,10 +1,10 @@
 <template>
   <section>
     <div class="grid">
-      <div class="col-2 panel panel--blanco">
+      <div class="col-md-2">
         <lista-empleados/>
       </div>
-      <div class="col-10">
+      <div class="col-md-10">
         <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"
                        @event-created="(evt) => { $refs.modaltarea.abrirModal(evt) }"
                        @event-selected="(evt) => { $refs.modaltarea.editarModal(evt) }"/>
