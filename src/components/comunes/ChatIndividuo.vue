@@ -103,7 +103,7 @@ function enviar(txt) {
 function cargarMensajes(id) {
   debug("Cargando los mensajes del chat");
   this.idReceptor = id;
-  return this.listar().then((msjs) => {
+  return this.listar(0).then((msjs) => {
     this.mensajes = msjs;
     this.arreglarScroll();
     this.$refs.chatInput.focus();
@@ -119,26 +119,25 @@ function arreglarScroll() {
 }
 
 function agregarMensaje(mensaje) {
-  this.$notify(mensaje.texto);
   this.mensajes.docs.push(mensaje);
   this.mensajes.cant += 1;
   this.arreglarScroll();
 }
 
-function listar() {
+function listar(cargados) {
   if (this.privado) {
     return chatApi
-      .listarPrivado(this.mensajes.docs.length, this.limiteItems, this.idEmisor, this.idReceptor);
+      .listarPrivado(cargados, this.limiteItems, this.idEmisor, this.idReceptor);
   }
   return chatApi
-    .listarPublico(this.mensajes.docs.length, this.limiteItems);
+    .listarPublico(cargados, this.limiteItems);
 }
 
 function mounted() {
   this.$refs.dialogo.onscroll = () => {
     if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
       this.cargando = true;
-      return this.listar()
+      return this.listar(this.mensajes.docs.length)
         .then((msjs) => {
           const heightInicial = this.$refs.dialogo.scrollHeight;
           this.mensajes.docs = msjs.docs.concat(this.mensajes.docs);
