@@ -36,10 +36,17 @@ function guardar(obj) {
     .then(resp => resp.data);
 }
 
+function marcarComoVistos(emisor) {
+  return axios
+    .put(`${axios.defaults.baseUrl}/api/mensaje/marcarvistos/${emisor}`)
+    .then(resp => resp.data);
+}
+
 const chatApi = {
   listarPrivado,
   listarPublico,
   guardar,
+  marcarComoVistos,
 };
 
 export default chatApi;

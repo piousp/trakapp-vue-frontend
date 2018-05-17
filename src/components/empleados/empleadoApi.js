@@ -12,6 +12,12 @@ function listar(pagina, cantidad) {
     .then(resp => resp.data);
 }
 
+function listarConMensajes() {
+  return axios
+    .get(`${axios.defaults.baseUrl}/api/empleado/conmensajes`)
+    .then(resp => resp.data);
+}
+
 function obtener(id) {
   return axios
     .get(`${axios.defaults.baseUrl}/api/empleado/${id}`)
@@ -35,6 +41,7 @@ function eliminar(id) {
 
 const empleadoApi = {
   listar,
+  listarConMensajes,
   obtener,
   guardar,
   eliminar,
