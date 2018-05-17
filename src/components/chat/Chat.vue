@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="full-height">
     <chat-individuo ref="chat" :privado="false"/>
   </section>
 </template>
