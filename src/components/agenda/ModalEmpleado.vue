@@ -25,7 +25,7 @@
                 :clickable="false"/>
             </gmap-map>
           </div>
-          <div class="col-6" ng-if="empleado">
+          <div class="col-6">
             <chat-individuo ref="chat" :privado="true"/>
           </div>
         </div>
