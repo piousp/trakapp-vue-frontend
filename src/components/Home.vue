@@ -36,6 +36,11 @@ export default {
   components: { directorio: Menu, Navbar },
   data,
   created,
+  sockets: {
+    recibirMensaje(mensaje) {
+      this.$notify(mensaje.texto);
+    },
+  },
 };
 </script>
 
