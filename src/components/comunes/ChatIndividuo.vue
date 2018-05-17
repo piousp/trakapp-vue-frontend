@@ -1,5 +1,5 @@
 <template lang="html">
-  <section>
+  <section class="full-height">
     <div class="chat">
       <div class="chat__dialogo" ref="dialogo">
         <div class="text--center">
@@ -156,14 +156,19 @@ function mounted() {
 <style lang="scss">
 
 @import "../../sass/base/colores";
+@import "../../sass/tema/colores";
 .chat {
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 .chat__input {
   width: 100%;
-  background-color: $gris-fondo;
+  background: transparentize($fondo, .5);
+  .form__input {
+    color: $blanco;
+  }
 }
 .chat__dialogo {
   overflow-y: auto;

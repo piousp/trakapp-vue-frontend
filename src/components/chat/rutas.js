@@ -6,7 +6,7 @@ export default [
     name: "chat",
     component: Chat,
     meta: {
-      titulo: "Chat",
+      titulo: "Comunicados",
       icono: "fal fa-fw fa-comments",
     },
   },
