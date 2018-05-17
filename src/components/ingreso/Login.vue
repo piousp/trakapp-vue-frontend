@@ -31,7 +31,7 @@
         para registrarse
       </p>
       <div class="text--center">
-        <button class="boton boton--verde boton--l" type="submit">
+        <button class="boton boton--indigo boton--l" type="submit">
           <i class="fa fa-fw fa-sign-in"/>
           Iniciar sesión
         </button>

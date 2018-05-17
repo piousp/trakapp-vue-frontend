@@ -1,16 +1,19 @@
 <template>
-  <div class="modal-empleado">
-    <div class="boton boton--blanco boton--s"
-         @click="abrirEmpleado(emp)"
-         v-for="emp in empleados" :key="emp._id">
-      <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
-      <span class="text">{{ emp.nombre }}</span>
-      <span v-show="emp.cantMensajesNoVistos > 0" class="indicadorMensajes">
-        {{ emp.cantMensajesNoVistos }}
-      </span>
-    </div>
+  <section>
+    <ul class="lista lista--clickeable">
+      <li class="lista__item"
+          @click="abrirEmpleado(emp)"
+          v-for="emp in empleados"
+          :key="emp._id">
+        <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
+        <span class="text">{{ emp.nombre }} {{ emp.apellidos }}</span>
+        <span class="badge badge--rosado" v-if="emp.cantMensajesNoVistos > 0">
+          {{ emp.cantMensajesNoVistos }}
+        </span>
+      </li>
+    </ul>
     <modal-empleado ref="modalempleado"/>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -62,21 +65,19 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import "../../sass/base/colores";
+<style lang="scss" scoped="true">
 .colorEmpleado{
   display: inline-block;
   height: 10px;
   width: 10px;
 }
-.indicadorMensajes {
-  float: right;
-  background: $rojo;
-  color: $blanco;
-  border-radius: 40%;
-  padding: .2em .5em;
-  font-weight: bold;
+
+.lista__item {
   position: relative;
-  bottom: 2px;
+}
+
+.badge{
+  position: absolute;
+  right: .5em;
 }
 </style>

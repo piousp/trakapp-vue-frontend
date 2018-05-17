@@ -20,6 +20,9 @@ main {
 * {
   margin: 0;
   padding: 0;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: subpixel-antialiased;
+  font-smooth: always;
 }
 
 .calendarioSinEventos {

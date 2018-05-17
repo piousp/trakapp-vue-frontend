@@ -1,68 +1,27 @@
 <template>
   <ul class="menu">
-    <li class="menu__item"
-        v-for="(ruta, index) in rutas"
-        :key="ruta.meta.titulo">
-      <div class="menu__item__content"
-           @click="accionar(ruta, index)"
-           v-if="ruta.meta ? !ruta.meta.esconder : true">
-        <i :class="ruta.meta ? ruta.meta.icono : ''"/>
-        <span>{{ ruta.meta.titulo }}</span>
-      </div>
-      <div class="menu__hijos"
-           :class="{'menu__hijos--active': ruta.name === estirado}"
-           @blur="cerrar" :tabindex="index + 1">
-        <h1 class="menu__hijos__title">{{ ruta.meta.titulo }}</h1>
-        <ul>
-          <li tag="li"
-              class="menu__hijos__item"
-              @click="accionar(hijo)"
-              v-for="hijo in ruta.children"
-              :key="hijo.meta.titulo"
-              v-if="hijo.meta ? !hijo.meta.esconder : true">
-            <i :class="hijo.meta ? hijo.meta.icono : ''"/>
-            <span>{{ hijo.meta.titulo }}</span>
-          </li>
-        </ul>
-      </div>
-    </li>
+    <router-link :to="{ name: ruta.name }" tag="li"
+                 v-for="ruta in rutas"
+                 active-class="menu__item--active"
+                 :key="ruta.meta.titulo"
+                 v-if="ruta.meta ? !ruta.meta.esconder : true"
+                 class="menu__item">
+      <i :class="ruta.meta ? ruta.meta.icono : ''"/>
+      <span>{{ ruta.meta.titulo }}</span>
+    </router-link>
   </ul>
 </template>
 <script type="text/javascript">
 export default {
   data,
-  methods: {
-    accionar,
-    cerrar,
-  },
 };
 
 function data() {
   return {
     rutas: this.$router.options.routes[0].children,
-    estirado: "",
   };
 }
 
-function accionar(ruta, index) {
-  if (!ruta.children) {
-    this.$router.push({ name: ruta.name });
-    this.estirado = "";
-  } else {
-    setTimeout(() => {
-      document.getElementsByClassName("menu__hijos")[index].focus();
-    }, 50);
-    if (ruta.name === this.estirado) {
-      this.estirado = "";
-    } else {
-      this.estirado = ruta.name;
-    }
-  }
-}
-
-function cerrar() {
-  this.estirado = "";
-}
 
 </script>
 <style lang="scss">
@@ -72,109 +31,36 @@ function cerrar() {
 @import "../sass/base/fondos";
 @import "../sass/base/helpers";
 @import "../sass/base/tipografia";
-$ancho-menu: 200px;
-$ancho-menu-movil: 160px;
 
 .menu{
+  @extend %sans;
   outline:none;
   list-style: none;
-  padding: 0;
-  margin: 0;
+  display: flex;
 }
 
 .menu__item{
-  @extend %sans;
-  color: $blanco;
+  display: block;
+  text-align: center;
+  line-height: 45px;
+  padding: 0 1em;
   cursor: pointer;
-  font-size: .9em;
+  transition: all ease .5s;
 
   &:hover{
-    background: transparentize($lima-tema, .1);
-    color: $negro2;
-  }
-
-  &.router-link-active {
-    @extend .text--negro2;
-    background: transparentize($lima-tema, .5);
-    cursor: default;
-  }
-
-  .menu__item__content {
-    padding: 1em 0;
-    font-size: 1em;
-    padding-left: 17px;
-
-    span {
-      text-align: center;
-    }
-
-    @media (min-width: $reflex-md ) {
-      visibility: visible;
-    }
+    @extend .text--blanco;
+    background: $cyan-vivo;
   }
 }
 
-.menu__hijos {
-  border-right: 3px solid $lima-tema;
+.menu__item--active{
+  @extend .text--blanco;
+  background: $fondo;
   cursor: default;
-  display: none;
-  height: 0;
-  opacity: 0;
-  transition: all .5s;
-  z-index: 5;
-  outline: none;
 
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-}
-
-.menu__hijos--active {
-  background: $blanco;
-  box-shadow: 3px 0 3px transparentize($gris6, .4);
-  color: $negro4;
-  display: block;
-  height: 100%;
-  left: $ancho-menu-movil;
-  list-style: none;
-  margin: 0;
-  opacity: 1;
-  padding: 0;
-  position: fixed;
-  top: 52px;
-  width: 12em;
-
-  @media (min-width: $reflex-md ) {
-    left: $ancho-menu;
-  }
-}
-
-.menu__hijos__title {
-  @extend %sans;
-  @extend .text--center;
-  @extend .text--negro2;
-  font-size: 1.3em;
-}
-
-.menu__hijos__item {
-  @extend %sans;
-  @extend .text--left;
-  background: inherit;
-  cursor: pointer;
-  padding: .5em 1em;
-
-  &:hover {
-    background: transparentize($lima-tema, .8);
-  }
-
-  .fa {
-    font-size: 1em;
-  }
-
-  span {
-    display: inline;
+  &:hover{
+    @extend .text--blanco;
+    background: $fondo;
   }
 }
 

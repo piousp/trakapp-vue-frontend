@@ -130,7 +130,7 @@
         para ingresar
       </p>
       <div class="text--center">
-        <button class="boton boton--verde boton--xl" type="submit">
+        <button class="boton boton--indigo boton--xl" type="submit">
           <i class="fas fa-fw fa-building"/>
           ¡Registrarse!
         </button>

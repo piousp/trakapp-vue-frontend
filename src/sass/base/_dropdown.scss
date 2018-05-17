@@ -1,5 +1,4 @@
 .popover {
-  position: absolute;
   @extend %sans;
   .popover__list {
     background: $blanco;
@@ -14,11 +13,11 @@
     font-size: .9em;
     cursor: pointer;
     &:hover {
-      background: $lima-tema;
+      background: $cyan;
     }
   }
   .popover__list__divider {
-    background-color: $musgo-tema;
+    background-color: $indigo;
     height: 1px;
   }
 }

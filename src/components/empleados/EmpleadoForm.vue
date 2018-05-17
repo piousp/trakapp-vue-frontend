@@ -53,8 +53,11 @@
 </template>
 
 <script>
+import D from "debug";
 import cloneDeep from "lodash/cloneDeep";
 import empleadoApi from "./empleadoApi.js";
+
+const debug = D("ciris:EmpleadoForm.vue");
 
 function data() {
   return {
@@ -100,6 +103,7 @@ function cancelar() {
 }
 
 function beforeRouteEnter(to, from, next) {
+  const self = this;
   if (to.params.id) {
     return empleadoApi.obtener(to.params.id)
       .then(resp => next((vm) => {
@@ -108,7 +112,8 @@ function beforeRouteEnter(to, from, next) {
         vm.editando = to.params.edit;
       }))
       .catch((err) => {
-        this.$toastr("error", err, "Error");
+        debug(err);
+        self.$toastr("error", err, "Error");
       });
   }
   return next();

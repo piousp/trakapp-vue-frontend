@@ -9,6 +9,7 @@ export default [
     meta: {
       titulo: "Perfil",
       icono: "fal fa-fw fa-user-cog",
+      esconder: true,
     },
   },
   {
@@ -18,6 +19,7 @@ export default [
     meta: {
       titulo: "Cuenta",
       icono: "fal fa-fw fa-warehouse-alt",
+      esconder: true,
     },
   },
 ];

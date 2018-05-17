@@ -1,50 +1,59 @@
 <template lang="html">
   <nav class="navbar">
-    <div class="navbar__left">
-      <i class="navbar__left__menu far fa-bars fa-2x" @click="mostrarMenu"/>
-      <img class="navbar__left__logo" src="/static/icono.png">
-    </div>
-    <div class="navbar__right" v-if="nombreUsuario !== 'undefined'">
-      <div class="navbar__right__botones navbar__right__elem"/>
-      <popover name="default" class="popover">
-        <div slot="face" class="navbar__popover">
-          <i class="far fa-fw fa-user-circle"/>
-          <span>{{ nombreUsuario }}</span>
-          <i class="fas fa-fw fa-caret-down"/>
+    <div class="navbar__top">
+      <div class="grid grid-bleed">
+        <div class="col-2">
+          <img src="/static/logo-hor.png" alt="Logo" class="img-responsive navbar__logo">
         </div>
-        <div slot="content">
-          <ul class="popover__list">
-            <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
-              <i class="fal fa-fw fa-user-cog"/>
-              <span>Mi Perfil</span>
-            </router-link>
-            <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
-              <i class="fal fa-fw fa-warehouse-alt"/>
-              <span>Configurar Cuenta</span>
-            </router-link>
-            <li class="popover__list__item" @click="logout">
-              <i class="fal fa-fw fa-sign-out"/>
-              <span>Cerrar sesión</span>
-            </li>
-            <li class="popover__list__divider"/>
-            <li class="text--small text--italic navbar__version">
-              <i class="fal fa-fw fa-tags"/>
-              <span>Versión: {{ version }}</span>
-            </li>
-          </ul>
+        <div class="col-8">
+          <directorio/>
         </div>
-      </popover>
+        <div class="col-2">
+          <popover name="default" class="popover">
+            <div slot="face" class="navbar__popover">
+              <i class="far fa-fw fa-user-circle"/>
+              <span>{{ nombreUsuario }}</span>
+              <i class="fas fa-fw fa-caret-down"/>
+            </div>
+            <div slot="content">
+              <ul class="popover__list">
+                <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
+                  <i class="fal fa-fw fa-user-cog"/>
+                  <span>Mi Perfil</span>
+                </router-link>
+                <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
+                  <i class="fal fa-fw fa-warehouse-alt"/>
+                  <span>Configurar Cuenta</span>
+                </router-link>
+                <li class="popover__list__item" @click="logout">
+                  <i class="fal fa-fw fa-sign-out"/>
+                  <span>Cerrar sesión</span>
+                </li>
+                <li class="popover__list__divider"/>
+                <li class="popover__list__item">
+                  <i class="fal fa-fw fa-tags"/>
+                  <span>Versión: {{ version }}</span>
+                </li>
+              </ul>
+            </div>
+          </popover>
+        </div>
+      </div>
     </div>
+    <div class="navbar__bottom"/>
+
   </nav>
 </template>
 
 <script>//
 import popover from "vue-popover";
+import Menu from "./Menu.vue";
 import pkg from "../../package.json";
 
 export default {
   components: {
     popover,
+    directorio: Menu,
   },
   data,
   computed: {
@@ -93,111 +102,60 @@ function version() {
   @import "../sass/tema/colores";
   @import "../sass/base/helpers";
   @import "../sass/tema/globales";
-  $ancho-menu: 200px;
-  $ancho-menu-movil: 160px;
   .navbar {
-    background: $blanco;
-    box-shadow: inset 0 -1px 0 $grisd;
+    @extend .sombra;
     top: 0;
     left: 0;
-    height: 52px;
     width: 100%;
     z-index: 5;
-
-    @media (min-width: $reflex-md ) {
-      position: fixed;
-    }
-  }
-  .navbar__left {
-    background: $negro2;
-    display: block;
-    height: 52px;
-    width: 50px;
-    padding: .7em 1em;
-    float:left;
-
-    @media (min-width: $reflex-md ) {
-      width: $ancho-menu;
-    }
+    position: fixed;
   }
 
-  .navbar__left__menu {
-    color: $blanco;
-    text-shadow: 0 1px 1px $sombra1;
-    cursor: pointer;
-
-    @media (min-width: $reflex-md ) {
-      display: none;
-    }
+  .navbar__top {
+    background: $blanco;
+    height: 45px;
+    width: 100%;
+    color: $gris8;
   }
 
-  .navbar__left__logo {
-    height: 32px;
-    display: none;
-    @media (min-width: $reflex-md ) {
-      display: block;
-    }
+  .navbar__bottom{
+    background: $fondo;
+    box-shadow: inset 0 -1px $cyan-vivo;
+    height: 45px;
+    width: 100%;
   }
 
-  .navbar__right {
-    text-align: center;
-    color: $negro4;
-    padding: 0 1em;
-    height: 52px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @media (min-width: $reflex-md ) {
-      text-align: left;
-    }
+  .navbar__logo {
+    height: 45px;
+    padding: 0 3em;
   }
 
-  .botones-pagina{
+  .botones-pagina,
+  .fc-header-toolbar
+  {
+    float: none;
     text-align: center;
     position: fixed;
-    width: 95%;
-    height: 52px;
-    padding-left: 50px;
-    padding-top: 7px;
-    top: 0;
+    width: 100%;
+    height: 40px;
+    top: 50px;
     left: 0;
     z-index: 5;
+    pointer-events: none;
 
-    @media (min-width: $reflex-md ) {
-      padding-left: $ancho-menu;
+    * {
+      pointer-events: auto;
     }
   }
 
-  .navbar__right__elem{
-    position: relative;
-
-    .boton {
-      margin: 0 5px;
-    }
+  .fc-header-toolbar{
+    top: 47px;
   }
 
-  .popover{
-    position:inherit !important;
-    z-index: 9;
-  }
-
-  .popover__container{
-    position: absolute;
-    right: -16px;
-    top: 52px;
-    width: 200px;
-  }
-
-  .navbar__menu__interno{
-    padding: 0 .5em;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
   .navbar__popover {
     cursor: pointer;
     text-align: right;
+    line-height: 45px;
   }
   .navbar__version {
     padding: 8px 16px;
