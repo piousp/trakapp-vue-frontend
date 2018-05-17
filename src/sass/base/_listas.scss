@@ -1,0 +1,10 @@
+.lista {
+  @extend .text;
+  li {
+    &:hover {
+      background-color: $celeste-pastel;
+    }
+    padding: 10px;
+    cursor: pointer;
+  }
+}
