@@ -121,7 +121,6 @@ function cargarTareas(inicio, fin, tz, cb) {
 
 <style lang="scss">
 @import "../../sass/base/colores";
-@import "../../../node_modules/fullcalendar/dist/fullcalendar.css";
 
 .tarea--finalizada{
   text-decoration:line-through !important;

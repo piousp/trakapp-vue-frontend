@@ -7,6 +7,7 @@
           :key="emp._id">
         <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
         <span class="text">{{ emp.nombre }} {{ emp.apellidos }}</span>
+        <span class="badge badge--rosado" v-if="false">7</span>
       </li>
     </ul>
     <modal-empleado ref="modalempleado"/>
@@ -43,10 +44,19 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped="true">
 .colorEmpleado{
   display: inline-block;
   height: 10px;
   width: 10px;
+}
+
+.lista__item {
+  position: relative;
+}
+
+.badge{
+  position: absolute;
+  right: .5em;
 }
 </style>

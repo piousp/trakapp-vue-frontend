@@ -1,5 +1,6 @@
 .boton {
   @extend %sans;
+  box-sizing: border-box;
   border: 0;
   border-radius: 3px;
   cursor: pointer;
@@ -28,6 +29,11 @@
 
   &:disabled {
     cursor: not-allowed;
+  }
+
+  &::-moz-focus-inner {
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -73,11 +79,11 @@
   &:disabled {
     background: transparentize(darken($fondo, 10%), .3);
     border-bottom: 0;
-    box-shadow: 0;
+    box-shadow: 0 0 0 $negro;
     color: transparentize($letra, .3);
     &:hover {
       background: transparentize(darken($fondo, 10%), .3);
-      box-shadow: 0;
+      box-shadow: 0 0 0 $negro;
     }
   }
 }
