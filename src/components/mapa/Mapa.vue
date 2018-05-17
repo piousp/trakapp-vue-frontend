@@ -1,24 +1,29 @@
 <template>
-  <section>
-    <gmap-map
-      class="map-container"
-      ref="map"
-      :center="center"
-      :zoom="15"
-      :options="{ disableDefaultUI : true }"
-      map-type-id="terrain">
-      <gmap-marker
-        :key="index"
-        v-for="(e, index) in empleados"
-        :position="e.ubicacion.pos"
-        :clickable="true"
-        @click="e.opened=!e.opened">
-        <info-window :opened="e.opened">
-          <p class="text--bold">{{ `${e.nombre} ${e.apellidos}` }}</p>
-          <small>Últ. vez: {{ e.ubicacion.lastUpdate | fecha("DD/MM/YYYY HH:mm") }}</small>
-        </info-window>
-      </gmap-marker>
-    </gmap-map>
+  <section class="grid full-height">
+    <div class="col-md-2 full-height">
+      <lista-empleados/>
+    </div>
+    <div class="col-md-10 full-height">
+      <gmap-map
+        class="map-container full-height"
+        ref="map"
+        :center="center"
+        :zoom="15"
+        :options="{ disableDefaultUI : true }"
+        map-type-id="terrain">
+        <gmap-marker
+          :key="index"
+          v-for="(e, index) in empleados"
+          :position="e.ubicacion.pos"
+          :clickable="true"
+          @click="e.opened=!e.opened">
+          <info-window :opened="e.opened">
+            <p class="text--bold">{{ `${e.nombre} ${e.apellidos}` }}</p>
+            <small>Últ. vez: {{ e.ubicacion.lastUpdate | fecha("DD/MM/YYYY HH:mm") }}</small>
+          </info-window>
+        </gmap-marker>
+      </gmap-map>
+    </div>
   </section>
 </template>
 
@@ -105,9 +110,8 @@ function mounted() {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped="true">
 .map-container {
-  height: 500px;
-  margin-top: 2em;
+  min-height: 300px;
 }
 </style>

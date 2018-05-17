@@ -54,10 +54,12 @@ export default {
 
   .layout__content{
     padding-top: 90px;
+    height: 100%;
   }
 
   .layout__padding {
     padding: 1em;
+    height: 100%;
     @media (min-width: $reflex-md ) {
       padding: 1em 3em;
     }

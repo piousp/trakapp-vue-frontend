@@ -24,9 +24,9 @@ const router = new Router({
       children: union(
         RutasDocumentacion,
         RutasMapa,
-        RutasEmpleados,
         RutasAgenda,
         RutasChat,
+        RutasEmpleados,
         RutasPerfil,
       ),
     },

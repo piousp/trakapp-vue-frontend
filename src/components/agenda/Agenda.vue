@@ -19,9 +19,8 @@
 <script>
 import { FullCalendar } from "vue-full-calendar";
 import D from "debug";
-import obtenerColor from "./colores.js";
+import obtenerColor from "../comunes/colores.js";
 import agendaApi from "./agendaApi";
-import ListaEmpleados from "./ListaEmpleados.vue";
 import ModalTarea from "./ModalTarea.vue";
 
 const debug = D("ciris:Agenda.vue");
@@ -30,7 +29,6 @@ export default {
   components: {
     FullCalendar,
     "modal-tarea": ModalTarea,
-    "lista-empleados": ListaEmpleados,
   },
   data,
   store: ["tarea"],
