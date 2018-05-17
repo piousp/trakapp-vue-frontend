@@ -130,7 +130,10 @@ function version() {
     padding: 0 3em;
   }
 
-  .botones-pagina{
+  .botones-pagina,
+  .fc-header-toolbar
+  {
+    float: none;
     text-align: center;
     position: fixed;
     width: 100%;
@@ -138,6 +141,15 @@ function version() {
     top: 50px;
     left: 0;
     z-index: 5;
+    pointer-events: none;
+
+    * {
+      pointer-events: auto;
+    }
+  }
+
+  .fc-header-toolbar{
+    top: 47px;
   }
 
   .navbar__popover {

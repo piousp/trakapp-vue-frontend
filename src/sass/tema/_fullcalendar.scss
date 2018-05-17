@@ -42,7 +42,11 @@ body .fc {
   }
 
 .fc-prev-button,
-.fc-next-button{
+.fc-next-button,
+.fc-month-button,
+.fc-agendaWeek-button,
+.fc-agendaDay-button
+{
   @extend .boton--negro4;
 }
 
@@ -63,6 +67,24 @@ body .fc {
   /* non-theme */
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px; }
+
+.fc-state-active {
+  cursor: default;
+  background: $indigo-vivo;
+
+  &:hover {
+    background: lighten($indigo-vivo, 7%);
+  }
+
+  &:active{
+    border: 0;
+    box-shadow: inset 0 4px 6px -3px darken($indigo-vivo, 25%),
+      inset 0 -3px 6px -3px lighten($indigo-vivo, 35%),
+      0 1px 1px 0 $sombra1,
+      0 1px 3px 0 $sombra2,
+      0 2px 1px -2px $sombra3;
+  }
+}
 
 /* Buttons Groups
 --------------------------------------------------------------------------------------------------*/
@@ -89,18 +111,7 @@ body .fc {
   }
 }
 
-/*
-every button that is not first in a button group should scootch over one pixel and cover the
-previous button's border...
-*/
-.fc .fc-button-group > * {
-  /* extra precedence b/c buttons have margin set to zero */
-  float: left;
-  margin: 0 0 0 -1px; }
 
-.fc .fc-button-group > :first-child {
-  /* same */
-  margin-left: 0; }
 
 /* Popover
 --------------------------------------------------------------------------------------------------*/
@@ -698,55 +709,34 @@ NOTE: use percentage font sizes or else old IE chokes
 /* Toolbar
 --------------------------------------------------------------------------------------------------*/
 .fc-toolbar {
-  text-align: center; }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.fc-toolbar.fc-header-toolbar {
-  margin-bottom: 1em; }
+  .fc-left {
+    order: 0;
+    margin-right: .5em;
 
-.fc-toolbar.fc-footer-toolbar {
-  margin-top: 1em; }
+    .fc-button-group{
+      margin-right: .5em;
+    }
+  }
 
-.fc-toolbar .fc-left {
-  float: left; }
+  .fc-center {
+    order: 2;
+    margin-right: .5em;
+  }
 
-.fc-toolbar .fc-right {
-  float: right; }
-
-.fc-toolbar .fc-center {
-  display: inline-block; }
-
-/* the things within each left/right/center section */
-.fc .fc-toolbar > * > * {
-  /* extra precedence to override button border margins */
-  float: left;
-  margin-left: .75em; }
-
-/* the first thing within each left/center/right section */
-.fc .fc-toolbar > * > :first-child {
-  /* extra precedence to override button border margins */
-  margin-left: 0; }
+  .fc-right {
+    order: 3;
+  }
+}
 
 /* title text */
 .fc-toolbar h2 {
-  margin: 0; }
-
-/* button layering (for border precedence) */
-.fc-toolbar button {
-  position: relative; }
-
-.fc-toolbar .fc-state-hover,
-.fc-toolbar .ui-state-hover {
-  z-index: 2; }
-
-.fc-toolbar .fc-state-down {
-  z-index: 3; }
-
-.fc-toolbar .fc-state-active,
-.fc-toolbar .ui-state-active {
-  z-index: 4; }
-
-.fc-toolbar button:focus {
-  z-index: 5; }
+  @extend .h4;
+  @extend .text--blanco;
+}
 
 /* View Structure
 --------------------------------------------------------------------------------------------------*/
