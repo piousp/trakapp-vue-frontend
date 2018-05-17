@@ -168,20 +168,54 @@ function mounted() {
 .chat__dialogo {
   overflow-y: auto;
   flex-grow: 2;
-  height: 260px
+  height: 260px;
+  padding: .6em;
 }
 .chat__dialogo__msj {
+  position: relative;
   min-width: 80px;
-  background: $verde;
+  background: $grisc;
   display: inline-block;
   min-width: 80px;
   padding: .5em;
-  color: $blanco;
+  color: $negro4;
   border-radius: 5px;
+
+  &::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-right-color: $grisc;
+    border-left: 0;
+    border-top: 0;
+    margin-top: -5px;
+    margin-left: -10px;
+  }
 }
 
 .chat__dialogo__msj--yo {
-  background: $grisc;
-  color: $negro2;
+  background: $indigo;
+  color: $grisc;
+
+  &::after{
+    content: "";
+    position: absolute;
+    right: 0;
+    left:auto;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-left-color: $indigo;
+    border-left: auto;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: -5px;
+    margin-right: -10px;
+  }
 }
 </style>
