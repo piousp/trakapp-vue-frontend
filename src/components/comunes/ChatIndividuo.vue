@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="chat__input">
-        <textarea class="form__input" placeholder="Escriba un mensaje..." :disabled="cargando"
+        <textarea class="form__input" placeholder="Escriba un mensaje..."
                   v-model="mensaje.texto" @keypress.enter="enviar(mensaje.texto)" ref="chatInput"
         />
       </div>
@@ -30,6 +30,7 @@
 <script>
 import D from "debug";
 import noop from "lodash/noop";
+import moment from "moment";
 import chatApi from "../chat/chatApi.js";
 
 const debug = D("ciris:comunes/ChatIndividuo.vue");
@@ -76,8 +77,9 @@ function isBlank(txt) {
 function enviar(txt) {
   const msj = {
     texto: txt,
-    emisor: this.idEmisor,
+    emisor: this.$auth.usuario,
     modelo: "usuario",
+    fechaEnvio: moment(),
   };
   if (this.privado) {
     msj.receptor = this.idReceptor;
@@ -86,16 +88,14 @@ function enviar(txt) {
     return noop;
   }
   debug("Enviando el texto", isBlank(txt));
-  this.cargando = true;
+  this.agregarMensaje(msj, true);
+  setTimeout(() => {
+    this.$refs.chatInput.focus();
+    this.mensaje = {};
+  }, 10);
   return chatApi.guardar(msj).then((resp) => {
     debug("Mensaje guardado");
     this.$socket.emit(this.privado ? "mensajeEnviado" : "broadcastEnviado", resp);
-    this.agregarMensaje(resp, true);
-    this.mensaje = {};
-    this.cargando = false;
-    setTimeout(() => {
-      this.$refs.chatInput.focus();
-    }, 10);
     return null;
   });
 }
