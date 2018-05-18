@@ -1,6 +1,6 @@
 {
   "name": "trakapp",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "UI del rastreador",
   "author": "Ciris Informatic Solutions <ventas@ciriscr.com>",
   "scripts": {
