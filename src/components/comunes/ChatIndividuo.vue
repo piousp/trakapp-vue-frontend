@@ -20,7 +20,7 @@
       </div>
       <div class="chat__input">
         <textarea class="form__input" placeholder="Escriba un mensaje..." :disabled="cargando"
-                  v-model="mensaje.texto" @keyup.enter="enviar(mensaje.texto)" ref="chatInput"
+                  v-model="mensaje.texto" @keypress.enter="enviar(mensaje.texto)" ref="chatInput"
         />
       </div>
     </div>

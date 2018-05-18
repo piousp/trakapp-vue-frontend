@@ -29,6 +29,7 @@ const router = new Router({
         RutasEmpleados,
         RutasPerfil,
       ),
+      redirect: "/agenda",
     },
     {
       path: "/login",
