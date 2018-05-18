@@ -81,7 +81,7 @@ import cloneDeep from "lodash/cloneDeep";
 import D from "debug";
 import api from "./perfilApi.js";
 
-const debug = D("ciris:Configuracion.vue");
+const debug = D("ciris:Perfil.vue");
 
 export default {
   beforeRouteEnter,

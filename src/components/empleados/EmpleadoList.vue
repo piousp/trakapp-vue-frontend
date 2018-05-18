@@ -87,7 +87,7 @@ function eliminar(empleado) {
         .eliminar(empleado._id)
         .then(() => {
           this.$toastr("success", "El empleado ha sido eliminado", "Éxito");
-          this.empleados.docs = reject(this.empleados.docs, obs => [obs._id, empleado._id]);
+          this.empleados.docs = reject(this.empleados.docs, ["_id", empleado._id]);
           this.empleados.cant -= 1;
           return this.empleados;
         })
