@@ -33,8 +33,8 @@ function permiso() {
   debug("Permiso para Notification?", Notification.permission);
   if (Notification.permission !== "granted") {
     Notification.requestPermission(() => {
-      const c = new Notification("Hi there!");
-      debug(c);
+      const c = new Notification("Ahora recibirás notificaciones");
+      return c;
     });
   }
 }

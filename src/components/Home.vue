@@ -31,8 +31,8 @@ export default {
   data,
   created,
   sockets: {
-    recibirMensaje(mensaje) {
-      this.$notify(mensaje.texto);
+    recibirMensaje(msj) {
+      this.$notify(`${msj.emisor.nombre} dice: `, msj.texto);
     },
   },
 };
