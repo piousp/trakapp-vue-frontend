@@ -1,33 +1,41 @@
 .tabs {
-  background: darken($gris-fondo, 5%);
+  background: transparent;
   display: flex;
   justify-content: space-around;
-  overflow: hidden;
-  border-radius: 5px;
-  box-shadow:
-    0 2px 2px -1px $sombra1,
-    0 4px 5px -3px $sombra2,
-    0 6px 1px -5px $sombra3;
 }
 
 
 .tabs__tab {
   @extend .text--center;
-  @extend %sans;
-  background: transparent;
-  box-shadow: inset 0 -5px 6px -3px $sombra1,
-    inset 0 5px 6px -3px transparentize($blanco, .5);
+  @extend .boton;
+  @extend .boton--cyan;
+  border-radius: 0;
   cursor: pointer;
+  color: $negro4;
   flex-basis: 0;
   flex-grow: 1;
   height: 40px;
-  line-height: 40px;
+  line-height: 25px;
   position: relative;
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  &:hover{
+    color: $negro4;
+  }
+
+  &:first-child{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  &:last-child{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
   &:not(:last-child){
-    border-right: 1px solid darken($gris-fondo, 10%);
+    border-right: 1px solid $cyan-opaco;
   }
 
   span {
@@ -43,18 +51,7 @@
 }
 
 .tabs__tab--active {
-
-  background: $magenta;
-
-  color: $blanco;
-  pointer-events: none;
-}
-
-.tabs__tab--disabled {
-  background: darken($gris-fondo, 15%);
-  color: darken($gris-fondo, 35%);
-  box-shadow: inset 0 -5px 6px -3px transparentize($blanco, .8),
-    inset 0 5px 6px -3px darken($sombra3, 15%);
-  cursor: not-allowed;
+  background: $fondo;
+  color: $cyan-vivo;
   pointer-events: none;
 }

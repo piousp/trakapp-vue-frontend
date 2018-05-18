@@ -21,7 +21,7 @@
                   <i class="fal fa-fw fa-user-cog"/>
                   <span>Mi Perfil</span>
                 </router-link>
-                <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
+                <router-link class="popover__list__item" tag="li" :to="{ name: 'cuenta' }">
                   <i class="fal fa-fw fa-warehouse-alt"/>
                   <span>Configurar Cuenta</span>
                 </router-link>

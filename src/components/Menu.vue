@@ -57,6 +57,7 @@ function data() {
   @extend .text--blanco;
   background: $fondo;
   cursor: default;
+  pointer-events: none;
 
   &:hover{
     @extend .text--blanco;
