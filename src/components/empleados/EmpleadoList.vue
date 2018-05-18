@@ -28,6 +28,7 @@
             <router-link tag="td"
                          :to="{name: 'empleadoform', params: {id: empleado._id}}">
               {{ empleado.correo }}
+              <span class="badge badge--verde" v-show="!empleado.ubicacion">Nuevo</span>
             </router-link>
             <td>
               <ul class="tabla__opciones">
