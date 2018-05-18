@@ -2,6 +2,7 @@ import axios from "../../config/axios";
 
 const perfilApi = {
   actualizarUsuario,
+  actualizarCuenta,
   datosUsuario,
   datosCuenta,
   verificarPasswordCorrecto,
@@ -13,6 +14,12 @@ export default perfilApi;
 function actualizarUsuario(usuario) {
   return axios
     .put(`${axios.defaults.baseUrl}/api/usuario/${usuario._id}`, usuario)
+    .then(resp => resp.data);
+}
+
+function actualizarCuenta(cuenta) {
+  return axios
+    .put(`${axios.defaults.baseUrl}/api/usuario/cuenta`, cuenta)
     .then(resp => resp.data);
 }
 
