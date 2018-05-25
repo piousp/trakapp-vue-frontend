@@ -24,7 +24,7 @@ function data() {
 
 
 </script>
-<style lang="scss">
+<style lang="scss" scoped="scoped">
 @import "../sass/tema/globales";
 @import "../sass/base/colores";
 @import "../sass/tema/colores";
@@ -36,26 +36,26 @@ function data() {
   @extend %sans;
   outline:none;
   list-style: none;
-  display: flex;
 }
 
 .menu__item{
+  @extend .text--blanco;
   display: block;
-  text-align: center;
+  text-align: justify;
   line-height: 45px;
   padding: 0 1em;
   cursor: pointer;
   transition: all ease .5s;
 
   &:hover{
-    @extend .text--blanco;
-    background: $cyan-vivo;
+    @extend .text--negro4;
+    background: $cyan-tema;
   }
 }
 
 .menu__item--active{
   @extend .text--blanco;
-  background: $fondo;
+  background: transparentize($azul-tema, .2);
   cursor: default;
   pointer-events: none;
 

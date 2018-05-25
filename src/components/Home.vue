@@ -1,10 +1,13 @@
 <template>
   <div class="layout">
-    <div class="layout__content">
+    <vue-progress-bar/>
+    <div class="layout__nav" v-simplebar>
       <navbar/>
+      <lista-empleados/>
+    </div>
+    <div class="layout__content">
       <div class="layout__padding">
         <router-view/>
-        <vue-progress-bar/>
       </div>
     </div>
   </div>
@@ -40,21 +43,36 @@ export default {
 
 <style lang="scss">
   @import "../sass/base/colores";
+  @import "../sass/tema/colores";
   @import "../sass/base/helpers";
   @import "../sass/tema/globales";
-  html, body{
-    background: url("/static/fondo.jpg");
-    background-attachment: fixed;
-    background-size: cover;
-  }
 
   .layout {
+    background: url("/static/hero2.jpg");
+    background-attachment: fixed;
+    background-size: cover;
     height: 100%;
+    display: flex;
+  }
+
+  .layout__nav,
+  .layout__chat{
+    @extend .sombra;
+    background: transparentize($negro2, .3);
+    height: 100%;
+    width: 260px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .layout__content{
-    padding-top: 90px;
     height: 100%;
+    padding-top: 40px;
+    flex-grow: 2;
+    width: 100%;
+    background: transparentize($blanco, .2);
+    box-shadow: inset 2px 0 0 $negro2;
+    position: relative;
   }
 
   .layout__padding {

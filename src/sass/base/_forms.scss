@@ -31,7 +31,6 @@
 .form__input {
   @extend %sans;
   background: transparent;
-  box-shadow: 0 3px 2px -2px transparentize($azul-tema, .7);
   border:0;
   border-bottom: 1px solid $azul-tema;
   color: $negro4;
@@ -60,6 +59,7 @@
   & + .form__label {
     font-size: 1em;
     position: absolute;
+    pointer-events: none;
     top: 8px;
     left: 0;
     bottom: 0;
@@ -72,7 +72,7 @@
       height: 2px;
       width: 10px;
       visibility: hidden;
-      background-color: $cyan;
+      background-color: $celeste-tema;
       transition: 350ms ease all;
     }
   }
@@ -84,7 +84,7 @@
 
   &:focus + .form__label,
   &:active + .form__label{
-    color: $cyan-tema;
+    color: $celeste-tema;
     font-size: .8em;
     top: -8px;
     &::after{

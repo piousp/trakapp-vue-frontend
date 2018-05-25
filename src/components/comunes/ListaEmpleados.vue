@@ -1,7 +1,8 @@
 <template>
   <section>
-    <ul class="lista lista--clickeable">
-      <li class="lista__item"
+    <h1 class="h5 text--blanco text--center">Chat empleados</h1>
+    <ul class="lista-empleados" v-simplebar>
+      <li class="lista-empleados__item"
           @click="abrirEmpleado(emp)"
           v-for="emp in empleados"
           :key="emp._id">
@@ -66,18 +67,45 @@ export default {
 </script>
 
 <style lang="scss" scoped="true">
+@import "../../sass/tema/globales";
+@import "../../sass/base/colores";
+@import "../../sass/tema/colores";
+@import "../../sass/base/fondos";
+@import "../../sass/base/helpers";
+@import "../../sass/base/tipografia";
+.lista-empleados{
+  @extend %sans;
+  outline:none;
+  list-style: none;
+}
+
+.lista-empleados__item{
+  @extend .text--blanco;
+  box-shadow: inset 0 -1px 0 $negro2;
+  display: block;
+  text-align: justify;
+  line-height: 35px;
+  padding: 0 1em;
+  cursor: pointer;
+  position: relative;
+  transition: all ease .5s;
+
+  &:hover{
+    @extend .text--negro4;
+    background: $cyan-tema;
+  }
+
+}
+
 .colorEmpleado{
   display: inline-block;
   height: 10px;
   width: 10px;
 }
 
-.lista__item {
-  position: relative;
-}
-
 .badge{
   position: absolute;
   right: .5em;
+  top: 8px;
 }
 </style>
