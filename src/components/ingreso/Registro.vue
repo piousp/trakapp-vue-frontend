@@ -14,7 +14,7 @@
       <div class="grid">
         <div class="col-sm-6">
           <form-group :error="errors.has(ids.nombre) && submitted">
-            <input class="form__input"
+            <input class="form__input form__input--blanco"
                    :id="ids.nombre"
                    :name="ids.nombre"
                    required
@@ -24,7 +24,7 @@
             <label :for="ids.nombre" class="form__label">Nombre</label>
           </form-group>
           <form-group :error="errors.has(ids.apellidos) && submitted">
-            <input class="form__input"
+            <input class="form__input form__input--blanco"
                    :id="ids.apellidos"
                    :name="ids.apellidos"
                    value=""
@@ -38,7 +38,7 @@
         <div class="col-sm-6">
           <form-group :error="errors.has(ids.correo) && submitted">
             <input
-              class="form__input"
+              class="form__input form__input--blanco"
               :id="ids.correo"
               :name="ids.correo"
               type="email"
@@ -49,7 +49,7 @@
             <label :for="ids.correo" class="form__label">Correo</label>
           </form-group>
           <form-group :error="errors.has(ids.password) && submitted">
-            <input class="form__input"
+            <input class="form__input form__input--blanco"
                    type="password"
                    :id="ids.password"
                    :name="ids.password"
@@ -61,13 +61,13 @@
             <label :for="ids.password" class="form__label">Password</label>
           </form-group>
           <form-group>
-            <div class="checkbox checkbox--morado">
+            <div class="checkbox checkbox--cyan">
               <input type="checkbox"
                      :id="ids.empresarial"
                      :name="ids.empresarial"
                      v-model="usuario.empresarial"
                      checked="false">
-              <label class="form__label" :for="ids.empresarial">
+              <label class="form__label text--blanco" :for="ids.empresarial">
                 Estoy creando una cuenta empresarial
               </label>
             </div>
@@ -127,7 +127,7 @@
       </div>
     </form>
     <p class="text text--blanco">
-      ¿Ya tienes cuenta? <router-link class="text--blanco"
+      ¿Ya tienes cuenta? <router-link class="text--cyan"
                                       to="login">Ingresa aquí</router-link>
     </p>
   </section>
