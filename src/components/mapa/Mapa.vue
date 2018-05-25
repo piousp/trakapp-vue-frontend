@@ -34,7 +34,7 @@ export default {
   data,
   beforeRouteEnter,
   sockets: {
-    actualizarPosicion,
+    actualizar,
   },
   mounted,
 };
@@ -70,7 +70,7 @@ function beforeRouteEnter(to, from, next) {
   });
 }
 
-function actualizarPosicion(e) {
+function actualizar(e) {
   debug("actualizarPosicion", e);
   const i = findIndex(this.empleados, { _id: e._id });
   this.empleados[i].ubicacion = {
