@@ -50,7 +50,7 @@
             <div class="col-6">
               <form-group>
                 <label class="form__label">Ubicación</label>
-                <gmap-autocomplete class="form__input"
+                <gmap-autocomplete class="form__input" ref="gmapAutocomplete"
                                    :disabled="tarea.activa === false"
                                    :options="{componentRestrictions: {country: 'cr'}}"
                                    @place_changed="buscarLugar"/>
@@ -107,6 +107,7 @@ function abrirModal(evt) {
 
 function cerrarModal() {
   this.tarea = {};
+  this.$refs.gmapAutocomplete.$el.value = null;
   this.modalVisible = false;
 }
 
