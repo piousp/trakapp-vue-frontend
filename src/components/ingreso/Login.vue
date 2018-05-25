@@ -1,42 +1,41 @@
 <template>
-  <section class="login">
-    <form class="login__body" novalidate @submit.stop.prevent="login()">
+  <section class="cuadro-ingreso">
+    <form class="cuadro-ingreso__body" novalidate @submit.stop.prevent="login()">
       <div class="text--center">
-        <img src="/static/logo.png" class="logo-login img--center" alt="Trakapp Logo">
+        <img src="/static/logo-peq-contra.png" class="logo-login img--center" alt="Trakapp Logo">
       </div>
+      <h1 class="h4 text--blanco text--center">Ingrese sus credenciales</h1>
       <form-group :error="errors.has(ids.correo) && submitted">
-        <label :for="ids.correo" class="form__label">Correo:</label>
         <input type="text"
+               autofocus
                :id="ids.correo"
                :name="ids.correo"
-               placeholder="Digite su usuario. Ej: usuario@dominio.com"
-               class="form__input"
+               class="form__input form__input--blanco"
                v-model="usuario"
                v-validate="'required'"
                @input="usuario = usuario.toLowerCase()">
+        <label :for="ids.correo" class="form__label form__input--blanco">Correo</label>
       </form-group>
       <form-group :error="errors.has(ids.password) && submitted">
-        <label :for="ids.password" class="form__label">Contraseña:</label>
         <input type="password"
-               placeholder="Digite su contraseña"
                :id="ids.password"
                :name="ids.password"
-               class="form__input"
+               class="form__input form__input--blanco"
                v-model="password"
                v-validate="'required'">
+        <label :for="ids.password" class="form__label form__input--blanco">Contraseña</label>
       </form-group>
-      <br>
-      <p class="text text--right">
-        ¿No tienes cuenta? Click <router-link to="registro">aquí</router-link>
-        para registrarse
-      </p>
       <div class="text--center">
-        <button class="boton boton--indigo boton--l" type="submit">
+        <button class="boton boton--celeste-tema boton--l" type="submit">
           <i class="fa fa-fw fa-sign-in"/>
           Iniciar sesión
         </button>
       </div>
     </form>
+    <p class="text text--right text--blanco text--registro">
+      ¿No tienes cuenta? <router-link to="registro"
+                                      class="text--cyan">¡Regístrese ahora!</router-link>
+    </p>
   </section>
 </template>
 
