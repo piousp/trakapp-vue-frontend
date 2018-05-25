@@ -49,7 +49,7 @@ export default {
     cerrarModal,
   },
   sockets: {
-    actualizarPosicion,
+    actualizar,
   },
   store: ["empleado"],
 };
@@ -63,7 +63,7 @@ function data() {
   };
 }
 
-function actualizarPosicion(e) {
+function actualizar(e) {
   debug("actualizarPosicion", e);
   this.empleado.ubicacion = {
     lastUpdate: e.ubicacion.lastUpdate,
