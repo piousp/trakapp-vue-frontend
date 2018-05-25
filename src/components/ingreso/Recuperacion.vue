@@ -1,9 +1,12 @@
 <template>
   <section class="cuadro-ingreso">
     <div v-if="!exito" class="cuadro-ingreso__body">
+      <div class="text--center">
+        <img src="/static/logo-peq-contra.png" class="logo-login img--center" alt="Trakapp Logo">
+      </div>
       <form v-if="validarRecuperacion(recuperacion)"
             novalidate @submit.stop.prevent="recuperar()">
-        <h1 class="text--center">Recuperar cuenta</h1>
+        <h1 class="h4 text--blanco text--center">Recuperar Contraseña</h1>
         <form-group :error="errors.has('password') && submitted">
           <input type="text"
                  id="password"
@@ -31,16 +34,21 @@
           </button>
         </div>
       </form>
-      <h1 v-else style="width: 100% !important"
-          class="login__body text text--uppercase text--center">
-        Parece que este link ya no es válido, por favor genere otra petición de recuperación
-      </h1>
+      <div v-else>
+        <h1 class="h3 text--naranja text--center"><i class="fal fa-watch"/> Error</h1>
+        <p class="text text--big text--blanco text--left">
+          Parece que este link ya no es válido, por favor genere otra petición de recuperación.
+        </p>
+      </div>
     </div>
-    <div v-else class="login__body">
-      <h1 style="width: 100% !important"
-          class="login__body text text--uppercase text--center">
+    <div v-else class="cuadro-ingreso__body">
+      <div class="text--center">
+        <img src="/static/logo-peq-contra.png" class="logo-login img--center" alt="Trakapp Logo">
+      </div>
+      <h1 class="h3 text--lima text--center"><i class="fal fa-check-circle"/> Éxito</h1>
+      <p class="text text--big text--blanco text--left">
         El cambio se efectuó exitosamente, ya puede cerrar esta ventana.
-      </h1>
+      </p>
     </div>
   </section>
 </template>
