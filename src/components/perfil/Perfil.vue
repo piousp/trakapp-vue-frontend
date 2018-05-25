@@ -9,39 +9,35 @@
     <h1 class="titulo">Perfil</h1>
     <div class="grid">
       <div class="col-6">
-        <div class="panel fondo--blanco">
-          <h3 class="h3">Datos básicos</h3>
-          <form novalidate @submit.stop.prevent="guardarUsuario(usuario)">
-            <form-group>
-              <label for="" class="form__label">Correo</label>
-              <p class="form__input">{{ usuario.correo }}</p>
-            </form-group>
-            <form-group>
-              <label for="" class="form__label">Nombre</label>
-              <input type="text" class="form__input" v-model="usuario.nombre">
-            </form-group>
-            <form-group>
-              <label for="" class="form__label">Apellidos</label>
-              <input type="text" class="form__input" v-model="usuario.apellidos">
-            </form-group>
-            <button type="submit" class="boton boton--guardar"/>
-          </form>
-        </div>
+        <h3 class="h3">Datos básicos</h3>
+        <form novalidate @submit.stop.prevent="guardarUsuario(usuario)">
+          <form-group>
+            <label for="" class="form__label">Correo</label>
+            <p class="form__input">{{ usuario.correo }}</p>
+          </form-group>
+          <form-group>
+            <input type="text" class="form__input" v-model="usuario.nombre">
+            <label for="" class="form__label">Nombre</label>
+          </form-group>
+          <form-group>
+            <input type="text" class="form__input" v-model="usuario.apellidos">
+            <label for="" class="form__label">Apellidos</label>
+          </form-group>
+          <button type="submit" class="boton boton--guardar"/>
+        </form>
       </div>
       <div class="col-6">
-        <div class="panel fondo--blanco">
-          <h3 class="h3">Cambiar mi contraseña</h3>
-          <form novalidate @submit.stop.prevent="mostrarModalCambioClave(claveActual)">
-            <form-group>
-              <label for="" class="form__label">Contraseña actual</label>
-              <input type="password" class="form__input" v-model="claveActual">
-            </form-group>
-            <button type="submit" class="boton boton--azul">
-              <i class="fa far fa-key"/>
-              <span>Nueva contraseña</span>
-            </button>
-          </form>
-        </div>
+        <h3 class="h3">Cambiar mi contraseña</h3>
+        <form novalidate @submit.stop.prevent="mostrarModalCambioClave(claveActual)">
+          <form-group>
+            <input type="password" class="form__input" v-model="claveActual">
+            <label for="" class="form__label">Contraseña actual</label>
+          </form-group>
+          <button type="submit" class="boton boton--azul">
+            <i class="fa far fa-key"/>
+            <span>Nueva contraseña</span>
+          </button>
+        </form>
       </div>
     </div>
     <modal :visible="modalclave">
@@ -49,7 +45,6 @@
         <p class="h4">Digite una nueva contraseña</p>
         <form novalidate @submit.stop.prevent="cambiarContrasena(password)">
           <form-group :error="errors.has('password')">
-            <label for="password" class="form__label">Contraseña:</label>
             <input type="text"
                    id="password"
                    name="password"
@@ -57,9 +52,9 @@
                    class="form__input"
                    v-model="password"
                    v-validate="{rules: {is: password2, required: true}}">
+            <label for="password" class="form__label">Contraseña:</label>
           </form-group>
           <form-group :error="errors.has('password2')">
-            <label for="password2" class="form__label">Confirme la contraseña:</label>
             <input type="text"
                    id="password2"
                    name="password2"
@@ -67,6 +62,7 @@
                    class="form__input"
                    v-model="password2"
                    v-validate="{rules: {is: password, required: true}}">
+            <label for="password2" class="form__label">Confirme la contraseña:</label>
           </form-group>
           <button type="submit" id="submit" name="button" style="display: none"/>
         </form>

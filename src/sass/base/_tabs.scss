@@ -1,41 +1,26 @@
 .tabs {
-  background: transparent;
+  background: url("/static/hero2.jpg");
+  background-attachment: fixed;
+  background-size: cover;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
+  height: 56px;
 }
 
 
 .tabs__tab {
-  @extend .text--center;
-  @extend .boton;
-  @extend .boton--cyan;
-  border-radius: 0;
   cursor: pointer;
-  color: $negro4;
+  color: $blanco;
   flex-basis: 0;
-  flex-grow: 1;
-  height: 40px;
-  line-height: 25px;
+  padding: 1em;
   position: relative;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-right: 1px solid $negro2;
 
   &:hover{
-    color: $negro4;
-  }
-
-  &:first-child{
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-  }
-
-  &:last-child{
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
-
-  &:not(:last-child){
-    border-right: 1px solid $cyan-opaco;
+    color: $cyan-vivo;
+    background: transparentize($negro2, .3);
   }
 
   span {
@@ -51,7 +36,7 @@
 }
 
 .tabs__tab--active {
-  background: $fondo;
-  color: $cyan-vivo;
+  background: transparentize($azul-tema, .3);
+  color: $blanco;
   pointer-events: none;
 }
