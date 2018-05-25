@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <vue-progress-bar/>
-    <div class="layout__nav" v-simplebar>
+    <div class="layout__nav">
       <navbar/>
       <lista-empleados/>
     </div>
