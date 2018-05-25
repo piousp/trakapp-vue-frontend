@@ -50,10 +50,13 @@ export default {
   @import "../sass/base/helpers";
   @import "../sass/tema/globales";
 
-  .layout {
+  body{
     background: url("/static/hero2.jpg");
     background-attachment: fixed;
     background-size: cover;
+  }
+
+  .layout {
     height: 100%;
     display: flex;
   }
