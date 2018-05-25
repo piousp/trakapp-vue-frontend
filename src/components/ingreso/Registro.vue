@@ -67,9 +67,9 @@
                      :name="ids.empresarial"
                      v-model="usuario.empresarial"
                      checked="false">
-              <label class="form__label text--blanco" :for="ids.empresarial">
+                     <!--<label class="form__label text--blanco" :for="ids.empresarial">
                 Estoy creando una cuenta empresarial
-              </label>
+              </label>-->
             </div>
           </form-group>
         </div>

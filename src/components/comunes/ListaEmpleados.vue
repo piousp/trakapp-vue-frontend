@@ -1,7 +1,7 @@
 <template>
   <section>
     <h1 class="h5 text--blanco text--center">Chat empleados</h1>
-    <ul class="lista-empleados" v-simplebar>
+    <ul class="lista-empleados">
       <li class="lista-empleados__item"
           @click="abrirEmpleado(emp)"
           v-for="emp in empleados"

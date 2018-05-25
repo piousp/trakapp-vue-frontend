@@ -45,6 +45,7 @@ function data() {
   line-height: 45px;
   padding: 0 1em;
   cursor: pointer;
+  user-select: none;
   transition: all ease .5s;
 
   &:hover{

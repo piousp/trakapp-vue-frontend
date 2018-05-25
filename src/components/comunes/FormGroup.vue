@@ -23,11 +23,13 @@ export default {
 
 function labelizador(el) {
   const jel = $(el);
-  if (jel.children(".form__input").val()) {
-    jel.children(".form__label").addClass("form__label--active");
-  } else {
-    jel.children(".form__label").removeClass("form__label--active");
-  }
+  setTimeout(() => {
+    if (jel.children(".form__input").val()) {
+      jel.children(".form__label").addClass("form__label--active");
+    } else {
+      jel.children(".form__label").removeClass("form__label--active");
+    }
+  }, 50);
 }
 </script>
 

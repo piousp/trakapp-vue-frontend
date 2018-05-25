@@ -6,6 +6,7 @@
       <lista-empleados/>
     </div>
     <div class="layout__content">
+      <div class="layout__content__bar"/>
       <div class="layout__padding">
         <router-view/>
       </div>
@@ -39,6 +40,8 @@ export default {
     },
   },
 };
+
+
 </script>
 
 <style lang="scss">
@@ -75,11 +78,39 @@ export default {
     position: relative;
   }
 
+  .layout__content__bar{
+    background: $blanco;
+    box-shadow: inset 2px 0 0 $negro2;
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    top: 0;
+    left: 0;
+  }
+
   .layout__padding {
     padding: 1em;
     height: 100%;
     @media (min-width: $reflex-md ) {
       padding: 1em 3em;
+    }
+  }
+
+  .botones-pagina,
+  .fc-header-toolbar
+  {
+    float: none;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    padding-top: 3px;
+    pointer-events: none;
+    * {
+      pointer-events: auto;
     }
   }
 </style>
