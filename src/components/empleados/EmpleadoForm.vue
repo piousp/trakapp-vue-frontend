@@ -19,34 +19,30 @@
           v-if="editando"
           @click="guardar(empleado)"/>
       </div>
-
-      <div class="form__group"
-           :class="{ 'form__group--error': errors.has('nombre') && submitted }">
-        <label class="form__label">Nombre</label>
+      <form-group :error="errors.has('nombre') && submitted">
         <input
           name="nombre"
           class="form__input"
           v-model="empleado.nombre"
           :disabled="!editando"
           v-validate="'required'" >
-      </div>
-
-      <div class="form__group">
-        <label class="form__label">Apellidos</label>
+        <label class="form__label">Nombre</label>
+      </form-group>
+      <form-group>
         <input class="form__input"
                v-model="empleado.apellidos"
                :disabled="!editando">
-      </div>
+        <label class="form__label">Apellidos</label>
+      </form-group>
 
-      <div class="form__group"
-           :class="{ 'form__group--error': errors.has('correo') && submitted }">
-        <label class="form__label">Correo electrónico</label>
+      <form-group :error="errors.has('correo') && submitted">
         <input class="form__input"
                v-model="empleado.correo"
                :disabled="!editando"
                v-validate="'required|email'"
                name="correo">
-      </div>
+        <label class="form__label">Correo electrónico</label>
+      </form-group>
 
     </form>
   </section>

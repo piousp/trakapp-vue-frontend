@@ -86,3 +86,7 @@
 .boton--musgo {
   @include boton-color($musgo-tema, $blanco);
 }
+
+.boton--celeste-tema {
+  @include boton-color($celeste-tema, $blanco);
+}

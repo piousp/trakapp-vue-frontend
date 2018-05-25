@@ -1,28 +1,28 @@
 <template>
-  <section class="login">
-    <div v-if="!exito" class="login__body">
+  <section class="cuadro-ingreso">
+    <div v-if="!exito" class="cuadro-ingreso__body">
       <form v-if="validarRecuperacion(recuperacion)"
             novalidate @submit.stop.prevent="recuperar()">
         <h1 class="text--center">Recuperar cuenta</h1>
         <form-group :error="errors.has('password') && submitted">
-          <label for="password" class="form__label">Contraseña:</label>
           <input type="text"
                  id="password"
                  name="password"
                  placeholder="**********"
-                 class="form__input"
+                 class="form__input form__input--blanco"
                  v-model="password"
                  v-validate="{rules: {is: password2, required: true}}">
+          <label for="password" class="form__label">Contraseña:</label>
         </form-group>
         <form-group :error="errors.has('password2') && submitted">
-          <label for="password2" class="form__label">Confirme la contraseña:</label>
           <input type="text"
                  id="password2"
                  name="password2"
                  placeholder="**********"
-                 class="form__input"
+                 class="form__input form__input--blanco"
                  v-model="password2"
                  v-validate="{rules: {is: password, required: true}}">
+          <label for="password2" class="form__label">Confirme la contraseña:</label>
         </form-group>
         <div class="text--center">
           <button class="boton boton--l boton--musgo" type="submit">

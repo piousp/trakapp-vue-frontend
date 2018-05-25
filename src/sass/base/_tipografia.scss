@@ -80,7 +80,7 @@ code {
 .text {
   @extend %sans;
   font-weight: 400;
-  color: $negro4;
+  color: inherit;
 }
 
 p.text{

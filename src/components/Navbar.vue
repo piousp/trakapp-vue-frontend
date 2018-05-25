@@ -1,58 +1,26 @@
 <template lang="html">
   <nav class="navbar">
-    <div class="navbar__top">
-      <div class="grid grid-bleed">
-        <div class="col-2">
-          <img src="/static/logo-hor.png" alt="Logo" class="img-responsive navbar__logo">
-        </div>
-        <div class="col-8">
-          <directorio/>
-        </div>
-        <div class="col-2">
-          <popover name="default" class="popover">
-            <div slot="face" class="navbar__popover">
-              <i class="far fa-fw fa-user-circle"/>
-              <span>{{ nombreUsuario }}</span>
-              <i class="fas fa-fw fa-caret-down"/>
-            </div>
-            <div slot="content">
-              <ul class="popover__list">
-                <router-link class="popover__list__item" tag="li" :to="{ name: 'perfil' }">
-                  <i class="fal fa-fw fa-user-cog"/>
-                  <span>Mi Perfil</span>
-                </router-link>
-                <router-link class="popover__list__item" tag="li" :to="{ name: 'cuenta' }">
-                  <i class="fal fa-fw fa-warehouse-alt"/>
-                  <span>Configurar Cuenta</span>
-                </router-link>
-                <li class="popover__list__item" @click="logout">
-                  <i class="fal fa-fw fa-sign-out"/>
-                  <span>Cerrar sesión</span>
-                </li>
-                <li class="popover__list__divider"/>
-                <li class="popover__list__item">
-                  <i class="fal fa-fw fa-tags"/>
-                  <span>Versión: {{ version }}</span>
-                </li>
-              </ul>
-            </div>
-          </popover>
-        </div>
-      </div>
-    </div>
-    <div class="navbar__bottom"/>
-
+    <img src="/static/logo-peq-contra.png" alt="Logo" class="img-responsive navbar__logo">
+    <router-link :to="{ name: 'perfil' }" tag="div"
+                 class="navbar__user" active-class="navbar__user--active">
+      <p>
+        <i class="far fa-fw fa-user-circle"/>
+        <span class="text">{{ nombreUsuario }}</span>
+      </p>
+      <hr class="navbar__user__hr">
+      <p class="navbar__user__version text--gris6 text text--small
+       text--right text--center text--italic">Versión: {{ version }}</p>
+    </router-link>
+    <directorio/>
   </nav>
 </template>
 
 <script>//
-import popover from "vue-popover";
-import Menu from "./Menu.vue";
 import pkg from "../../package.json";
+import Menu from "./Menu.vue";
 
 export default {
   components: {
-    popover,
     directorio: Menu,
   },
   data,
@@ -67,7 +35,6 @@ export default {
     mostrarMenu() {
       this.$parent.$emit("mostrarMenu");
     },
-    logout,
   },
 };
 
@@ -81,75 +48,64 @@ function route(val) {
   this.titulo = val;
 }
 
-function logout() {
-  this.$auth.logout();
-  this.$router.push("/login");
-}
-
 function nombreUsuario() {
   const { usuario } = this.$auth;
-  return `${usuario.nombre}`;
+  return `${usuario.nombre} ${usuario.apellidos}`;
 }
 
 function version() {
   return pkg.version;
 }
-
 </script>
 
 <style lang="scss">
-  @import "../sass/base/colores";
-  @import "../sass/tema/colores";
-  @import "../sass/base/helpers";
-  @import "../sass/tema/globales";
+@import "../sass/tema/globales";
+@import "../sass/base/colores";
+@import "../sass/tema/colores";
+@import "../sass/base/fondos";
+@import "../sass/base/helpers";
+@import "../sass/base/tipografia";
+
   .navbar {
-    @extend .sombra;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 5;
-    position: fixed;
-  }
-
-  .navbar__top {
-    background: $blanco;
-    height: 45px;
-    width: 100%;
-    color: $gris8;
-  }
-
-  .navbar__bottom{
-    background: $fondo;
-    box-shadow: inset 0 -1px $cyan-vivo;
-    height: 45px;
     width: 100%;
   }
 
   .navbar__logo {
-    height: 45px;
-    padding: 0 3em;
+    padding: 1em 2em;
   }
 
-  .botones-pagina,
-  .fc-header-toolbar
-  {
-    float: none;
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    height: 40px;
-    top: 50px;
-    left: 0;
-    z-index: 5;
-    pointer-events: none;
+  .navbar__user{
+    @extend .text--blanco;
+    padding: 1em;
+    user-select: none;
+    cursor: pointer;
+    transition: all ease .5s;
 
-    * {
-      pointer-events: auto;
+    &:hover{
+      @extend .text--negro4;
+      background: $cyan-tema;
     }
   }
 
-  .fc-header-toolbar{
-    top: 47px;
+  .navbar__user__hr{
+    border: 0;
+    border-top: 1px solid $azul-tema;
+  }
+
+  .navbar__user__version{
+    user-select: none;
+  }
+
+  .navbar__user--active{
+    @extend .text--blanco;
+    background: transparentize($azul-tema, .2);
+    cursor: default;
+    pointer-events: none;
+
+    &:hover{
+      @extend .text--blanco;
+      background: $fondo;
+    }
   }
 
   .navbar__popover {
