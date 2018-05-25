@@ -35,7 +35,6 @@ export default {
     mostrarMenu() {
       this.$parent.$emit("mostrarMenu");
     },
-    logout,
   },
 };
 
@@ -47,11 +46,6 @@ function data() {
 
 function route(val) {
   this.titulo = val;
-}
-
-function logout() {
-  this.$auth.logout();
-  this.$router.push("/login");
 }
 
 function nombreUsuario() {

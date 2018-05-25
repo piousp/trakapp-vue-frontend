@@ -1,5 +1,11 @@
 <template lang="html">
   <section>
+    <div class="botones-pagina">
+      <button class="boton boton--rosado" @click="logout">
+        <i class="fal fa-sign-out"/>
+        <span>Cerrar sesión</span>
+      </button>
+    </div>
     <h1 class="titulo">Perfil</h1>
     <div class="grid">
       <div class="col-6">
@@ -87,6 +93,7 @@ export default {
   beforeRouteEnter,
   data,
   methods: {
+    logout,
     guardarUsuario,
     mostrarModalCambioClave,
     cerrarModal,
@@ -102,6 +109,11 @@ function data() {
     password: "",
     password2: "",
   };
+}
+
+function logout() {
+  this.$auth.logout();
+  this.$router.push("/login");
 }
 
 function cerrarModal() {
