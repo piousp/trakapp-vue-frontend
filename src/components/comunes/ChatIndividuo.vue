@@ -52,10 +52,6 @@ export default {
     agregarMensaje,
     listar,
   },
-  sockets: {
-    recibirMensaje: agregarMensaje,
-    recibirBroadcast: agregarMensaje,
-  },
 };
 
 function data() {
@@ -134,6 +130,7 @@ function listar(cargados) {
 }
 
 function mounted() {
+  this.$socket.on(this.privado ? "recibirMensaje" : "recibirBroadcast", this.agregarMensaje);
   this.$refs.dialogo.onscroll = () => {
     if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
       this.cargando = true;
