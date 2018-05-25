@@ -26,6 +26,13 @@
   }
 }
 
+.cuadro-ingreso__body--l{
+  @media (min-width: 992px) {
+    padding: 1em;
+    width: 700px;
+  }
+}
+
 .login__label {
   font-size: 90%;
   font-weight: bolder;

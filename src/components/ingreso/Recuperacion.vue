@@ -1,6 +1,6 @@
 <template>
-  <section class="login">
-    <div v-if="!exito" class="login__body">
+  <section class="cuadro-ingreso">
+    <div v-if="!exito" class="cuadro-ingreso__body">
       <form v-if="validarRecuperacion(recuperacion)"
             novalidate @submit.stop.prevent="recuperar()">
         <h1 class="text--center">Recuperar cuenta</h1>

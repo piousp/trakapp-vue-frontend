@@ -1,6 +1,7 @@
 <template>
   <section class="cuadro-ingreso">
-    <form class="cuadro-ingreso__body" novalidate @submit.stop.prevent="registrarse()">
+    <form class="cuadro-ingreso__body cuadro-ingreso__body--l"
+          novalidate @submit.stop.prevent="registrarse()">
       <img src="/static/logo-peq-contra.png" class="img-center" alt="Trakapp Logo">
       <div class="text--center"/>
       <p class="text text--center text--blanco">
@@ -11,7 +12,7 @@
       <input type="password" name="hack-password" id="hack-password"
              style="opacity:0;position:absolute;height:0;">
       <div class="grid">
-        <div class="col-md-6">
+        <div class="col-sm-6">
           <form-group :error="errors.has(ids.nombre) && submitted">
             <input class="form__input"
                    :id="ids.nombre"
@@ -34,7 +35,7 @@
             <label :for="ids.apellidos" class="form__label">Apellidos</label>
           </form-group>
         </div>
-        <div class="col-md-6">
+        <div class="col-sm-6">
           <form-group :error="errors.has(ids.correo) && submitted">
             <input
               class="form__input"
