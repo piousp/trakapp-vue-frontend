@@ -183,9 +183,12 @@ function registrarse() {
       this.$auth.registro(this.usuario)
         .then((resp) => {
           debug(resp);
-          this.$toastr("success", "Cuenta creada", "OK");
-          this.$router.push({ name: "home" });
-          this.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
+          this.$toastr(
+            "success",
+            "Se le ha enviado un correo de verificación para activar su cuenta.",
+            "Cuenta creada",
+          );
+          this.$router.push({ name: "login" });
           return resp;
         })
         .catch((err) => {

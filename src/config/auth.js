@@ -12,14 +12,7 @@ const Auth = {
       registro(obj) {
         return axios
           .post(`${axios.defaults.baseUrl}/api/auth/registro`, obj)
-          .then((resp) => {
-            sessionStorage.setItem(options.pkg, JSON.stringify(resp.data));
-            this.usuario = resp.data.usuario;
-            this.usuario.estaAutenticado = true;
-            axios.defaults.headers.common.Authorization = `Bearer ${resp.data.token}`;
-            identificarSocket(resp.data.usuario);
-            return resp.data;
-          });
+          .then(resp => resp.data);
       },
       login(cred, password, recuerdame) {
         return axios

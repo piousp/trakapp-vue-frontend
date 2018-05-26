@@ -2,9 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import union from "lodash/union";
 import Home from "../components/Home.vue";
-import Login from "../components/ingreso/Login.vue";
-import Registro from "../components/ingreso/Registro.vue";
-import Recuperacion from "../components/ingreso/Recuperacion.vue";
+import RutasIngreso from "../components/ingreso/rutas.js";
 import RutasMapa from "../components/mapa/rutas.js";
 import RutasEmpleados from "../components/empleados/rutas.js";
 import RutasAgenda from "../components/agenda/rutas.js";
@@ -16,7 +14,7 @@ Vue.use(Router);
 
 const router = new Router({
   mode: "history",
-  routes: [
+  routes: union([
     {
       path: "/",
       name: "home",
@@ -31,31 +29,7 @@ const router = new Router({
       ),
       redirect: "/agenda",
     },
-    {
-      path: "/login",
-      name: "login",
-      component: Login,
-      meta: {
-        esPublica: true,
-      },
-    },
-    {
-      path: "/registro",
-      name: "registro",
-      component: Registro,
-      meta: {
-        esPublica: true,
-      },
-    },
-    {
-      path: "/recuperacion/:id",
-      name: "recuperacion",
-      component: Recuperacion,
-      meta: {
-        esPublica: true,
-      },
-    },
-  ],
+  ], RutasIngreso),
 });
 
 router.beforeEach((to, from, next) => {
