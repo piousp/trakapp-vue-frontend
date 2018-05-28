@@ -32,7 +32,7 @@ const debug = D("ciris:Mapa.vue");
 
 export default {
   data,
-  beforeRouteEnter,
+  // beforeRouteEnter,
   sockets: {
     actualizar,
   },
@@ -44,30 +44,6 @@ function data() {
     center: { lat: 0, lng: 0 },
     empleados: [],
   };
-}
-
-function beforeRouteEnter(to, from, next) {
-  const self = this;
-  debug("beforeRouteEnter");
-  next((vm) => {
-    empleadoApi.listar(0, 0)
-      .then((empleados) => {
-        vm.empleados = map(empleados.docs, (e) => {
-          if (get(e.ubicacion, "pos.coordinates", null)) {
-            e.opened = false;
-            e.ubicacion.pos = generarCoords(e.ubicacion.pos.coordinates);
-            return e;
-          }
-          return null;
-        });
-        vm.empleados = compact(vm.empleados);
-        debug("empleados", vm.empleados);
-        return vm.empleados;
-      })
-      .catch((err) => {
-        self.$toastr("error", err, "Error");
-      });
-  });
 }
 
 function actualizar(e) {
@@ -84,18 +60,23 @@ function generarCoords(coordinates) {
 }
 
 function mounted() {
-  const self = this;
   this.$refs.map.$mapCreated
     .then((objMapa) => {
-      const mapaCargado = objMapa.addListener("tilesloaded", () => {
-        mapaCargado.remove();
-        const bounds = new google.maps.LatLngBounds();
-        self.empleados.forEach((emp) => {
-          bounds.extend(emp.ubicacion.pos);
+      const bounds = new google.maps.LatLngBounds();
+      return empleadoApi.listar(0, 0).then((empleados) => {
+        const empMapeados = map(empleados.docs, (e) => {
+          if (get(e.ubicacion, "pos.coordinates", null)) {
+            e.opened = false;
+            e.ubicacion.pos = generarCoords(e.ubicacion.pos.coordinates);
+            bounds.extend(e.ubicacion.pos);
+            return e;
+          }
+          return null;
         });
         objMapa.fitBounds(bounds);
+        this.empleados = compact(empMapeados);
+        return null;
       });
-      return mapaCargado;
     })
     .catch((err) => {
       this.$toastr("error", err, "Error");

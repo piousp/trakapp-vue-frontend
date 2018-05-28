@@ -48,7 +48,6 @@
             <input type="text"
                    id="password"
                    name="password"
-                   placeholder="**********"
                    class="form__input"
                    v-model="password"
                    v-validate="{rules: {is: password2, required: true}}">
@@ -58,7 +57,6 @@
             <input type="text"
                    id="password2"
                    name="password2"
-                   placeholder="**********"
                    class="form__input"
                    v-model="password2"
                    v-validate="{rules: {is: password, required: true}}">

@@ -12,7 +12,7 @@
                :name="ids.correo"
                class="form__input form__input--blanco"
                v-model="usuario"
-               v-validate="'required'"
+               v-validate="'required|email'"
                @input="usuario = usuario.toLowerCase()">
         <label :for="ids.correo" class="form__label form__input--blanco">Correo</label>
       </form-group>
@@ -28,7 +28,7 @@
       <div>
         <span class="text text--blanco text--registro text--small">
           ¿Olvidaste tu contraseña? <a @click="() => {modalVisible = !modalVisible}"
-                                       class="text--cyan">Recuperala aqui</a>
+                                       class="text--cyan clickable">Recupérala aquí</a>
         </span>
       </div>
       <br>
@@ -51,20 +51,26 @@
           </div>
         </div>
         <div class="modal__body">
-          <p class="text--center">Ingrese el correo electronico al que está asociado su cuenta</p>
-          <br>
-          <form-group :error="errors.has(ids.modalCorreo) && submitted">
+          <form-group class="modal__form" :error="errors.has(ids.modalCorreo) && modalSubmitted">
             <input type="text"
                    :id="ids.modalCorreo"
                    :name="ids.modalCorreo"
                    class="form__input form__input--blanco"
                    v-model="modalCorreo"
-                   v-validate="'required'">
+                   required
+                   v-validate="'required|email'">
+            <label :for="ids.modalCorreo" class="form__label">
+              Ingrese el correo electronico al que está asociado su cuenta
+            </label>
+            <span class="text text--rojo text--small modal__form__error"
+                  v-show="errors.has(ids.modalCorreo) && modalSubmitted">
+              * Formato de correo inválido.
+            </span>
           </form-group>
         </div>
         <div class="modal__footer">
           <button type="button" class="boton boton--cancelar"
-                  @click="() => {modalVisible = !modalVisible; modalCorreo = ''}"/>
+                  @click="cerrarModal"/>
           <button class="boton boton--aceptar" type="submit"/>
         </div>
       </form>
@@ -84,6 +90,7 @@ export default {
   methods: {
     login,
     recuperar,
+    cerrarModal,
   },
 };
 
@@ -94,6 +101,7 @@ function data() {
     password: "",
     recordar: true,
     submitted: false,
+    modalSubmitted: false,
     modalVisible: false,
     modalCorreo: "",
   };
@@ -132,12 +140,12 @@ function login() {
 }
 
 function recuperar() {
-  this.modalVisible = !this.modalVisible;
-  this.submitted = true;
+  this.modalSubmitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
       return this.$auth.solicitarCambio(this.modalCorreo)
         .then((resp) => {
+          this.modalVisible = !this.modalVisible;
           this.$toastr("success", this.$t("recovery.success"), this.$t("common.success"));
           return resp;
         })
@@ -152,6 +160,12 @@ function recuperar() {
     }
     return noop;
   });
+}
+
+function cerrarModal() {
+  this.modalVisible = !this.modalVisible;
+  this.modalCorreo = "";
+  this.modalSubmitted = false;
 }
 </script>
 
