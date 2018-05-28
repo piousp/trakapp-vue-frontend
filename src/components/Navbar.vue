@@ -50,7 +50,7 @@ function route(val) {
 
 function nombreUsuario() {
   const { usuario } = this.$auth;
-  return `${usuario.nombre} ${usuario.apellidos}`;
+  return `${usuario.nombre} ${usuario.apellidos || ""}`;
 }
 
 function version() {
