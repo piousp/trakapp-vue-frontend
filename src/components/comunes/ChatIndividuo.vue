@@ -165,6 +165,9 @@ function mounted() {
   background: transparentize($fondo, .5);
   .form__input {
     color: $blanco;
+    &::placeholder {
+      color: $grisc;
+    }
   }
 }
 .chat__dialogo {
