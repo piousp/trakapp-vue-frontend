@@ -25,6 +25,13 @@
                v-validate="'required'">
         <label :for="ids.password" class="form__label form__input--blanco">Contraseña</label>
       </form-group>
+      <div>
+        <span class="text text--blanco text--registro text--small">
+          ¿Olvidaste tu contraseña? <a @click="() => {modalVisible = !modalVisible}"
+                                       class="text--cyan">Recuperala aqui</a>
+        </span>
+      </div>
+      <br>
       <div class="text--center">
         <button class="boton boton--celeste-tema boton--l" type="submit">
           <i class="fa fa-fw fa-sign-in"/>
@@ -36,6 +43,32 @@
       ¿No tienes cuenta? <router-link to="registro"
                                       class="text--cyan">¡Regístrese ahora!</router-link>
     </p>
+    <modal :visible="modalVisible">
+      <form novalidate @submit.stop.prevent="recuperar()">
+        <div class="modal__header text--center">
+          <div class="modal__header__titulo">
+            Recuperar contraseña
+          </div>
+        </div>
+        <div class="modal__body">
+          <p class="text--center">Ingrese el correo electronico al que está asociado su cuenta</p>
+          <br>
+          <form-group :error="errors.has(ids.modalCorreo) && submitted">
+            <input type="text"
+                   :id="ids.modalCorreo"
+                   :name="ids.modalCorreo"
+                   class="form__input form__input--blanco"
+                   v-model="modalCorreo"
+                   v-validate="'required'">
+          </form-group>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="boton boton--cancelar"
+                  @click="() => {modalVisible = !modalVisible; modalCorreo = ''}"/>
+          <button class="boton boton--aceptar" type="submit"/>
+        </div>
+      </form>
+    </modal>
   </section>
 </template>
 
@@ -50,6 +83,7 @@ export default {
   created,
   methods: {
     login,
+    recuperar,
   },
 };
 
@@ -60,6 +94,8 @@ function data() {
     password: "",
     recordar: true,
     submitted: false,
+    modalVisible: false,
+    modalCorreo: "",
   };
 }
 
@@ -67,6 +103,7 @@ function created() {
   this.ids = {
     correo: `correo-${id()}`,
     password: `password-${id()}`,
+    modalCorreo: `modalCorreo-${id()}`,
   };
 }
 
@@ -84,9 +121,32 @@ function login() {
         .catch((err) => {
           debug(err);
           if (err.response.status < 500) {
-            this.$toastr("info", "Credenciales inválidos", "Usuario inválido");
+            this.$toastr("info", this.$t("login.credencialesInvalidos.msj"), this.$t("login.credencialesInvalidos.titulo"));
           } else {
             this.$toastr("error", this.$t("login.error"), "Error");
+          }
+        });
+    }
+    return noop;
+  });
+}
+
+function recuperar() {
+  this.modalVisible = !this.modalVisible;
+  this.submitted = true;
+  return this.$validator.validateAll().then((valido) => {
+    if (valido) {
+      return this.$auth.solicitarCambio(this.modalCorreo)
+        .then((resp) => {
+          this.$toastr("success", this.$t("recovery.success"), this.$t("common.success"));
+          return resp;
+        })
+        .catch((err) => {
+          debug(err);
+          if (err.response.status < 500) {
+            this.$toastr("info", this.$t("login.credencialesInvalidos.msj"), this.$t("login.credencialesInvalidos.titulo"));
+          } else {
+            this.$toastr("error", this.$t("login.error"), this.$t("common.error"));
           }
         });
     }

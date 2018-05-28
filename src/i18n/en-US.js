@@ -3,7 +3,9 @@ export default {
     name: "Name",
     email: "E-mail",
     password: "Password",
-    feedback: "Please, check entered data.",
+    feedback: "Please verify your information",
+    success: "Success",
+    error: "Error",
   },
   home: {
     readMore: "Read more",
@@ -11,8 +13,12 @@ export default {
   login: {
     title: "Sign in",
     remember: "Remember me",
-    success: "Session started",
-    error: "Sign in error",
+    success: "Signed in",
+    error: "Error signing in",
+    credencialesInvalidos: {
+      msj: "Invalid credentials",
+      titulo: "Invalid user",
+    },
   },
   navbar: {
     home: "Home",
@@ -21,12 +27,21 @@ export default {
     profile: "My profile",
     userInfo: "Go to profile",
     signout: "Sign out",
-    success: "Session ended",
+    success: "Signed out",
   },
   signup: {
     title: "Sign up",
     confirm: "Confirm password",
     success: "Account created",
-    error: "Sign up error",
+    error: "Error signing out",
+  },
+  recovery: {
+    solicitud: {
+      success: "A recovery email was sent, please check your inbox",
+      fail: "A recovery email couldn't be sent",
+    },
+    proceso: {
+      fail: "An error ocurred while sending a recovery email, please try again",
+    },
   },
 };

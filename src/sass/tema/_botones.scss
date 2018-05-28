@@ -37,6 +37,10 @@
   @include boton-expecial(".boton--verde", $kiwi-vivo, "\f019", ".flip", "Guardar");
 }
 
+.boton--aceptar {
+  @include boton-expecial(".boton--verde", $kiwi-vivo, "\f058", ".flip", "Aceptar");
+}
+
 .boton--cancelar {
   @include boton-expecial(".boton--negro4", $rosado-vivo, "\f05e", ".rubberBand", "Cancelar");
 }

@@ -43,7 +43,7 @@
     <modal :visible="modalclave">
       <div class="modal__body">
         <p class="h4">Digite una nueva contraseña</p>
-        <form novalidate @submit.stop.prevent="cambiarContrasena(password)">
+        <form novalidate @submit.stop.prevent="actualizarContrasena(password)">
           <form-group :error="errors.has('password')">
             <input type="text"
                    id="password"
@@ -69,7 +69,7 @@
       </div>
       <div class="modal__footer">
         <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
-        <button type="button" class="boton boton--verde" @click="cambiarContrasena(password)">
+        <button type="button" class="boton boton--verde" @click="actualizarContrasena(password)">
           <i class="fa fal fa-lock-alt"/>
           <span>Cambiar contraseña</span>
         </button>
@@ -93,7 +93,7 @@ export default {
     guardarUsuario,
     mostrarModalCambioClave,
     cerrarModal,
-    cambiarContrasena,
+    actualizarContrasena,
   },
 };
 
@@ -133,12 +133,12 @@ function mostrarModalCambioClave(claveActual) {
     });
 }
 
-function cambiarContrasena(pass) {
-  debug("cambiarContrasena");
+function actualizarContrasena(pass) {
+  debug("actualizarContrasena");
   return this.$validator.validateAll()
     .then((valido) => {
       if (valido) {
-        return api.cambiarContrasena(pass)
+        return api.actualizarContrasena(pass)
           .then(() => {
             this.$toastr("success", "Se ha modificado su contraseña", "Contraseña Cambiada");
             this.modalclave = false;
