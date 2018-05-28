@@ -6,7 +6,7 @@ const perfilApi = {
   datosUsuario,
   datosCuenta,
   verificarPasswordCorrecto,
-  cambiarContrasena,
+  actualizarContrasena,
 };
 
 export default perfilApi;
@@ -41,8 +41,8 @@ function verificarPasswordCorrecto(clave) {
     .then(resp => resp.data);
 }
 
-function cambiarContrasena(password) {
+function actualizarContrasena(password) {
   return axios
-    .post(`${axios.defaults.baseUrl}/api/auth/cambiarContrasena`, { password })
+    .post(`${axios.defaults.baseUrl}/api/auth/actualizarContrasena`, { password })
     .then(resp => resp.data);
 }

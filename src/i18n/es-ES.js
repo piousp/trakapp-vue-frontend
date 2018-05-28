@@ -4,6 +4,8 @@ export default {
     email: "Correo electrónico",
     password: "Contraseña",
     feedback: "Por favor, revise los datos ingresados.",
+    success: "Éxito",
+    error: "Error",
   },
   home: {
     readMore: "Leer más",
@@ -13,6 +15,10 @@ export default {
     remember: "Recordarme",
     success: "Sesión iniciada",
     error: "Error al iniciar sesión",
+    credencialesInvalidos: {
+      msj: "Credenciales invalidos",
+      titulo: "Usuario invalido",
+    },
   },
   navbar: {
     home: "Inicio",
@@ -28,5 +34,14 @@ export default {
     confirm: "Confirmar contraseña",
     success: "Cuenta creada",
     error: "Error al crear cuenta",
+  },
+  recovery: {
+    solicitud: {
+      success: "Se envió un correo electrónico para recuperar la contraseña",
+      fail: "No se pudo enviar un correo electrónico",
+    },
+    proceso: {
+      fail: "Ocurrió un error cambiando la contraseña, intente nuevamente",
+    },
   },
 };

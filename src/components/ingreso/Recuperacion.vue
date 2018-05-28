@@ -11,21 +11,19 @@
           <input type="text"
                  id="password"
                  name="password"
-                 placeholder="**********"
                  class="form__input form__input--blanco"
                  v-model="password"
                  v-validate="{rules: {is: password2, required: true}}">
-          <label for="password" class="form__label">Contraseña:</label>
+          <label for="password" class="form__label">Ingrese la contraseña nueva</label>
         </form-group>
         <form-group :error="errors.has('password2') && submitted">
           <input type="text"
                  id="password2"
                  name="password2"
-                 placeholder="**********"
                  class="form__input form__input--blanco"
                  v-model="password2"
                  v-validate="{rules: {is: password, required: true}}">
-          <label for="password2" class="form__label">Confirme la contraseña:</label>
+          <label for="password2" class="form__label">Confirme la contraseña</label>
         </form-group>
         <div class="text--center">
           <button class="boton boton--l boton--musgo" type="submit">
@@ -90,14 +88,18 @@ function recuperar() {
     .validateAll()
     .then((result) => {
       if (result) {
-        this.$auth.cambiarContrasena(this.recuperacion._id, this.password, true).then((resp) => {
+        this.$auth.cambiarContrasena(
+          this.recuperacion._id,
+          this.password,
+          this.recuperacion.movil,
+        ).then((resp) => {
           if (isEmpty(resp)) {
-            return this.$toastr("error", "Ocurrio un error cambiando la contraseña, intente nuevamente", "Error");
+            return this.$toastr("error", this.$t("recovery.proceso.fail"), this.$t("common.error"));
           }
           this.exito = true;
           return null;
         })
-          .catch(() => this.$toastr("error", "Ocurrio un error cambiando la contraseña, intente nuevamente", "Error"));
+          .catch(() => this.$toastr("error", this.$t("recovery.proceso.fail"), this.$t("common.error")));
       } else {
         this.$toastr(
           "error",

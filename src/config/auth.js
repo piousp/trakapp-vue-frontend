@@ -47,8 +47,24 @@ const Auth = {
           identificarSocket(this.usuario);
         }
       },
+      solicitarCambio(correo) {
+        const url = `${axios.defaults.baseUrl}/api/auth/solicitarCambio/`;
+        return axios
+          .post(`${url}`, {
+            correo,
+          })
+          .then(resp => resp);
+      },
       cambiarContrasena(idRec, nvoPass, movil) {
         const url = movil ? `${axios.defaults.baseUrl}/api/auth/cambiarContrasena/movil/` : `${axios.defaults.baseUrl}/api/auth/cambiarContrasena/`;
+        return axios
+          .post(`${url}${idRec}`, {
+            password: nvoPass,
+          })
+          .then(resp => resp);
+      },
+      actualizarContrasena(idRec, nvoPass) {
+        const url = `${axios.defaults.baseUrl}/api/auth/actualizarContrasena/`;
         return axios
           .post(`${url}${idRec}`, {
             password: nvoPass,
