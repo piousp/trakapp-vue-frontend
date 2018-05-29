@@ -3,6 +3,7 @@ var fs = require("fs")
 var utils = require("./utils")
 var config = require("../config")
 var vueLoaderConfig = require("./vue-loader.conf")
+var selectFile = require("./env-selector");
 
 function resolve (dir) {
   return path.join(__dirname, "..", dir)
@@ -15,9 +16,7 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: "[name].js",
-    publicPath: process.env.NODE_ENV === "production"
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: selectFile(process.env.NODE_ENV).assetsPublicPath
   },
   resolve: {
     extensions: [".js", ".vue", ".json"],

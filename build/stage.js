@@ -1,18 +1,17 @@
 require("./check-versions")()
 
-process.env.NODE_ENV = "production"
+process.env.NODE_ENV = "staging";
 
-var debug = require("debug")("ciris:webpack/build.js");
-var rm = require("rimraf")
-var path = require("path")
-var chalk = require("chalk")
-var webpack = require("webpack")
-var config = require("../config")
-var webpackConfig = require("./webpack.prod.conf")
+var debug = require("debug")("ciris:webpack/stage.js");
+var rm = require("rimraf");
+var path = require("path");
+var webpack = require("webpack");
+var config = require("../config");
+var webpackConfig = require("./webpack.stag.conf");
 
-debug("building for production...");
+debug("building for staging...")
 
-rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
+rm(path.join(config.stage.assetsRoot, config.stage.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, function (err, stats) {
     debug("build finished");

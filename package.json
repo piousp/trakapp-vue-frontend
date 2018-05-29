@@ -10,6 +10,7 @@
     "dev": "cross-env DEBUG=ciris:* node build/dev-server.js",
     "start": "npm-run-all --parallel lint:watch dev",
     "build": "cross-env NODE_ENV=production DEBUG=ciris:* npx rimraf dist; node build/build.js",
+    "stage": "cross-env NODE_ENV=staging DEBUG=ciris:* npx rimraf dist; node build/stage.js",
     "test": "cross-env DEBUG=ciris:* tape ./src/*.spec.js -r ./config/tests.js | tap-notify | tap-summary",
     "coverage": "cross-env DEBUG=ciris:* nyc  babel-tape-runner ./src/**/*.js | tap-nyc; nyc report --reporter=text-summary"
   },

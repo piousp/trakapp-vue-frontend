@@ -1,7 +1,9 @@
-var chalk = require("chalk")
-var semver = require("semver")
-var packageConfig = require("../package.json")
-var shell = require("shelljs")
+var chalk = require("chalk");
+var semver = require("semver");
+var packageConfig = require("../package.json");
+var shell = require("shelljs");
+var debug = require("debug")("ciris:webpack/check-versions.js");
+
 function exec (cmd) {
   return require("child_process").execSync(cmd).toString().trim()
 }
@@ -35,14 +37,14 @@ module.exports = function () {
   }
 
   if (warnings.length) {
-    console.log("")
-    console.log(chalk.yellow("To use this template, you must update following to modules:"))
-    console.log()
+    debug("");
+    debug("To use this template, you must update following to modules:");
+    debug()
     for (var i = 0; i < warnings.length; i++) {
       var warning = warnings[i]
-      console.log("  " + warning)
+      debug("  " + warning)
     }
-    console.log()
+    debug()
     process.exit(1)
   }
 }
