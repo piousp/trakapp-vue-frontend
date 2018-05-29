@@ -21,6 +21,17 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
   },
+  stage: {
+    env: require("./stag.env"),
+    index: path.resolve(__dirname, "../dist/index.html"),
+    assetsRoot: path.resolve(__dirname, "../dist"),
+    assetsSubDirectory: "static",
+    assetsPublicPath: "/",
+    productionSourceMap: true,
+    productionGzip: false,
+    productionGzipExtensions: ["js", "css"],
+    bundleAnalyzerReport: process.env.npm_config_report
+  },
   dev: {
     env: require("./dev.env"),
     port: 3000,

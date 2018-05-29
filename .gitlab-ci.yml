@@ -16,7 +16,7 @@ deploy_desarrollo:
   stage: deploy
   script:
     - npm install
-    - npm run build
+    - npm run stage
     - rsync -rlDv --delete * /software/trakapp/frontend/
   environment:
     name: desarrollo

@@ -6,6 +6,7 @@ if (!process.env.NODE_ENV) {
 }
 
 var opn = require("opn")
+var debug = require("debug")("ciris:webpack/dev-server.js");
 var path = require("path")
 var express = require("express")
 var webpack = require("webpack")
@@ -70,9 +71,9 @@ var readyPromise = new Promise(resolve => {
   _resolve = resolve
 })
 
-console.log("> Starting dev server...")
+debug("> Starting dev server...")
 devMiddleware.waitUntilValid(() => {
-  console.log("> Listening at " + uri + "\n")
+  debug("> Listening at " + uri + "\n")
   // when env is testing, don"t need open it
   if (autoOpenBrowser && process.env.NODE_ENV !== "testing") {
     opn(uri)
