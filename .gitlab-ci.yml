@@ -17,7 +17,7 @@ deploy_desarrollo:
   script:
     - npm install
     - npm run stage
-    - rsync -rlDv --delete * /software/trakapp/frontend/
+    - rsync -rlDv --delete dist/ /software/trakapp/frontend/
   environment:
     name: desarrollo
     url: trakapp.ciriscr.com
@@ -29,7 +29,7 @@ deploy_estable:
   script:
     - npm install
     - npm run build
-    - rsync -rlDv --delete * /software/trakapp/produccion/admin
+    - rsync -rlDv --delete dist/ /software/trakapp/produccion/admin
   environment:
     name: estable
     url: https://admin.trakapp.co.cr
