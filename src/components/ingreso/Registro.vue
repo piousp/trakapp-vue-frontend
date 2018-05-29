@@ -56,7 +56,7 @@
                    value=""
                    required
                    v-model="usuario.password"
-                   v-validate="'required|email'"
+                   v-validate="'required'"
             >
             <label :for="ids.password" class="form__label">Password</label>
           </form-group>
