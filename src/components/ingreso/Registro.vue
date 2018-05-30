@@ -34,8 +34,6 @@
             >
             <label :for="ids.apellidos" class="form__label">Apellidos</label>
           </form-group>
-        </div>
-        <div class="col-sm-6">
           <form-group :error="errors.has(ids.correo) && submitted">
             <input
               class="form__input form__input--blanco"
@@ -48,18 +46,9 @@
             >
             <label :for="ids.correo" class="form__label">Correo</label>
           </form-group>
-          <form-group :error="errors.has(ids.password) && submitted">
-            <input class="form__input form__input--blanco"
-                   type="password"
-                   :id="ids.password"
-                   :name="ids.password"
-                   value=""
-                   required
-                   v-model="usuario.password"
-                   v-validate="'required'"
-            >
-            <label :for="ids.password" class="form__label">Password</label>
-          </form-group>
+        </div>
+        <div class="col-sm-6">
+          <password class="form__input--blanco"/>
           <form-group>
             <div class="checkbox checkbox--cyan">
               <input type="checkbox"
