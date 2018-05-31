@@ -43,31 +43,12 @@
     <modal :visible="modalclave">
       <div class="modal__body">
         <p class="h4">Digite una nueva contraseña</p>
-        <form novalidate @submit.stop.prevent="actualizarContrasena(password)">
-          <form-group :error="errors.has('password')">
-            <input type="text"
-                   id="password"
-                   name="password"
-                   class="form__input"
-                   v-model="password"
-                   v-validate="{rules: {is: password2, required: true}}">
-            <label for="password" class="form__label">Contraseña:</label>
-          </form-group>
-          <form-group :error="errors.has('password2')">
-            <input type="text"
-                   id="password2"
-                   name="password2"
-                   class="form__input"
-                   v-model="password2"
-                   v-validate="{rules: {is: password, required: true}}">
-            <label for="password2" class="form__label">Confirme la contraseña:</label>
-          </form-group>
-          <button type="submit" id="submit" name="button" style="display: none"/>
-        </form>
+        <password
+        @password="claveNueva = $event"/>
       </div>
       <div class="modal__footer">
         <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
-        <button type="button" class="boton boton--verde" @click="actualizarContrasena(password)">
+        <button type="button" class="boton boton--verde" @click="actualizarContrasena(claveNueva)">
           <i class="fa fal fa-lock-alt"/>
           <span>Cambiar contraseña</span>
         </button>
@@ -100,8 +81,7 @@ function data() {
     usuario: {},
     claveActual: "",
     modalclave: false,
-    password: "",
-    password2: "",
+    claveNueva: "",
   };
 }
 
@@ -140,8 +120,7 @@ function actualizarContrasena(pass) {
           .then(() => {
             this.$toastr("success", "Se ha modificado su contraseña", "Contraseña Cambiada");
             this.modalclave = false;
-            this.password = "";
-            this.password2 = "";
+            this.claveNueva = "";
             return null;
           })
           .catch((err) => {

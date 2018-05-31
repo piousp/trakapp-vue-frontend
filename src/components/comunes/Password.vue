@@ -26,7 +26,7 @@
     <div v-if="password">
       <p class="form__help text--gris8">Fuerza de la contraseña: {{ textoCalidadPassword }}</p>
       <p class="form__help text--extra-small text--ambar" v-if="calidadPassword.feedback.warning">
-        Advertencia: {{ advertencia(calidadPassword.feedback.warning) }}
+        {{ advertencia(calidadPassword.feedback.warning) }}
       </p>
     </div>
     <form-group :error="errors.has(ids.password2)">
@@ -102,10 +102,11 @@ function calidadPassword() {
 }
 
 function emitirPassword() {
+  debug("Verificando antes de emitir");
   this.$validator.validateAll().then((valido) => {
     if (valido) {
       debug("Emitiendo el password", this.password);
-      this.$emit("password", this.password);
+      return this.$emit("password", this.password);
     }
     return this.$emit("password", null);
   })
