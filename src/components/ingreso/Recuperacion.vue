@@ -7,24 +7,9 @@
       <form v-if="validarRecuperacion(recuperacion)"
             novalidate @submit.stop.prevent="recuperar()">
         <h1 class="h4 text--blanco text--center">Recuperar Contraseña</h1>
-        <form-group :error="errors.has('password') && submitted">
-          <input type="text"
-                 id="password"
-                 name="password"
-                 class="form__input form__input--blanco"
-                 v-model="password"
-                 v-validate="{rules: {is: password2, required: true}}">
-          <label for="password" class="form__label">Ingrese la contraseña nueva</label>
-        </form-group>
-        <form-group :error="errors.has('password2') && submitted">
-          <input type="text"
-                 id="password2"
-                 name="password2"
-                 class="form__input form__input--blanco"
-                 v-model="password2"
-                 v-validate="{rules: {is: password, required: true}}">
-          <label for="password2" class="form__label">Confirme la contraseña</label>
-        </form-group>
+        <password class="text--blanco"
+                  @password="password = $event"
+                  :submitted="submitted"/>
         <div class="text--center">
           <button class="boton boton--l boton--musgo" type="submit">
             <i class="fa fa-fw fa-check"/>
