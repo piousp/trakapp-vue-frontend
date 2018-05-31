@@ -4,6 +4,7 @@ import Vue from "vue";
 import "moment/locale/es";
 import Datepicker from "vuejs-datepicker";
 import VeeValidate from "vee-validate";
+import es from "vee-validate/dist/locale/es";
 import VueI18n from "vue-i18n";
 import * as VueGoogleMaps from "vue2-google-maps";
 import VueWebsocket from "vue-socket.io";
@@ -24,7 +25,7 @@ const pkg = require("../package.json").name;
 Vue.config.productionTip = false;
 
 Vue.use(VueToastr);
-Vue.use(VeeValidate);
+
 Vue.use(Notify);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
@@ -46,6 +47,13 @@ Vue.prototype.$auth.checkAuth();
 const i18n = new VueI18n({
   locale: "es",
   messages,
+});
+
+Vue.use(VeeValidate, {
+  i18n,
+  dictionary: {
+    es,
+  },
 });
 
 /* eslint-disable no-new */
