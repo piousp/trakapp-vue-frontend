@@ -17,7 +17,7 @@ deploy_desarrollo:
   script:
     - npm install
     - npm run stage
-    - rsync -rlDv --delete dist/ /software/trakapp/frontend/
+    - rsync -rlDv --delete dist/ /software/trakapp/pruebas/admin
   environment:
     name: desarrollo
     url: trakapp.ciriscr.com
