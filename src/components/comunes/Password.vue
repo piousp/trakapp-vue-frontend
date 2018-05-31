@@ -1,6 +1,12 @@
 <template lang="html">
   <div>
-    <form-group :error="errors.has(ids.password)">
+    <!-- Esto es EL HACK para que el autocomplete del browser se confunda y no me joda el form -->
+    <input type="text" style="opacity:0;position:absolute;height:0;">
+    <input type="password" name="hack-password" id="hack-password"
+           style="opacity:0;position:absolute;height:0;">
+    <form-group :error="errors.has(ids.password) ||
+      (submitted && errors.has(ids.password)) ||
+    (submitted && !password)">
       <i class="fa-eye form__icon form__icon--clickeable"
          :class="verPass ? 'fas form__icon--active' : 'fal'"
          @click="verPass =! verPass"/>
@@ -10,7 +16,7 @@
         data-vv-as="Contraseña"
         :id="ids.password"
         :name="ids.password"
-        value=""
+        autocomplete="false"
         required
         v-model.trim="password"
         v-validate="'required|passwordBueno'">
@@ -33,6 +39,7 @@
         value=""
         required
         v-model.trim="password2"
+        @change="emitirPassword"
         v-validate="{ is: password }">
       <label :for="password2" class="form__label">Confirme su contraseña</label>
     </form-group>
@@ -46,13 +53,22 @@
 </template>
 
 <script>
+import D from "debug";
 import { Validator } from "vee-validate";
 import zxcvbn from "zxcvbn";
 import id from "../ids.js";
 
+const debug = D("ciris:Password.vue");
+
 Validator.extend("passwordBueno", value => zxcvbn(value).score > 2);
 
 export default {
+  props: {
+    submitted: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data,
   computed: {
     calidadPassword,
@@ -61,6 +77,7 @@ export default {
   created,
   methods: {
     advertencia,
+    emitirPassword,
   },
 };
 
@@ -70,7 +87,6 @@ function data() {
     verPass: false,
     password: "",
     password2: "",
-    submitted: false,
   };
 }
 
@@ -83,6 +99,17 @@ function created() {
 
 function calidadPassword() {
   return zxcvbn(this.password);
+}
+
+function emitirPassword() {
+  this.$validator.validateAll().then((valido) => {
+    if (valido) {
+      debug("Emitiendo el password", this.password);
+      this.$emit("password", this.password);
+    }
+    return this.$emit("password", null);
+  })
+    .catch(err => debug(err));
 }
 
 function advertencia(text) {

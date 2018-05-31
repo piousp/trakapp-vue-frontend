@@ -7,10 +7,6 @@
       <p class="text text--center text--blanco">
         Por favor rellene los campos con los datos solicitados
       </p>
-      <input type="text" style="display:none">
-      <!-- Esto es EL HACK para que el autocomplete del browser se confunda y no me joda el form -->
-      <input type="password" name="hack-password" id="hack-password"
-             style="opacity:0;position:absolute;height:0;">
       <div class="grid">
         <div class="col-sm-6">
           <form-group :error="errors.has(ids.nombre) && submitted">
@@ -48,66 +44,11 @@
           </form-group>
         </div>
         <div class="col-sm-6">
-          <password class="form__input--blanco"/>
-          <form-group>
-            <div class="checkbox checkbox--cyan">
-              <input type="checkbox"
-                     :id="ids.empresarial"
-                     :name="ids.empresarial"
-                     v-model="usuario.empresarial"
-                     checked="false">
-                     <!--<label class="form__label text--blanco" :for="ids.empresarial">
-                Estoy creando una cuenta empresarial
-              </label>-->
-            </div>
-          </form-group>
+          <password class="text--blanco"
+                    @password="usuario.password = $event"
+                    :submitted="submitted"/>
         </div>
       </div>
-      <div class="grid" v-if="usuario.empresarial">
-        <div class="col-md-6">
-          <form-group :error="errors.has(ids.empresa) && submitted">
-            <label :for="ids.empresa" class="form__label">Empresa</label>
-            <input class="form__input"
-                   :id="ids.empresa"
-                   :name="ids.empresa"
-                   required
-                   v-model="usuario.cuenta.nombre"
-                   v-validate="'required'"
-            >
-          </form-group>
-          <form-group :error="errors.has(ids.correoEmpresa) && submitted">
-            <label :for="ids.correoEmpresa" class="form__label">Correo contacto</label>
-            <input class="form__input"
-                   type="email"
-                   :id="ids.correoEmpresa"
-                   :name="ids.correoEmpresa"
-                   required
-                   v-model="usuario.cuenta.correo"
-                   v-validate="'required|email'"
-            >
-          </form-group>
-        </div>
-        <div class="col-md-6">
-          <form-group :error="errors.has(ids.cedula) && submitted">
-            <label :for="ids.cedula" class="form__label">Cédula</label>
-            <input type="text"
-                   class="form__input"
-                   :id="ids.cedula"
-                   :name="ids.cedula"
-                   v-model="usuario.cuenta.cedula"
-            >
-          </form-group>
-          <form-group :error="errors.has(ids.direccion) && submitted">
-            <label :for="ids.direccion" class="form__label">Dirección</label>
-            <textarea cols="30" rows="2" class="form__input"
-                      :id="ids.direccion"
-                      :name="ids.direccion"
-                      v-model="usuario.cuenta.direccion"
-            />
-          </form-group>
-        </div>
-      </div>
-      <br>
       <div class="text--center">
         <button class="boton boton--celeste-tema boton--xl" type="submit">
           <i class="fas fa-fw fa-building"/>
@@ -156,7 +97,6 @@ function created() {
     nombre: `nombre-${id()}`,
     apellidos: `apellidos-${id()}`,
     correo: `correo-${id()}`,
-    password: `password-${id()}`,
     empresarial: `empresarial-${id()}`,
     empresa: `empresa-${id()}`,
     correoEmpresa: `correoEmpresa-${id()}`,
