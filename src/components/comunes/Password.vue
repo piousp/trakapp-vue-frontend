@@ -180,7 +180,7 @@ meter {
   /* Applicable only to Firefox */
   background: none;
   background-color: transparentize($blanco, .8);
-  border: 1px solid $negro4;
+  border: 0;
 }
 
 meter::-webkit-meter-bar {
