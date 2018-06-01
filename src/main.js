@@ -29,7 +29,7 @@ Vue.use(VueToastr);
 Vue.use(Notify);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
-Vue.use(VueWebsocket, Vue.axios.defaults.baseUrl);
+Vue.use(VueWebsocket, process.env.SOCKET_URL);
 Vue.use(VueStash);
 Vue.use(VueGoogleMaps, {
   load: {
