@@ -161,8 +161,10 @@ function mounted() {
   background: transparentize($fondo, .5);
   .form__input {
     color: $blanco;
+    padding-left: 6px;
+    padding-right: 6px;
     &::placeholder {
-      color: $grisc;
+      color: $grisd;
     }
   }
 }
@@ -200,7 +202,7 @@ function mounted() {
 
 .chat__dialogo__msj--yo {
   background: $indigo;
-  color: $grisc;
+  color: $blanco;
 
   &::after{
     content: "";
