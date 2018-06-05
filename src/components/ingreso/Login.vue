@@ -27,8 +27,8 @@
       </form-group>
       <div>
         <span class="text text--blanco text--registro text--small">
-          ¿Olvidaste tu contraseña? <a @click="() => {modalVisible = !modalVisible}"
-                                       class="text--cyan clickable">Recupérala aquí</a>
+          ¿Olvidó su contraseña? <a @click="() => {modalVisible = !modalVisible}"
+                                    class="text--cyan clickable">Recupérela aquí</a>
         </span>
       </div>
       <br>
@@ -40,8 +40,8 @@
       </div>
     </form>
     <p class="text text--right text--blanco text--registro">
-      ¿No tienes cuenta? <router-link to="registro"
-                                      class="text--cyan">¡Regístrese ahora!</router-link>
+      ¿No tiene cuenta? <router-link to="registro"
+                                     class="text--cyan">¡Regístrese ahora!</router-link>
     </p>
     <modal :visible="modalVisible">
       <form novalidate @submit.stop.prevent="recuperar()">
@@ -60,7 +60,7 @@
                    required
                    v-validate="'required|email'">
             <label :for="ids.modalCorreo" class="form__label">
-              Ingrese el correo electronico al que está asociado su cuenta
+              Ingrese el correo electrónico al que está asociado su cuenta
             </label>
             <span class="text text--rojo text--small modal__form__error"
                   v-show="errors.has(ids.modalCorreo) && modalSubmitted">
@@ -146,7 +146,7 @@ function recuperar() {
       return this.$auth.solicitarCambio(this.modalCorreo)
         .then((resp) => {
           this.modalVisible = !this.modalVisible;
-          this.$toastr("success", this.$t("recovery.success"), this.$t("common.success"));
+          this.$toastr("success", this.$t("recovery.solicitud.success"), this.$t("common.success"));
           return resp;
         })
         .catch((err) => {

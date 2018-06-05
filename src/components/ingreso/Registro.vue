@@ -57,8 +57,8 @@
       </div>
     </form>
     <p class="text text--blanco">
-      ¿Ya tienes cuenta? <router-link class="text--cyan"
-                                      to="login">Ingresa aquí</router-link>
+      ¿Ya tiene cuenta? <router-link class="text--cyan"
+                                      to="login">Ingrese aquí</router-link>
     </p>
   </section>
 </template>
