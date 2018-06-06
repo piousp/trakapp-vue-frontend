@@ -25,6 +25,14 @@ export default {
   },
   data,
   store: ["tarea"],
+  mounted() {
+    window.eventBus.$on("abrirModalTarea", () => {
+      this.$refs.modaltarea.abrirModal({});
+    });
+    window.eventBus.$on("cerrarModalTarea", () => {
+      this.$refs.modaltarea.cerrarModal();
+    });
+  },
   methods: {
     guardarTarea,
     aceptarTarea,

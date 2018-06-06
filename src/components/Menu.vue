@@ -5,7 +5,8 @@
                  active-class="menu__item--active"
                  :key="ruta.meta.titulo"
                  v-if="ruta.meta ? !ruta.meta.esconder : true"
-                 class="menu__item">
+                 class="menu__item"
+                 :id="ruta.name">
       <i :class="ruta.meta ? ruta.meta.icono : ''"/>
       <span>{{ ruta.meta.titulo }}</span>
     </router-link>

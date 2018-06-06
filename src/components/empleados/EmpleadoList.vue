@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section id="seccion-empleados">
     <div class="botones-pagina">
       <router-link tag="button"
                    class="boton boton--nuevo"

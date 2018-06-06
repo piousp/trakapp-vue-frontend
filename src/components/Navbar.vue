@@ -15,9 +15,11 @@
   </nav>
 </template>
 
-<script>//
+<script>
 import pkg from "../../package.json";
 import Menu from "./Menu.vue";
+import tour from "./tour.js";
+import perfilApi from "./perfil/perfilApi.js";
 
 export default {
   components: {
@@ -31,6 +33,7 @@ export default {
   watch: {
     $route: route,
   },
+  mounted,
   methods: {
     mostrarMenu() {
       this.$parent.$emit("mostrarMenu");
@@ -55,6 +58,18 @@ function nombreUsuario() {
 
 function version() {
   return pkg.version;
+}
+
+function mounted() {
+  return perfilApi.datosUsuario().then((usuario) => {
+    if (!usuario.tourVisto) {
+      return tour(this.$router, () => {
+        usuario.tourVisto = true;
+        return perfilApi.actualizarCuenta(usuario);
+      });
+    }
+    return null;
+  });
 }
 </script>
 
@@ -115,5 +130,10 @@ function version() {
   }
   .navbar__version {
     padding: 8px 16px;
+  }
+  .estilo {
+    z-index: 9999 !important;
+    background:white !important;
+    color: black !important;
   }
 </style>

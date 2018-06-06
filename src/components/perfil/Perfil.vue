@@ -139,7 +139,7 @@ function guardarUsuario(usuario) {
       api.actualizarUsuario(usuario)
         .then((resp) => {
           debug(resp);
-          this.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
+          this.$toastr("success", "La información ha sido guardada", "Éxito");
           return resp;
         })
         .catch((err) => {
