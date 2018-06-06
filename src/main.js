@@ -19,6 +19,9 @@ import axios from "./config/axios.js";
 import messages from "./i18n";
 import "./config/filtros.js";
 import "./components/comunes";
+import "./config/anno.js";
+
+window.eventBus = new Vue({});
 
 const pkg = require("../package.json").name;
 
