@@ -35,6 +35,9 @@ export default {
   data,
   created,
   sockets: {
+    connect() {
+      this.$socket.emit("sesionIniciada", this.$auth.usuario);
+    },
     recibirMensaje(msj) {
       this.$notify(`${msj.emisor.nombre} dice: `, msj.texto);
     },

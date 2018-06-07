@@ -65,14 +65,13 @@ function data() {
   };
 }
 
-function isBlank(txt) {
-  const str = txt.trim();
-  return (!str || /^\s*$/.test(str));
-}
-
 function enviar(txt) {
+  const txtTrim = txt ? txt.trim() : null;
+  if (!txtTrim) {
+    return noop;
+  }
   const msj = {
-    texto: txt,
+    texto: txtTrim,
     emisor: this.$auth.usuario,
     modelo: "usuario",
     fechaEnvio: moment(),
@@ -80,10 +79,7 @@ function enviar(txt) {
   if (this.privado) {
     msj.receptor = this.idReceptor;
   }
-  if (isBlank(txt)) {
-    return noop;
-  }
-  debug("Enviando el texto", isBlank(txt));
+  debug("Enviando el texto", txtTrim);
   this.agregarMensaje(msj, true);
   setTimeout(() => {
     this.$refs.chatInput.focus();
