@@ -17,7 +17,7 @@
                 <input class="form__input" v-model="tarea.title"
                        :disabled="tarea.activa === false">
               </form-group>
-              <div class="form-group">
+              <div class="form-group" id="asignar-tarea">
                 <label class="form__label">Asignar a</label>
                 <select class="form__input" v-model="tarea.empleado"
                         :disabled="tarea.activa === false">
@@ -32,7 +32,7 @@
                           v-model="tarea.descripcion"
                           :disabled="tarea.activa === false"/>
               </form-group>
-              <div class="grid grid--bleed">
+              <div class="grid grid--bleed" id="fecha-tarea">
                 <div class="col-6">
                   <form-group>
                     <label class="form__label">Desde</label>
@@ -48,7 +48,7 @@
               </div>
             </div>
             <div class="col-6">
-              <form-group>
+              <form-group id="ubicacion-tarea">
                 <label class="form__label">Ubicación</label>
                 <gmap-autocomplete class="form__input" ref="gmapAutocomplete"
                                    :disabled="tarea.activa === false"

@@ -6,7 +6,8 @@
     "node": true
   },
   "globals": {
-    "google": true
+    "google": true,
+    "Anno": true
   },
   "plugins": [
     "lodash",

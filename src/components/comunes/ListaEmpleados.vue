@@ -1,7 +1,10 @@
 <template>
-  <section>
+  <section id="chat-empleados">
     <h1 class="h5 text--blanco text--center">Chat empleados</h1>
     <ul class="lista-empleados">
+      <li class="text--center text--grisa text--small" v-show="!empleados.length">
+        No hay empleados.
+      </li>
       <li class="lista-empleados__item"
           @click="abrirEmpleado(emp)"
           v-for="emp in empleados"

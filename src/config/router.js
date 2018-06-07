@@ -8,7 +8,6 @@ import RutasEmpleados from "../components/empleados/rutas.js";
 import RutasAgenda from "../components/agenda/rutas.js";
 import RutasChat from "../components/chat/rutas.js";
 import RutasPerfil from "../components/perfil/rutas.js";
-import RutasDocumentacion from "../documentacion/rutas.js";
 
 Vue.use(Router);
 
@@ -20,7 +19,6 @@ const router = new Router({
       name: "home",
       component: Home,
       children: union(
-        RutasDocumentacion,
         RutasMapa,
         RutasAgenda,
         RutasChat,
