@@ -3,8 +3,8 @@
     class="map-container full-height"
     ref="map"
     :center="center"
-    :zoom="15"
-    :options="{ disableDefaultUI : true }"
+    :zoom="13"
+    :options="{ disableDefaultUI : true, styles: estilos }"
     map-type-id="terrain">
     <gmap-marker
       :key="index"
@@ -27,6 +27,7 @@ import compact from "lodash/compact";
 import get from "lodash/get";
 import findIndex from "lodash/findIndex";
 import empleadoApi from "../empleados/empleadoApi";
+import estilos from "../comunes/estilosMapa";
 
 const debug = D("ciris:Mapa.vue");
 
@@ -41,7 +42,8 @@ export default {
 
 function data() {
   return {
-    center: { lat: 0, lng: 0 },
+    center: { lat: 9.93, lng: -84.07 },
+    estilos,
     empleados: [],
   };
 }
