@@ -65,7 +65,7 @@ function mounted() {
     if (!usuario.tourVisto) {
       return tour(this.$router, () => {
         usuario.tourVisto = true;
-        return perfilApi.actualizarCuenta(usuario);
+        return perfilApi.actualizarUsuario(usuario);
       });
     }
     return null;
