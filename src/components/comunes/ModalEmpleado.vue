@@ -16,8 +16,8 @@
               class="map-container"
               ref="map"
               :center="center"
-              :zoom="15"
-              :options="{ disableDefaultUI : true }"
+              :zoom="14"
+              :options="{ disableDefaultUI : true, styles: estilos }"
               map-type-id="terrain">
               <gmap-marker
                 :if="empleado"
@@ -40,6 +40,7 @@
 <script>
 import D from "debug";
 import get from "lodash/get";
+import estilos from "./estilosMapa";
 
 const debug = D("ciris:ModalEmpleado.vue");
 export default {
@@ -57,6 +58,7 @@ export default {
 function data() {
   return {
     center: { lat: 9.93, lng: -84.07 },
+    estilos,
     modalVisible: false,
     mensajes: [],
     mensaje: {},
@@ -85,6 +87,8 @@ function abrirModal() {
   this.$refs.chat.cargarMensajes(this.empleado._id);
   this.$refs.map.$mapCreated
     .then((objMapa) => {
+      const trafficLayer = new google.maps.TrafficLayer();
+      trafficLayer.setMap(objMapa);
       const bounds = new google.maps.LatLngBounds();
       bounds.extend(this.empleado.ubicacion.pos);
       objMapa.fitBounds(bounds);
