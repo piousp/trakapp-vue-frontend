@@ -63,6 +63,8 @@ function mounted() {
   this.$refs.map.$mapCreated
     .then((objMapa) => {
       const bounds = new google.maps.LatLngBounds();
+      const trafficLayer = new google.maps.TrafficLayer();
+      trafficLayer.setMap(objMapa);
       return empleadoApi.listar(0, 0).then((empleados) => {
         const empMapeados = map(empleados.docs, (e) => {
           if (get(e.ubicacion, "pos.coordinates", null)) {

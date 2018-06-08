@@ -85,6 +85,8 @@ function abrirModal() {
   this.$refs.chat.cargarMensajes(this.empleado._id);
   this.$refs.map.$mapCreated
     .then((objMapa) => {
+      const trafficLayer = new google.maps.TrafficLayer();
+      trafficLayer.setMap(objMapa);
       const bounds = new google.maps.LatLngBounds();
       bounds.extend(this.empleado.ubicacion.pos);
       objMapa.fitBounds(bounds);
