@@ -11,7 +11,7 @@
                   @password="password = $event"
                   :submitted="submitted"/>
         <div class="text--center">
-          <button class="boton boton--l boton--musgo" type="submit">
+          <button class="boton boton--l boton--celeste-tema" type="submit">
             <i class="fa fa-fw fa-check"/>
             Cambiar contraseña
           </button>
