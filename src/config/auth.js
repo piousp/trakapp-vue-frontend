@@ -1,4 +1,5 @@
 import D from "debug";
+import bugsnagClient from "../components/comunes/bugsnag";
 
 const debug = D("ciris:auth.js");
 
@@ -6,6 +7,12 @@ const Auth = {
   install(Vue, axios, options) {
     function identificarSocket(usuario) {
       Vue.prototype.$socket.emit("sesionIniciada", usuario);
+      debug(usuario);
+      bugsnagClient.user = {
+        id: usuario._id,
+        name: `${usuario.nombre} ${usuario.apellidos}`,
+        email: usuario.correo,
+      };
     }
     Vue.auth = {
       usuario: {},
