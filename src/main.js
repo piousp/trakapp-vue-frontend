@@ -10,6 +10,7 @@ import * as VueGoogleMaps from "vue2-google-maps";
 import VueWebsocket from "vue-socket.io";
 import VueToastr from "@deveodk/vue-toastr";
 import VueStash from "vue-stash";
+import bugsnagVue from "bugsnag-vue";
 import store from "./config/store";
 import App from "./App.vue";
 import router from "./config/router";
@@ -17,6 +18,7 @@ import Auth from "./config/auth.js";
 import Notify from "./config/notify.js";
 import axios from "./config/axios.js";
 import messages from "./i18n";
+import bugsnagClient from "./components/comunes/bugsnag";
 import "./config/filtros.js";
 import "./components/comunes";
 import "./config/anno.js";
@@ -25,10 +27,10 @@ window.eventBus = new Vue({});
 
 const pkg = require("../package.json").name;
 
+bugsnagClient.use(bugsnagVue(Vue));
 Vue.config.productionTip = false;
 
 Vue.use(VueToastr);
-
 Vue.use(Notify);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
