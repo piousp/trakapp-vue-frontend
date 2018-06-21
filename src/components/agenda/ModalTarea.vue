@@ -8,29 +8,30 @@
           <span class="text--italic text--gris8" v-if="tarea.activa === false">Finalizada</span>
         </div>
       </div>
-      <div class="modal__body">
-        <form>
+      <form ref="form" novalidate>
+        <div class="modal__body">
           <div class="grid">
             <div class="col-6">
-              <form-group>
-                <label class="form__label">Título</label>
+              <form-group :error="errors.has('title') && submitted">
                 <input class="form__input" v-model="tarea.title"
-                       :disabled="tarea.activa === false">
+                       :disabled="tarea.activa === false"
+                       v-validate="'required'" name="title">
+                <label class="form__label">Título</label>
               </form-group>
-              <div class="form-group" id="asignar-tarea">
-                <label class="form__label">Asignar a</label>
+              <form-group id="asignar-tarea" :error="errors.has('empleado') && submitted">
                 <select class="form__input" v-model="tarea.empleado"
-                        :disabled="tarea.activa === false">
+                        :disabled="tarea.activa === false" name="empleado" v-validate="'required'">
                   <option v-for="emp in empleados" :value="emp._id" :key="emp._id">
                     {{ emp.nombre }} {{ emp.apellidos }}
                   </option>
                 </select>
-              </div>
+                <label class="form__label">Asignar a</label>
+              </form-group>
               <form-group>
-                <label class="form__label">Descripción</label>
                 <textarea class="form__input" rows="3"
                           v-model="tarea.descripcion"
                           :disabled="tarea.activa === false"/>
+                <label class="form__label">Descripción</label>
               </form-group>
               <div class="grid grid--bleed" id="fecha-tarea">
                 <div class="col-6">
@@ -49,11 +50,12 @@
             </div>
             <div class="col-6">
               <form-group id="ubicacion-tarea">
-                <label class="form__label">Ubicación</label>
                 <gmap-autocomplete class="form__input" ref="gmapAutocomplete"
                                    :disabled="tarea.activa === false"
                                    :options="{componentRestrictions: {country: 'cr'}}"
-                                   @place_changed="buscarLugar"/>
+                                   @place_changed="buscarLugar"
+                                   placeholder=""/>
+                <label class="form__label">Ubicación</label>
               </form-group>
               <gmap-map
                 class="mapa-agenda"
@@ -73,16 +75,16 @@
               </gmap-map>
             </div>
           </div>
-        </form>
-      </div>
-      <div class="modal__footer">
-        <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
-        <button type="button" class="boton boton--guardar" @click="$emit('aceptar', tarea)"/>
-        <button type="button"
-                class="boton boton--eliminar"
-                @click="$emit('eliminar', tarea)"
-                v-show="tarea._id"/>
-      </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
+          <button type="button" class="boton boton--guardar" @click="verificarYAceptar()"/>
+          <button type="button"
+                  class="boton boton--eliminar"
+                  @click="$emit('eliminar', tarea)"
+                  v-show="tarea._id"/>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -93,7 +95,22 @@ function data() {
   return {
     mapCenter: { lat: 9.93, lng: -84.07 },
     modalVisible: false,
+    submitted: false,
   };
+}
+
+function verificarYAceptar() {
+  this.submitted = true;
+  return this.$validator.validateAll().then((valido) => {
+    if (valido && this.tarea.ubicacion.coordinates) {
+      return this.$emit("aceptar", this.tarea);
+    } else if (!valido) {
+      this.$toastr("error", "Falta información por llenar", "Campos vacios");
+    } else if (!this.tarea.ubicacion.coordinates) {
+      this.$toastr("error", "La tarea tiene que tener una ubicación", "Campos vacios");
+    }
+    return null;
+  });
 }
 
 function abrirModal(evt) {
@@ -106,6 +123,7 @@ function abrirModal(evt) {
 }
 
 function cerrarModal() {
+  this.submitted = false;
   this.tarea = {};
   this.$refs.gmapAutocomplete.$el.value = null;
   this.modalVisible = false;
@@ -142,6 +160,7 @@ export default {
     abrirModal,
     cerrarModal,
     editarModal,
+    verificarYAceptar,
   },
 };
 </script>
