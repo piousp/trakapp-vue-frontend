@@ -31,7 +31,10 @@
         </div>
       </div>
       <div class="modal__footer">
-        <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
+        <button type="button" class="boton boton--negro" @click="cerrarModal">
+          <i class="far fa-times-circle rojo"/>
+          Cerrar chat
+        </button>
       </div>
     </div>
   </div>
@@ -110,5 +113,8 @@ function cerrarModal() {
 <style scoped lang="scss">
 .map-container {
   height: 300px;
+}
+.rojo {
+  color: red;
 }
 </style>
