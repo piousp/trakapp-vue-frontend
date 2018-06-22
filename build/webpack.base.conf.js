@@ -22,12 +22,17 @@ module.exports = {
     extensions: [".js", ".vue", ".json"],
     alias: {
       "vue$": "vue/dist/vue.esm.js",
+      "modernizr$": path.resolve(__dirname, ".modernizrrc.js"),
       "@": resolve("src"),
     },
     symlinks: false
   },
   module: {
     rules: [
+      {
+        loader: "webpack-modernizr-loader",
+        test: /\.modernizrrc\.js$/
+      },
       {
         test: /\.vue$/,
         loader: "vue-loader",
