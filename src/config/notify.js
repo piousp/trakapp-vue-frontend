@@ -1,5 +1,5 @@
 import D from "debug";
-import modernizr from "modernizr";
+import modernizr from "modernizr"; //eslint-disable-line
 
 const debug = D("ciris:notify.js");
 
@@ -43,7 +43,6 @@ function permiso() {
       });
     }
   }
-  alert("Su explorador no soporta todas las características de Trakapp");
 }
 
 export default Notificacion;
