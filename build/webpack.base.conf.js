@@ -24,7 +24,7 @@ module.exports = {
     extensions: [".js", ".vue", ".json"],
     alias: {
       "vue$": "vue/dist/vue.esm.js",
-      "modernizr$": resolve(".modernizrrc.js"),
+      "modernizr": resolve(".modernizrrc.js"),
       "@": resolve("src"),
     },
     symlinks: false

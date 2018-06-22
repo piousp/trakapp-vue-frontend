@@ -1,5 +1,5 @@
 import D from "debug";
-import modernizr from "modernizr"; //eslint-disable-line
+import modernizr from "modernizr";
 
 const debug = D("ciris:notify.js");
 
