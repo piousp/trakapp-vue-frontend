@@ -27,14 +27,14 @@ export default {
   store: ["tarea"],
   mounted() {
     window.eventBus.$on("abrirModalTarea", () => {
-      setTimeout(function () {
+      setTimeout(() => {
         if (this.$refs.modaltarea) {
           this.$refs.modaltarea.abrirModal({});
         }
       }, 100);
     });
     window.eventBus.$on("cerrarModalTarea", () => {
-      setTimeout(function () {
+      setTimeout(() => {
         if (this.$refs.modaltarea) {
           this.$refs.modaltarea.cerrarModal();
         }
