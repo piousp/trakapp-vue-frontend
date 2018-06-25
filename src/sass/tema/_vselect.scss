@@ -1,0 +1,6 @@
+.v-select {
+  .dropdown-toggle {
+    @extend .form__input;
+    border-radius: 0;
+  }
+}
