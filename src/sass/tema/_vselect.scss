@@ -4,3 +4,31 @@
     border-radius: 0;
   }
 }
+
+.v-select.disabled {
+  pointer-events: none;
+  .dropdown-toggle{
+    background: transparent;
+    border-bottom: 1px dotted $grisc;
+    color: $grisa;
+    box-shadow: 0 0 0 $negro;
+    cursor: not-allowed;
+
+    &:focus,
+    &:active {
+      outline-color: transparent;
+      box-shadow: 0 0 0 $negro;
+    }
+
+    .form-control{
+      background: transparent;
+    }
+  }
+
+
+
+  .clear,
+  .open-indicator {
+    display: none;
+  }
+}

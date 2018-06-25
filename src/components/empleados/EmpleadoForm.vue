@@ -52,15 +52,15 @@
         </form>
         <form class="form" novalidate>
           <h1 class="h1"><strong class="text--bold">Dato</strong>s de costos</h1>
-          <form-group :error="errors.has('costoHora') && submitted">
+          <form-group :error="errors.has('costoHora')">
             <input
               id="costoHora"
               name="costoHora"
               type="number"
               class="form__input"
-              v-model.number="empleado.costoHora"
+              v-model="empleado.costoHora"
               :disabled="!editando"
-              v-validate="'required|decimal'">
+              v-validate="'decimal'">
             <label class="form__label">Costo por hora</label>
           </form-group>
           <form-group :error="errors.has('horaExtra') && submitted">
@@ -69,9 +69,9 @@
               name="horaExtra"
               type="number"
               class="form__input"
-              v-model.number="empleado.horaExtra"
+              v-model="empleado.horaExtra"
               :disabled="!editando"
-              v-validate="'required|decimal'">
+              v-validate="'decimal'">
             <label class="form__label">Costo por hora extra</label>
           </form-group>
         </form>
@@ -83,63 +83,77 @@
             <label class="text">Lunes:</label>
             <v-select
               v-model="empleado.horarios.lunes.desde"
+              :disabled="!editando"
               :options="horarios"/>
             <v-select
               v-model="empleado.horarios.lunes.hasta"
+              :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Martes:</label>
             <v-select
               v-model="empleado.horarios.martes.desde"
+              :disabled="!editando"
               :options="horarios"/>
             <v-select
               v-model="empleado.horarios.martes.hasta"
+              :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Miércoles:</label>
             <v-select
               v-model="empleado.horarios.miercoles.desde"
+              :disabled="!editando"
               :options="horarios"/>
             <v-select
               v-model="empleado.horarios.miercoles.hasta"
+              :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Jueves:</label>
             <v-select
               v-model="empleado.horarios.jueves.desde"
+              :disabled="!editando"
               :options="horarios"/>
             <v-select
               v-model="empleado.horarios.jueves.hasta"
+              :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Viernes:</label>
             <v-select
               v-model="empleado.horarios.viernes.desde"
+              :disabled="!editando"
               :options="horarios"/>
             <v-select
               v-model="empleado.horarios.viernes.hasta"
+              :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Sábado:</label>
             <v-select
               v-model="empleado.horarios.sabado.desde"
+              :disabled="!editando"
               :options="horarios"/>
             <v-select
               v-model="empleado.horarios.sabado.hasta"
+              :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Domingo:</label>
             <v-select
               v-model="empleado.horarios.domingo.desde"
+              :disabled="!editando"
               :options="horarios"/>
             <v-select
               v-model="empleado.horarios.domingo.hasta"
+              :disabled="!editando"
               :options="horarios"/>
           </li>
         </ul>
@@ -173,30 +187,7 @@ export default {
 function data() {
   return {
     empleado: {
-      horarios: {
-        lunes: {
-          desde: aHora(8),
-          hasta: aHora(17),
-        },
-        martes: {
-          desde: aHora(8),
-          hasta: aHora(17),
-        },
-        miercoles: {
-          desde: aHora(8),
-          hasta: aHora(17),
-        },
-        jueves: {
-          desde: aHora(8),
-          hasta: aHora(17),
-        },
-        viernes: {
-          desde: aHora(8),
-          hasta: aHora(17),
-        },
-        sabado: {},
-        domingo: {},
-      },
+      horarios: verificarHorarios(null),
     },
     copia: {},
     editando: true,
@@ -228,6 +219,44 @@ function guardar(empleado) {
     });
 }
 
+function verificarHorarios(configHoras) {
+  debug(configHoras);
+  if (configHoras) {
+    configHoras.lunes = configHoras.lunes || {};
+    configHoras.martes = configHoras.martes || {};
+    configHoras.miercoles = configHoras.miercoles || {};
+    configHoras.jueves = configHoras.jueves || {};
+    configHoras.viernes = configHoras.viernes || {};
+    configHoras.sabado = configHoras.sabado || {};
+    configHoras.domingo = configHoras.domingo || {};
+    return configHoras;
+  }
+  return {
+    lunes: {
+      desde: aHora(8),
+      hasta: aHora(17),
+    },
+    martes: {
+      desde: aHora(8),
+      hasta: aHora(17),
+    },
+    miercoles: {
+      desde: aHora(8),
+      hasta: aHora(17),
+    },
+    jueves: {
+      desde: aHora(8),
+      hasta: aHora(17),
+    },
+    viernes: {
+      desde: aHora(8),
+      hasta: aHora(17),
+    },
+    sabado: {},
+    domingo: {},
+  };
+}
+
 function editar(empleado) {
   this.editando = true;
   this.copia = cloneDeep(empleado);
@@ -244,7 +273,8 @@ function beforeRouteEnter(to, from, next) {
     return empleadoApi.obtener(to.params.id)
       .then(resp => next((vm) => {
         vm.empleado = resp;
-        vm.copia = cloneDeep(resp);
+        vm.empleado.horarios = verificarHorarios(vm.empleado.horarios);
+        vm.copia = cloneDeep(vm.empleado);
         vm.editando = to.params.edit;
       }))
       .catch((err) => {
