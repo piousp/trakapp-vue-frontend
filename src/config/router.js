@@ -8,6 +8,7 @@ import RutasEmpleados from "../components/empleados/rutas.js";
 import RutasAgenda from "../components/agenda/rutas.js";
 import RutasChat from "../components/chat/rutas.js";
 import RutasPerfil from "../components/perfil/rutas.js";
+import RutasCliente from "../components/clientes/rutas.js";
 
 Vue.use(Router);
 
@@ -21,6 +22,7 @@ const router = new Router({
       children: union(
         RutasMapa,
         RutasAgenda,
+        RutasCliente,
         RutasChat,
         RutasEmpleados,
         RutasPerfil,
