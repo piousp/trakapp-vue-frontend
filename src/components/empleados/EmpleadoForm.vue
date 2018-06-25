@@ -31,10 +31,13 @@
               v-validate="'required'" >
             <label class="form__label">Nombre</label>
           </form-group>
-          <form-group>
-            <input class="form__input"
-                   v-model="empleado.apellidos"
-                   :disabled="!editando">
+          <form-group :error="errors.has('apellidos') && submitted">
+            <input
+              name="apellidos"
+              class="form__input"
+              v-model="empleado.apellidos"
+              :disabled="!editando"
+              v-validate="'required'" >
             <label class="form__label">Apellidos</label>
           </form-group>
 
@@ -49,19 +52,26 @@
         </form>
         <form class="form" novalidate>
           <h1 class="h1"><strong class="text--bold">Dato</strong>s de costos</h1>
-          <form-group :error="errors.has('nombre') && submitted">
+          <form-group :error="errors.has('costoHora') && submitted">
             <input
-              name="nombre"
+              id="costoHora"
+              name="costoHora"
+              type="number"
               class="form__input"
-              v-model="empleado.nombre"
+              v-model.number="empleado.costoHora"
               :disabled="!editando"
-              v-validate="'required'" >
+              v-validate="'required|decimal'">
             <label class="form__label">Costo por hora</label>
           </form-group>
-          <form-group>
-            <input class="form__input"
-                   v-model="empleado.apellidos"
-                   :disabled="!editando">
+          <form-group :error="errors.has('horaExtra') && submitted">
+            <input
+              id="horaExtra"
+              name="horaExtra"
+              type="number"
+              class="form__input"
+              v-model.number="empleado.horaExtra"
+              :disabled="!editando"
+              v-validate="'required|decimal'">
             <label class="form__label">Costo por hora extra</label>
           </form-group>
         </form>
@@ -72,51 +82,65 @@
           <li class="lista__item">
             <label class="text">Lunes:</label>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.lunes.desde"
+              :options="horarios"/>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.lunes.hasta"
+              :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Martes:</label>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.martes.desde"
+              :options="horarios"/>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.martes.hasta"
+              :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Miércoles:</label>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.miercoles.desde"
+              :options="horarios"/>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.miercoles.hasta"
+              :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Jueves:</label>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.jueves.desde"
+              :options="horarios"/>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.jueves.hasta"
+              :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Viernes:</label>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.viernes.desde"
+              :options="horarios"/>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.viernes.hasta"
+              :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Sábado:</label>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.sabado.desde"
+              :options="horarios"/>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.sabado.hasta"
+              :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Domingo:</label>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.domingo.desde"
+              :options="horarios"/>
             <v-select
-            :options="horarios"/>
+              v-model="empleado.horarios.domingo.hasta"
+              :options="horarios"/>
           </li>
         </ul>
       </div>
@@ -148,7 +172,32 @@ export default {
 
 function data() {
   return {
-    empleado: {},
+    empleado: {
+      horarios: {
+        lunes: {
+          desde: aHora(8),
+          hasta: aHora(17),
+        },
+        martes: {
+          desde: aHora(8),
+          hasta: aHora(17),
+        },
+        miercoles: {
+          desde: aHora(8),
+          hasta: aHora(17),
+        },
+        jueves: {
+          desde: aHora(8),
+          hasta: aHora(17),
+        },
+        viernes: {
+          desde: aHora(8),
+          hasta: aHora(17),
+        },
+        sabado: {},
+        domingo: {},
+      },
+    },
     copia: {},
     editando: true,
     submitted: false,
@@ -206,17 +255,27 @@ function beforeRouteEnter(to, from, next) {
   return next();
 }
 
+function aHora(val) {
+  const minutos = `${val % 1 === 0 ? ":00" : ":30"}`;
+  const hora = (`0${Math.floor((val > 12 ? val - 12 : val))}`).slice(-2);
+  return { label: `${hora}${minutos} ${val > 12 ? "PM" : "AM"}`, value: val };
+}
+
 function horarios() {
-  function aHora(val) {
-    const minutos = `${val % 1 === 0 ? ":00" : ":30"}`;
-    const hora = (`0${Math.floor((val > 12 ? val - 12 : val))}`).slice(-2);
-    return `${hora}${minutos} ${val > 12 ? "PM" : "AM"}`;
-  }
-  return range(0, 24, 0.5).map(val => ({ label: aHora(val), value: val }));
+  return range(0, 24, 0.5).map(aHora);
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped="true">
   .lista__item {
+    display: table-row;
 
+    label{
+      display: table-cell;
+    }
+
+    .v-select {
+      display: table-cell;
+      padding: 0 .5em;
+    }
   }
 </style>
