@@ -82,103 +82,107 @@
           <li class="lista__item">
             <label class="text">Lunes:</label>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               :disabled="!editando"
               v-model="empleado.horarios.lunes.desde"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.lunes.hasta"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
           </li>
           <li class="lista__item">
             <label class="text">Martes:</label>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.martes.desde"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.martes.hasta"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
           </li>
           <li class="lista__item">
             <label class="text">Miércoles:</label>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.miercoles.desde"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.miercoles.hasta"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
           </li>
           <li class="lista__item">
             <label class="text">Jueves:</label>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.jueves.desde"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.jueves.hasta"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
           </li>
           <li class="lista__item">
             <label class="text">Viernes:</label>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.viernes.desde"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.viernes.hasta"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
           </li>
           <li class="lista__item">
             <label class="text">Sábado:</label>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.sabado.desde"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
             <multiselect
-              label="label" track-by="value"
               placeholder="Seleccione una hora"
               v-model="empleado.horarios.sabado.hasta"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
           </li>
           <li class="lista__item">
             <label class="text">Domingo:</label>
             <multiselect
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.domingo.desde"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
             <multiselect
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.domingo.hasta"
               :disabled="!editando"
-              :options="horarios"/>
+              :options="horarios"
+              :custom-label="opt => aHora(opt)"/>
           </li>
         </ul>
       </div>
@@ -204,6 +208,7 @@ export default {
     guardar,
     editar,
     cancelar,
+    aHora,
   },
   beforeRouteEnter,
 };
@@ -257,24 +262,24 @@ function verificarHorarios(configHoras) {
   }
   return {
     lunes: {
-      desde: aHora(8),
-      hasta: aHora(17),
+      desde: 8,
+      hasta: 17,
     },
     martes: {
-      desde: aHora(8),
-      hasta: aHora(17),
+      desde: 8,
+      hasta: 17,
     },
     miercoles: {
-      desde: aHora(8),
-      hasta: aHora(17),
+      desde: 8,
+      hasta: 17,
     },
     jueves: {
-      desde: aHora(8),
-      hasta: aHora(17),
+      desde: 8,
+      hasta: 17,
     },
     viernes: {
-      desde: aHora(8),
-      hasta: aHora(17),
+      desde: 8,
+      hasta: 17,
     },
     sabado: {},
     domingo: {},
@@ -311,12 +316,13 @@ function beforeRouteEnter(to, from, next) {
 
 function aHora(val) {
   const minutos = `${val % 1 === 0 ? ":00" : ":30"}`;
-  const hora = (`0${Math.floor((val > 12 ? val - 12 : val))}`).slice(-2);
-  return { label: `${hora}${minutos} ${val > 12 ? "PM" : "AM"}`, value: val };
+  const hora = val < 1 ? "12" : (`0${Math.floor((val > 12 ? val - 12 : val))}`).slice(-2);
+  debug(val, hora, minutos);
+  return `${hora}${minutos} ${val > 12 ? "PM" : "AM"}`;
 }
 
 function horarios() {
-  return range(0, 24, 0.5).map(aHora);
+  return range(0, 24, 0.5);
 }
 </script>
 <style lang="scss" scoped="true">
