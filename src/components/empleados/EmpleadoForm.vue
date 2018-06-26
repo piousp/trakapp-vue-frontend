@@ -80,109 +80,151 @@
         <h1 class="h1"><strong class="text--bold">Hora</strong>rios de trabajo</h1>
         <ul class="lista">
           <li class="lista__item">
-            <label class="text">Lunes:</label>
-            <multiselect
-              placeholder="Seleccione una hora"
-              :disabled="!editando"
-              v-model="empleado.horarios.lunes.desde"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.lunes.hasta"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
+            <div class="lista__item__cell lista__item__cell--small">
+              <label class="text">Lunes:</label>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                :disabled="!editando"
+                v-model="empleado.horarios.lunes.desde"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.lunes.hasta"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
           </li>
           <li class="lista__item">
-            <label class="text">Martes:</label>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.martes.desde"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.martes.hasta"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
+            <div class="lista__item__cell lista__item__cell--small">
+              <label class="text">Martes:</label>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.martes.desde"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.martes.hasta"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
           </li>
           <li class="lista__item">
-            <label class="text">Miércoles:</label>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.miercoles.desde"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.miercoles.hasta"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
+            <div class="lista__item__cell lista__item__cell--small">
+              <label class="text">Miércoles:</label>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.miercoles.desde"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.miercoles.hasta"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
           </li>
           <li class="lista__item">
-            <label class="text">Jueves:</label>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.jueves.desde"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.jueves.hasta"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
+            <div class="lista__item__cell lista__item__cell--small">
+              <label class="text">Jueves:</label>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.jueves.desde"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.jueves.hasta"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
           </li>
           <li class="lista__item">
-            <label class="text">Viernes:</label>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.viernes.desde"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.viernes.hasta"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
+            <div class="lista__item__cell lista__item__cell--small">
+              <label class="text">Viernes:</label>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.viernes.desde"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.viernes.hasta"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
           </li>
           <li class="lista__item">
-            <label class="text">Sábado:</label>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.sabado.desde"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.sabado.hasta"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
+            <div class="lista__item__cell lista__item__cell--small">
+              <label class="text">Sábado:</label>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.sabado.desde"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.sabado.hasta"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
           </li>
           <li class="lista__item">
-            <label class="text">Domingo:</label>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.domingo.desde"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
-            <multiselect
-              placeholder="Seleccione una hora"
-              v-model="empleado.horarios.domingo.hasta"
-              :disabled="!editando"
-              :options="horarios"
-              :custom-label="opt => aHora(opt)"/>
+            <div class="lista__item__cell lista__item__cell--small">
+              <label class="text">Domingo:</label>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.domingo.desde"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
+            <div class="lista__item__cell">
+              <multiselect
+                placeholder="Seleccione una hora"
+                v-model="empleado.horarios.domingo.hasta"
+                :disabled="!editando"
+                :options="horarios"
+                :custom-label="opt => aHora(opt)"/>
+            </div>
           </li>
         </ul>
       </div>
@@ -327,6 +369,17 @@ function horarios() {
 </script>
 <style lang="scss" scoped="true">
   .lista__item {
+    display: table;
+    width: 100%;
+  }
 
+  .lista__item__cell {
+    display: table-cell;
+    padding: 0 1%;
+    width: 38%;
+  }
+
+  .lista__item__cell--small {
+    width: 20%;
   }
 </style>
