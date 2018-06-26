@@ -81,77 +81,101 @@
         <ul class="lista">
           <li class="lista__item">
             <label class="text">Lunes:</label>
-            <v-select
-              v-model="empleado.horarios.lunes.desde"
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               :disabled="!editando"
+              v-model="empleado.horarios.lunes.desde"
               :options="horarios"/>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.lunes.hasta"
               :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Martes:</label>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.martes.desde"
               :disabled="!editando"
               :options="horarios"/>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.martes.hasta"
               :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Miércoles:</label>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.miercoles.desde"
               :disabled="!editando"
               :options="horarios"/>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.miercoles.hasta"
               :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Jueves:</label>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.jueves.desde"
               :disabled="!editando"
               :options="horarios"/>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.jueves.hasta"
               :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Viernes:</label>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.viernes.desde"
               :disabled="!editando"
               :options="horarios"/>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.viernes.hasta"
               :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Sábado:</label>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.sabado.desde"
               :disabled="!editando"
               :options="horarios"/>
-            <v-select
+            <multiselect
+              label="label" track-by="value"
+              placeholder="Seleccione una hora"
               v-model="empleado.horarios.sabado.hasta"
               :disabled="!editando"
               :options="horarios"/>
           </li>
           <li class="lista__item">
             <label class="text">Domingo:</label>
-            <v-select
+            <multiselect
               v-model="empleado.horarios.domingo.desde"
               :disabled="!editando"
               :options="horarios"/>
-            <v-select
+            <multiselect
               v-model="empleado.horarios.domingo.hasta"
               :disabled="!editando"
               :options="horarios"/>
@@ -297,15 +321,6 @@ function horarios() {
 </script>
 <style lang="scss" scoped="true">
   .lista__item {
-    display: table-row;
 
-    label{
-      display: table-cell;
-    }
-
-    .v-select {
-      display: table-cell;
-      padding: 0 .5em;
-    }
   }
 </style>

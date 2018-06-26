@@ -11,7 +11,7 @@ import VueWebsocket from "vue-socket.io";
 import VueToastr from "@deveodk/vue-toastr";
 import VueStash from "vue-stash";
 import bugsnagVue from "bugsnag-vue";
-import vSelect from "vue-select";
+import Multiselect from "vue-multiselect";
 import store from "./config/store";
 import App from "./App.vue";
 import router from "./config/router";
@@ -47,7 +47,7 @@ Vue.use(VueGoogleMaps, {
 
 Vue.component("datepicker", Datepicker);
 Vue.component("infoWindow", VueGoogleMaps.InfoWindow);
-Vue.component("v-select", vSelect);
+Vue.component("multiselect", Multiselect);
 
 Vue.prototype.$auth.checkAuth();
 
