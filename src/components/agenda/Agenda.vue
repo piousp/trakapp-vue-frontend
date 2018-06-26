@@ -27,10 +27,18 @@ export default {
   store: ["tarea"],
   mounted() {
     window.eventBus.$on("abrirModalTarea", () => {
-      this.$refs.modaltarea.abrirModal({});
+      setTimeout(() => {
+        if (this.$refs.modaltarea) {
+          this.$refs.modaltarea.abrirModal({});
+        }
+      }, 100);
     });
     window.eventBus.$on("cerrarModalTarea", () => {
-      this.$refs.modaltarea.cerrarModal();
+      setTimeout(() => {
+        if (this.$refs.modaltarea) {
+          this.$refs.modaltarea.cerrarModal();
+        }
+      }, 100);
     });
   },
   methods: {

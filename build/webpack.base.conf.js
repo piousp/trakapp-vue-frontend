@@ -1,11 +1,13 @@
 var path = require("path")
 var fs = require("fs")
+var debug = require("debug")("ciris:webpack.base");
 var utils = require("./utils")
 var config = require("../config")
 var vueLoaderConfig = require("./vue-loader.conf")
 var selectFile = require("./env-selector");
 
 function resolve (dir) {
+  debug(path.join(__dirname, "..", dir));
   return path.join(__dirname, "..", dir)
 }
 
@@ -22,12 +24,17 @@ module.exports = {
     extensions: [".js", ".vue", ".json"],
     alias: {
       "vue$": "vue/dist/vue.esm.js",
+      "modernizr": resolve(".modernizrrc.js"),
       "@": resolve("src"),
     },
     symlinks: false
   },
   module: {
     rules: [
+      {
+        loader: "webpack-modernizr-loader",
+        test: /\.modernizrrc\.js$/
+      },
       {
         test: /\.vue$/,
         loader: "vue-loader",
