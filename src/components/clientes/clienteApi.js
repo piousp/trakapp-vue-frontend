@@ -33,11 +33,23 @@ function eliminar(id) {
   return axios.delete(`${axios.defaults.baseUrl}/api/cliente/${id}`);
 }
 
+function buscar(txt, pagina, cantidad) {
+  return axios
+    .get(`${axios.defaults.baseUrl}/api/cliente/buscar/${txt}`, {
+      params: {
+        pagina: pagina || 0,
+        cantidad: cantidad || 0,
+      },
+    })
+    .then(resp => resp.data);
+}
+
 const clienteApi = {
   listar,
   obtener,
   guardar,
   eliminar,
+  buscar,
 };
 
 export default clienteApi;

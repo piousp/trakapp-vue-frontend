@@ -28,7 +28,9 @@ window.eventBus = new Vue({});
 
 const pkg = require("../package.json").name;
 
-bugsnagClient.use(bugsnagVue(Vue));
+if (process.env.NODE_ENV === "production") {
+  bugsnagClient.use(bugsnagVue(Vue));
+}
 Vue.config.productionTip = false;
 
 Vue.use(VueToastr);

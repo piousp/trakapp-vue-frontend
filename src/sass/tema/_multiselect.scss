@@ -10,6 +10,9 @@
     outline-color: transparent;
     outline: none;
   }
+  * {
+    @extend %sans;
+  }
 }
 
 .multiselect,
