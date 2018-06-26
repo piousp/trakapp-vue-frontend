@@ -106,7 +106,7 @@ function cargarMensajes(id) {
 function arreglarScroll() {
   this.$nextTick(() => {
     debug("$nextTick, haciendo scroll del elemento");
-    setTimeout(function () {
+    setTimeout(() => {
       if (this.$refs.dialogo) {
         this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight;
       }
