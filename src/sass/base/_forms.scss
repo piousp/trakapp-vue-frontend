@@ -94,6 +94,7 @@
     color: $azul;
     border: 0;
     outline-color: transparent;
+    outline: none;
   }
 
   & + .form__label {
@@ -139,6 +140,7 @@
     color: $grisa;
     box-shadow: 0 0 0 $negro;
     cursor: not-allowed;
+    pointer-events: none;
 
     &:focus,
     &:active {

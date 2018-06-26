@@ -1,6 +1,6 @@
 {
   "name": "trakapp",
-  "version": "1.8.1",
+  "version": "1.9.0",
   "description": "UI del rastreador",
   "author": "Ciris Informatic Solutions <ventas@ciriscr.com>",
   "scripts": {
@@ -36,6 +36,7 @@
     "vue-full-calendar": "2.5.2",
     "vue-i18n": "7.3.4",
     "vue-meta": "1.4.2",
+    "vue-multiselect": "2.1.0",
     "vue-nav-tabs": "0.5.6",
     "vue-popover": "1.6.0",
     "vue-progressbar": "0.7.3",
