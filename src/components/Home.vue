@@ -60,7 +60,6 @@ export default {
   }
 
   .layout {
-    height: 100%;
     display: flex;
   }
 
@@ -68,14 +67,13 @@ export default {
   .layout__chat{
     @extend .sombra;
     background: transparentize($negro2, .3);
-    height: 100%;
     width: 260px;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
   .layout__content{
-    height: 100%;
+    min-height: 100vh;
     padding-top: 40px;
     flex-grow: 2;
     width: 100%;

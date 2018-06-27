@@ -12,11 +12,24 @@
         <div class="modal__body">
           <div class="grid">
             <div class="col-6">
-              <form-group :error="errors.has('title') && submitted">
+              <form-group id="title" :error="errors.has('title') && submitted">
                 <input class="form__input" v-model="tarea.title"
                        :disabled="tarea.activa === false"
                        v-validate="'required'" name="title">
                 <label class="form__label">Título</label>
+              </form-group>
+              <form-group :error="errors.has('cliente') && submitted">
+                <label class="form__label">Cliente dueño</label>
+                <multiselect
+                  :error="errors.has('cliente') && submitted"
+                  v-model="tarea.cliente"
+                  :options="clientes"
+                  :disabled="tarea.activa === false"
+                  label="nombreCompleto"
+                  placeholder="Buscar por nombre..."
+                  @search-change="buscarClientes"
+                  v-validate="'required'" name="cliente"
+                />
               </form-group>
               <form-group id="asignar-tarea" :error="errors.has('empleado') && submitted">
                 <select class="form__input" v-model="tarea.empleado"
@@ -90,11 +103,13 @@
 </template>
 
 <script>
+import clienteApi from "../clientes/clienteApi";
 
 function data() {
   return {
     mapCenter: { lat: 9.93, lng: -84.07 },
     modalVisible: false,
+    clientes: [],
     submitted: false,
   };
 }
@@ -126,10 +141,12 @@ function cerrarModal() {
   this.submitted = false;
   this.tarea = {};
   this.$refs.gmapAutocomplete.$el.value = null;
+  this.clienteBuscado = null;
   this.modalVisible = false;
 }
 
 function editarModal(tarea) {
+  tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
   this.tarea = tarea;
   this.modalVisible = true;
   // Hay que esperar a que el mapa cargue. No hay forma de hacer un watch sobre $refs.
@@ -152,6 +169,16 @@ function buscarLugar(lugar) {
   });
 }
 
+function buscarClientes(txt) {
+  if (!txt) {
+    return [];
+  }
+  return clienteApi.buscar(txt, 0, 10).then((resp) => {
+    this.clientes = resp;
+    return resp;
+  });
+}
+
 export default {
   data,
   store: ["tarea", "empleados"],
@@ -160,6 +187,7 @@ export default {
     abrirModal,
     cerrarModal,
     editarModal,
+    buscarClientes,
     verificarYAceptar,
   },
 };

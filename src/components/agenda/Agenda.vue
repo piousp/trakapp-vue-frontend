@@ -81,6 +81,7 @@ function guardarTarea(tarea) {
     if (tarea._id) {
       return self.$refs.calendario.fireMethod("updateEvent", agregarCamposCalendario(tarea));
     }
+    resp.cliente = tarea.cliente;
     return self.$refs.calendario.fireMethod("renderEvent", agregarCamposCalendario(resp));
   });
 }
@@ -112,6 +113,7 @@ function limpiarParaGuardar(tarea) {
     empleado: tarea.empleado,
     descripcion: tarea.descripcion,
     ubicacion: tarea.ubicacion,
+    cliente: tarea.cliente,
   };
 }
 
