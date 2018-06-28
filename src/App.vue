@@ -8,7 +8,4 @@
 <style lang="scss">
 @import "./sass/main";
 @import "./sass/print/layout";
-#app {
-  display: inline;
-}
 </style>
