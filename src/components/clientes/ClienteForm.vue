@@ -19,64 +19,70 @@
           v-if="editando"
           @click="guardar(cliente)"/>
       </div>
-      <form-group :error="errors.has('nombre') && submitted">
-        <input
-          name="nombre"
-          class="form__input"
-          v-model="cliente.nombre"
-          :disabled="!editando"
-          v-validate="'required'" >
-        <label class="form__label">Nombre</label>
-      </form-group>
-      <form-group>
-        <input class="form__input"
-               v-model="cliente.apellidos"
-               :disabled="!editando">
-        <label class="form__label">Apellidos</label>
-      </form-group>
+      <section class="grid">
+        <div class="col-md-6">
+          <h1 class="h1"><strong class="text--bold">Info</strong>rmación básica</h1>
+          <form-group :error="errors.has('nombre') && submitted">
+            <input
+              name="nombre"
+              class="form__input"
+              v-model="cliente.nombre"
+              :disabled="!editando"
+              v-validate="'required'" >
+            <label class="form__label">Nombre</label>
+          </form-group>
+          <form-group>
+            <input class="form__input"
+                   v-model="cliente.apellidos"
+                   :disabled="!editando">
+            <label class="form__label">Apellidos</label>
+          </form-group>
 
-      <form-group :error="errors.has('cedula') && submitted">
-        <input class="form__input"
-               v-model="cliente.cedula"
-               :disabled="!editando"
-               name="cedula">
-        <label class="form__label">Cédula</label>
-      </form-group>
+          <form-group :error="errors.has('cedula') && submitted">
+            <input class="form__input"
+                   v-model="cliente.cedula"
+                   :disabled="!editando"
+                   name="cedula">
+            <label class="form__label">Cédula</label>
+          </form-group>
 
-      <form-group :error="errors.has('direccion') && submitted">
-        <textarea class="form__input"
-                  v-model="cliente.direccion"
-                  :disabled="!editando"
-                  name="direccion"/>
-        <label class="form__label">Dirección</label>
-      </form-group>
-
-      <form-group v-show="editando">
-        <label class="form__label">Ubicación</label>
-        <gmap-autocomplete class="form__input"
-                           :disabled="!editando"
-                           :options="{componentRestrictions: {country: 'cr'}}"
-                           @place_changed="buscarLugar"/>
-      </form-group>
-      <gmap-map
-        class="mapa-cliente"
-        ref="mapCliente"
-        :center="{
-          lat: cliente.ubicacion.coordinates[1] || 9.93,
-          lng: cliente.ubicacion.coordinates[0] || -84.07
-        }"
-        :zoom="14"
-        :options="{ disableDefaultUI : true }"
-        map-type-id="terrain">
-        <gmap-marker
-          :draggable="editando"
-          :position="{
-            lat: cliente.ubicacion.coordinates[1],
-            lng: cliente.ubicacion.coordinates[0]
-          }
-        "/>
-      </gmap-map>
-
+        </div>
+        <div class="col-md-6">
+          <h1 class="h1"><strong class="text--bold">Ubic</strong>ación</h1>
+          <form-group :error="errors.has('direccion') && submitted">
+            <textarea class="form__input"
+                      v-model="cliente.direccion"
+                      :disabled="!editando"
+                      name="direccion"/>
+            <label class="form__label">Dirección</label>
+          </form-group>
+          <form-group v-show="editando">
+            <label class="form__label">Ubicación</label>
+            <gmap-autocomplete class="form__input"
+                               :disabled="!editando"
+                               :options="{componentRestrictions: {country: 'cr'}}"
+                               @place_changed="buscarLugar"/>
+          </form-group>
+          <gmap-map
+            class="mapa-cliente"
+            ref="mapCliente"
+            :center="{
+              lat: cliente.ubicacion.coordinates[1] || 9.93,
+              lng: cliente.ubicacion.coordinates[0] || -84.07
+            }"
+            :zoom="14"
+            :options="{ disableDefaultUI : true }"
+            map-type-id="terrain">
+            <gmap-marker
+              :draggable="editando"
+              :position="{
+                lat: cliente.ubicacion.coordinates[1],
+                lng: cliente.ubicacion.coordinates[0]
+              }
+            "/>
+          </gmap-map>
+        </div>
+      </section>
     </form>
   </section>
 </template>
