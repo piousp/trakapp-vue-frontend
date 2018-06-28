@@ -52,26 +52,26 @@
         </form>
         <form class="form" novalidate>
           <h1 class="h1"><strong class="text--bold">Dato</strong>s de costos</h1>
-          <form-group :error="errors.has('costoHora')">
-            <input
+          <form-group>
+            <money
               id="costoHora"
               name="costoHora"
-              type="number"
               class="form__input"
               v-model="empleado.costoHora"
+              v-bind="money"
               :disabled="!editando"
-              v-validate="'decimal'">
+            />
             <label class="form__label">Costo por hora</label>
           </form-group>
-          <form-group :error="errors.has('horaExtra') && submitted">
-            <input
+          <form-group>
+            <money
               id="horaExtra"
               name="horaExtra"
-              type="number"
               class="form__input"
               v-model="empleado.horaExtra"
+              v-bind="money"
               :disabled="!editando"
-              v-validate="'decimal'">
+            />
             <label class="form__label">Costo por hora extra</label>
           </form-group>
         </form>
@@ -263,6 +263,14 @@ function data() {
     copia: {},
     editando: true,
     submitted: false,
+    money: {
+      decimal: ",",
+      thousands: ".",
+      prefix: "₡",
+      suffix: "",
+      precision: 2,
+      masked: false, /* doesn't work with directive */
+    },
   };
 }
 
@@ -291,7 +299,6 @@ function guardar(empleado) {
 }
 
 function verificarHorarios(configHoras) {
-  debug(configHoras);
   if (configHoras) {
     configHoras.lunes = configHoras.lunes || {};
     configHoras.martes = configHoras.martes || {};
@@ -359,7 +366,6 @@ function beforeRouteEnter(to, from, next) {
 function aHora(val) {
   const minutos = `${val % 1 === 0 ? ":00" : ":30"}`;
   const hora = val < 1 ? "12" : (`0${Math.floor((val > 12 ? val - 12 : val))}`).slice(-2);
-  debug(val, hora, minutos);
   return `${hora}${minutos} ${val > 12 ? "PM" : "AM"}`;
 }
 

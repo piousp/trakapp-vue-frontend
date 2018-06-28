@@ -12,6 +12,7 @@ import VueToastr from "@deveodk/vue-toastr";
 import VueStash from "vue-stash";
 import bugsnagVue from "bugsnag-vue";
 import Multiselect from "vue-multiselect";
+import money from "v-money";
 import store from "./config/store";
 import App from "./App.vue";
 import router from "./config/router";
@@ -39,6 +40,7 @@ Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
 Vue.use(VueWebsocket, process.env.SOCKET_URL);
 Vue.use(VueStash);
+Vue.use(money, { precision: 4 });
 Vue.use(VueGoogleMaps, {
   load: {
     key: "AIzaSyDn5jFd9F1zSo3XhhCD5r5bf3AQnpph5kI",
