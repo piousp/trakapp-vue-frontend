@@ -13,9 +13,12 @@
           <div class="grid">
             <div class="col-6">
               <form-group id="title" :error="errors.has('title') && submitted">
-                <input class="form__input" v-model="tarea.title"
+                <input class="form__input"
+                       name="title"
+                       v-model="tarea.title"
                        :disabled="tarea.activa === false"
-                       v-validate="'required'" name="title">
+                       required
+                       v-validate="'required'">
                 <label class="form__label">Título</label>
               </form-group>
               <form-group>
@@ -30,8 +33,12 @@
                 />
               </form-group>
               <form-group id="asignar-tarea" :error="errors.has('empleado') && submitted">
-                <select class="form__input" v-model="tarea.empleado"
-                        :disabled="tarea.activa === false" name="empleado" v-validate="'required'">
+                <select class="form__input"
+                        name="empleado"
+                        v-model="tarea.empleado"
+                        required
+                        :disabled="tarea.activa === false"
+                        v-validate="'required'">
                   <option v-for="emp in empleados" :value="emp._id" :key="emp._id">
                     {{ emp.nombre }} {{ emp.apellidos }}
                   </option>
@@ -47,7 +54,7 @@
               <div class="grid grid--bleed" id="fecha-tarea">
                 <div class="col-6">
                   <form-group>
-                    <label class="form__label">Desde</label>
+                    <label class="form__label form__label--required">Desde</label>
                     <datepicker
                       v-if="tarea.activa"
                       language="es"
@@ -60,7 +67,7 @@
                 </div>
                 <div class="col-6">
                   <form-group>
-                    <label class="form__label">Hasta</label>
+                    <label class="form__label form__label--required">Hasta</label>
                     <datepicker
                       v-if="tarea.activa"
                       language="es"
@@ -87,10 +94,11 @@
               <form-group id="ubicacion-tarea">
                 <gmap-autocomplete class="form__input" ref="gmapAutocomplete"
                                    :disabled="tarea.activa === false"
+                                   required
                                    :options="{componentRestrictions: {country: 'cr'}}"
                                    @place_changed="buscarLugar"
                                    placeholder=""/>
-                <label class="form__label">Ubicación</label>
+                <label class="form__label form__label--required">Ubicación</label>
               </form-group>
               <gmap-map
                 class="mapa-agenda"

@@ -33,6 +33,23 @@
   width: 100%;
 }
 
+.form__label--opcional{
+  &::after{
+    content: '(Opcional)';
+    margin-left: 4px;
+    font-size: 70%;
+    font-weight: 200px;
+    opacity: 70%;
+  }
+}
+
+.form__label--required{
+  @extend .text--bold;
+  &::after{
+    content: '*';
+  }
+}
+
 .form__icon{
   position: absolute;
   top: 8px;
@@ -124,20 +141,11 @@
   }
 
   &:required + .form__label {
-    @extend .text--bold;
-    &::after{
-      content: '*';
-    }
+    @extend .form__label--required;
   }
 
   &:not(:required) + .form__label {
-    &::after{
-      content: '(Opcional)';
-      margin-left: 4px;
-      font-size: 70%;
-      font-weight: 200px;
-      opacity: 70%;
-    }
+    @extend .form__label--opcional;
   }
 
   &:focus + .form__label,

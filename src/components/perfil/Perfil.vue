@@ -16,11 +16,11 @@
             <p class="form__input">{{ usuario.correo }}</p>
           </form-group>
           <form-group>
-            <input type="text" class="form__input" v-model="usuario.nombre">
+            <input type="text" class="form__input" v-model="usuario.nombre" required>
             <label for="" class="form__label">Nombre</label>
           </form-group>
           <form-group>
-            <input type="text" class="form__input" v-model="usuario.apellidos">
+            <input type="text" class="form__input" v-model="usuario.apellidos" required>
             <label for="" class="form__label">Apellidos</label>
           </form-group>
           <button type="submit" class="boton boton--guardar"/>
@@ -30,7 +30,7 @@
         <h3 class="h3">Cambiar mi contraseña</h3>
         <form novalidate @submit.stop.prevent="mostrarModalCambioClave(claveActual)">
           <form-group>
-            <input type="password" class="form__input" v-model="claveActual">
+            <input type="password" class="form__input" v-model="claveActual" required>
             <label for="" class="form__label">Contraseña actual</label>
           </form-group>
           <button type="submit" class="boton boton--azul">
