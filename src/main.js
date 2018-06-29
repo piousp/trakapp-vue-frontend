@@ -13,6 +13,8 @@ import VueStash from "vue-stash";
 import bugsnagVue from "bugsnag-vue";
 import Multiselect from "vue-multiselect";
 import money from "v-money";
+import "promise-polyfill/src/polyfill";
+import "es6-object-assign/auto";
 import store from "./config/store";
 import App from "./App.vue";
 import router from "./config/router";
