@@ -28,6 +28,7 @@
               class="form__input"
               v-model="empleado.nombre"
               :disabled="!editando"
+              required
               v-validate="'required'" >
             <label class="form__label">Nombre</label>
           </form-group>
@@ -37,6 +38,7 @@
               class="form__input"
               v-model="empleado.apellidos"
               :disabled="!editando"
+              required
               v-validate="'required'" >
             <label class="form__label">Apellidos</label>
           </form-group>
@@ -46,6 +48,7 @@
                    v-model="empleado.correo"
                    :disabled="!editando"
                    v-validate="'required|email'"
+                   required
                    name="correo">
             <label class="form__label">Correo electrónico</label>
           </form-group>

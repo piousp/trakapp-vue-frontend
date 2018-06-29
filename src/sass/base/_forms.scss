@@ -105,7 +105,7 @@
     left: 0;
     bottom: 0;
     transition: all .35s ease;
-    &::after{
+    &::before{
       content: '';
       position: absolute;
       bottom: 4px;
@@ -123,12 +123,29 @@
     top: -8px;
   }
 
+  &:required + .form__label {
+    @extend .text--bold;
+    &::after{
+      content: '*';
+    }
+  }
+
+  &:not(:required) + .form__label {
+    &::after{
+      content: '(Opcional)';
+      margin-left: 4px;
+      font-size: 70%;
+      font-weight: 200px;
+      opacity: 70%;
+    }
+  }
+
   &:focus + .form__label,
   &:active + .form__label{
     color: $celeste-tema;
     font-size: .8em;
     top: -8px;
-    &::after{
+    &::before{
       visibility: visible;
       width: 100%;
       left: 0;
