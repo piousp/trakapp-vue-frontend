@@ -18,17 +18,15 @@
                        v-validate="'required'" name="title">
                 <label class="form__label">Título</label>
               </form-group>
-              <form-group :error="errors.has('cliente') && submitted">
+              <form-group>
                 <label class="form__label">Cliente dueño</label>
                 <multiselect
-                  :error="errors.has('cliente') && submitted"
                   v-model="tarea.cliente"
                   :options="clientes"
                   :disabled="tarea.activa === false"
                   label="nombreCompleto"
                   placeholder="Buscar por nombre..."
                   @search-change="buscarClientes"
-                  v-validate="'required'" name="cliente"
                 />
               </form-group>
               <form-group id="asignar-tarea" :error="errors.has('empleado') && submitted">
@@ -50,14 +48,38 @@
                 <div class="col-6">
                   <form-group>
                     <label class="form__label">Desde</label>
-                    <p class="form__input">{{ tarea.start | fecha("LLL") }}</p>
+                    <datepicker
+                      v-if="tarea.activa"
+                      language="es"
+                      input-class="form__input"
+                      v-model="tarea.start"/>
+                    <p v-else class="form__input">
+                      {{ tarea.start | fecha("DD MMM YYYY hh:mm a") }}
+                    </p>
                   </form-group>
                 </div>
                 <div class="col-6">
                   <form-group>
                     <label class="form__label">Hasta</label>
-                    <p class="form__input">{{ tarea.end | fecha("LLL") }}</p>
+                    <datepicker
+                      v-if="tarea.activa"
+                      language="es"
+                      input-class="form__input"
+                      v-model="tarea.end"/>
+                    <p v-else class="form__input">
+                      {{ tarea.end | fecha("DD MMM YYYY hh:mm a") }}
+                    </p>
                   </form-group>
+                </div>
+              </div>
+              <div class="grid" v-if="tarea.post">
+                <div class="col-md-6 form__group">
+                  <label class="form__label">Firma</label><br>
+                  <img :src="`data:image/svg+xml;base64,${tarea.post.firma}`" height="100px">
+                </div>
+                <div class="col-md-6 form__group">
+                  <label class="form__label">Apuntes</label>
+                  <p class="text text--gris8">{{ tarea.post.apuntes }}</p>
                 </div>
               </div>
             </div>
@@ -133,20 +155,23 @@ function abrirModal(evt) {
     start: evt.start,
     end: evt.end,
     ubicacion: {},
+    post: {},
   };
   this.modalVisible = true;
 }
 
 function cerrarModal() {
   this.submitted = false;
-  this.tarea = {};
+  this.tarea = { post: {} };
   this.$refs.gmapAutocomplete.$el.value = null;
   this.clienteBuscado = null;
   this.modalVisible = false;
 }
 
 function editarModal(tarea) {
-  tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
+  if (this.tarea) {
+    tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
+  }
   this.tarea = tarea;
   this.modalVisible = true;
   // Hay que esperar a que el mapa cargue. No hay forma de hacer un watch sobre $refs.
@@ -197,5 +222,15 @@ export default {
 .mapa-agenda{
   height: 300px;
   width: 100%;
+}
+#fecha-tarea {
+  .col-6 {
+    padding-top: 0;
+    padding-bottom: 0;
+    .form__group {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
 }
 </style>
