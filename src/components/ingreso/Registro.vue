@@ -97,9 +97,7 @@
             <textarea class="form__input form__input--blanco"
                       :id="ids.direccion"
                       :name="ids.direccion"
-                      required
                       v-model="usuario.cuenta.direccion"
-                      v-validate="'required'"
             />
             <label :for="ids.direccion" class="form__label">Dirección</label>
           </form-group>

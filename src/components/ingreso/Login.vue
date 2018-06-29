@@ -12,6 +12,7 @@
                :name="ids.correo"
                class="form__input form__input--blanco"
                v-model="usuario"
+               required
                v-validate="'required|email'"
                @input="usuario = usuario.toLowerCase()">
         <label :for="ids.correo" class="form__label form__input--blanco">Correo</label>
@@ -22,6 +23,7 @@
                :name="ids.password"
                class="form__input form__input--blanco"
                v-model="password"
+               required
                v-validate="'required'">
         <label :for="ids.password" class="form__label form__input--blanco">Contraseña</label>
       </form-group>

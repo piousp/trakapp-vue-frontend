@@ -28,6 +28,7 @@
               class="form__input"
               v-model="cliente.nombre"
               :disabled="!editando"
+              required
               v-validate="'required'" >
             <label class="form__label">Nombre</label>
           </form-group>

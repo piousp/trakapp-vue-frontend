@@ -6,6 +6,7 @@ module.exports = {
     "html5shiv"
   ],
   "feature-detects": [
-    "notification"
+    "notification",
+    "promises"
   ]
 };
