@@ -115,6 +115,7 @@ function emitirPassword() {
 
 function advertencia(text) {
   const te = {
+    "This is a top-10 common password": "Esa clave es de las 10 más comunes",
     "Short keyboard patterns are easy to guess":
       "Patrones cortos de teclado son muy fáciles de adivinar",
     "Sequences like abc or 6543 are easy to guess":
