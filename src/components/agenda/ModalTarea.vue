@@ -79,7 +79,7 @@
                   </form-group>
                 </div>
               </div>
-              <div class="grid" v-if="tarea.post">
+              <div class="grid" v-if="!isEmpty(tarea.post)">
                 <div class="col-md-6 form__group">
                   <label class="form__label">Firma</label><br>
                   <img :src="`data:image/svg+xml;base64,${tarea.post.firma}`" height="100px">
@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import isEmpty from "lodash/isEmpty";
 import clienteApi from "../clientes/clienteApi";
 
 function data() {
@@ -164,6 +165,7 @@ function abrirModal(evt) {
     end: evt.end,
     ubicacion: {},
     post: {},
+    activa: true,
   };
   this.modalVisible = true;
 }
@@ -222,6 +224,7 @@ export default {
     editarModal,
     buscarClientes,
     verificarYAceptar,
+    isEmpty,
   },
 };
 </script>
