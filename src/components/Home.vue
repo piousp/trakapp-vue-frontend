@@ -41,6 +41,11 @@ export default {
     recibirMensaje(msj) {
       this.$notify(`${msj.emisor.nombre} dice: `, msj.texto);
     },
+    notificarTarea(tarea) {
+      const titulo = `${tarea.empleado.nombre} ${tarea.empleado.apellidos} completó: `;
+      this.$toastr("success", tarea.title, titulo);
+      this.$notify(titulo, tarea.title);
+    },
   },
 };
 
