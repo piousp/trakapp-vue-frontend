@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import "babel-polyfill";
 import Vue from "vue";
 import "moment/locale/es";
 import Datepicker from "vuejs-datepicker";
@@ -13,8 +14,6 @@ import VueStash from "vue-stash";
 import bugsnagVue from "bugsnag-vue";
 import Multiselect from "vue-multiselect";
 import money from "v-money";
-import "promise-polyfill/src/polyfill";
-import "es6-object-assign/auto";
 import store from "./config/store";
 import App from "./App.vue";
 import router from "./config/router";
