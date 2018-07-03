@@ -6,7 +6,7 @@
         <span>Cerrar sesión</span>
       </button>
     </div>
-    <h1 class="titulo">Perfil</h1>
+    <h1 class="h1"><strong class="text--bold">Dato</strong>s de Perfil</h1>
     <div class="grid">
       <div class="col-6">
         <h3 class="h3">Datos básicos</h3>
