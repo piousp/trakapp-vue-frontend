@@ -43,7 +43,7 @@ function data() {
   @extend .text--blanco;
   display: block;
   text-align: justify;
-  line-height: 45px;
+  line-height: 35px;
   padding: 0 1em;
   cursor: pointer;
   user-select: none;

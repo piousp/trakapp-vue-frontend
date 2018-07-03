@@ -8,7 +8,7 @@
         <span class="text">{{ nombreUsuario }}</span>
       </p>
       <hr class="navbar__user__hr">
-      <p class="navbar__user__version text--gris6 text text--small
+      <p class="navbar__user__version text--gris8 text--small
        text--right text--center text--italic">Versión: {{ version }}</p>
     </router-link>
     <directorio/>
@@ -91,7 +91,7 @@ function mounted() {
 
   .navbar__user{
     @extend .text--blanco;
-    padding: 1em;
+    padding: .25em 1em;
     user-select: none;
     cursor: pointer;
     transition: all ease .5s;
@@ -121,19 +121,5 @@ function mounted() {
       @extend .text--blanco;
       background: $fondo;
     }
-  }
-
-  .navbar__popover {
-    cursor: pointer;
-    text-align: right;
-    line-height: 45px;
-  }
-  .navbar__version {
-    padding: 8px 16px;
-  }
-  .estilo {
-    z-index: 9999 !important;
-    background:white !important;
-    color: black !important;
   }
 </style>

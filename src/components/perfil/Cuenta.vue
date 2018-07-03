@@ -1,6 +1,6 @@
 <template lang="html">
   <section>
-    <h2 class="h2"><i class="fas fa-fw fa-warehouse-alt"/> Administración de la cuenta</h2>
+    <h1 class="h1"><strong class="text--bold">Admi</strong>nistración de la cuenta</h1>
     <div class="tabs">
       <router-link :to="{ name: 'cuenta-datos', params: {} }"
                    tag="div"
