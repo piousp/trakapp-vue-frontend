@@ -3,7 +3,7 @@
     ["env", {
       "modules": false,
       "targets": {
-        "browsers": ["> 5%", "last 5 versions", "not ie <= 8"]
+        "browsers": ["> 5% in CR", "last 5 versions", "not ie <= 9"]
       },
       "cacheDirectory": true
     }]
