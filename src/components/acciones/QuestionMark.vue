@@ -2,7 +2,7 @@
   <section>
     <modal-bug ref="modalBug"/>
     <div class="text text--negro4">
-      <div class="question__menu animated fadeIn" v-if="mostrarPopup">
+      <div class="question__menu" v-if="mostrarPopup">
         <div class="question__menu__header">
           <span>¿Qué desea hacer?</span>
           <span class="cerrar" @click="mostrarPopup = false"/>
@@ -42,22 +42,23 @@ export default {
 
 <style lang="scss">
 .fa-question-circle {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
+  position: fixed;
+  right: 10px;
+  bottom: 15px;
   cursor: pointer;
 }
 .question__menu {
   background: white;
-  position: absolute;
+  position: fixed;
   right: 20px;
-  min-width: 200px;
-  height: 103px;
+  min-width: 175px;
+  height: 96px;
   bottom: 60px;
   z-index: 9;
   border-radius: 5px;
   padding: 10px 0;
   box-shadow: 0 0 10px #888;
+  font-size: 14px;
 }
 .question__menu__header {
   margin-bottom: 6px;
