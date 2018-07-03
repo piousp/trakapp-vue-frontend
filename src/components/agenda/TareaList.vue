@@ -49,7 +49,7 @@
     <div v-else>
       <p class="no-results text--center">
         <i class="fa fa-fw fa-list"/>
-        <span>No hay tareas registrados.</span>
+        <span>No hay tareas registradas.</span>
       </p>
     </div>
     <modal-tarea
