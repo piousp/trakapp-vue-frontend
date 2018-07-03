@@ -9,6 +9,7 @@
       <div class="layout__content__bar"/>
       <div class="layout__padding">
         <router-view/>
+        <question-mark/>
       </div>
     </div>
   </div>
@@ -16,6 +17,7 @@
 
 <script>
 import Navbar from "./Navbar.vue";
+import QuestionMark from "./acciones/QuestionMark.vue";
 
 function data() {
   return {
@@ -31,7 +33,7 @@ function created() {
 
 export default {
   name: "App",
-  components: { Navbar },
+  components: { Navbar, QuestionMark },
   data,
   created,
   sockets: {
