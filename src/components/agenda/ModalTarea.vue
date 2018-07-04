@@ -56,7 +56,7 @@
                   <form-group>
                     <label class="form__label form__label--required">Desde</label>
                     <datepicker
-                      v-if="tarea.activa"
+                      v-if="tarea.activa && fechasHabilitadas"
                       language="es"
                       input-class="form__input"
                       v-model="tarea.start"/>
@@ -69,7 +69,7 @@
                   <form-group>
                     <label class="form__label form__label--required">Hasta</label>
                     <datepicker
-                      v-if="tarea.activa"
+                      v-if="tarea.activa && fechasHabilitadas"
                       language="es"
                       input-class="form__input"
                       v-model="tarea.end"/>
@@ -161,6 +161,7 @@ function data() {
     clientes: [],
     submitted: false,
     tarea: {},
+    fechasHabilitadas: false,
   };
 }
 
@@ -179,6 +180,9 @@ function verificarYAceptar() {
 }
 
 function abrirModal(evt) {
+  if (isEmpty(evt)) {
+    this.fechasHabilitadas = true;
+  }
   this.tarea = {
     start: evt.start,
     end: evt.end,
@@ -198,8 +202,7 @@ function cerrarModal() {
 }
 
 function editarModal(tarea) {
-  this.tarea = tarea;
-  if (this.tarea) {
+  if (tarea && tarea.cliente) {
     tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
   }
   this.tarea = tarea;

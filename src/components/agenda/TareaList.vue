@@ -22,7 +22,10 @@
             <td @click="abrir(tarea)">{{ tarea.start | fecha('DD/MM/YYYY hh:mm a') }}</td>
             <td @click="abrir(tarea)">{{ tarea.end | fecha('DD/MM/YYYY hh:mm a') }}</td>
             <td @click="abrir(tarea)">
-              {{ tarea.cliente.nombre }} {{ tarea.cliente.apellidos }}
+              <span v-if="tarea.cliente">
+                {{ tarea.cliente.nombre }} {{ tarea.cliente.apellidos }}
+              </span>
+              <span v-else>N/A</span>
             </td>
             <td @click="abrir(tarea)">
               {{ tarea.empleado.nombre }} {{ tarea.empleado.apellidos }}
