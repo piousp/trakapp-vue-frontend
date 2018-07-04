@@ -137,12 +137,12 @@ import isEmpty from "lodash/isEmpty";
 import clienteApi from "../clientes/clienteApi";
 
 export default {
+  data,
   computed: {
     empleados() {
-      this.$store.state.empleados.listado;
+      return this.$store.state.empleados.listado;
     },
   },
-  data,
   methods: {
     buscarLugar,
     abrirModal,
