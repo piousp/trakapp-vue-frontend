@@ -1,8 +1,8 @@
 <template lang="html">
   <section>
     <div class="titulo-tareas">
-      <h1 class="h1"><strong class="text--bold">Agen</strong>da de Tareas</h1>
-      <nav class="boton-group">
+      <h1 class="h1 inline"><strong class="text--bold">Agen</strong>da de Tareas</h1>
+      <nav class="boton-group float--right">
         <router-link class="boton boton--indigo boton--s"
                      :to="{ name: 'agenda' }" tag="a">
           <i class="fal fa-fw fa-calendar"/>
@@ -14,6 +14,7 @@
           <span>Vista Listado</span>
         </router-link>
       </nav>
+      <div class="clear-both"/>
     </div>
 
     <br>
@@ -33,9 +34,11 @@ function mounted() {
 
 <style lang="scss">
 .titulo-tareas {
-  display: table;
   .h1{
     margin: 0;
+  }
+  .boton-group {
+    margin-top: 1em;
   }
 }
 </style>
