@@ -9,6 +9,7 @@ const store = new Vuex.Store({
   modules: {
     empleados: empleadosStore,
   },
+  strict: true,
 });
 
 
