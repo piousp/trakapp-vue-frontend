@@ -1,4 +1,5 @@
 import Perfil from "./Perfil.vue";
+import Usuario from "./Usuario.vue";
 import Cuenta from "./Cuenta.vue";
 import DatosCuenta from "./sub/DatosCuenta.vue";
 
@@ -20,20 +21,30 @@ export default [
     name: "perfil",
     component: Perfil,
     meta: {
-      titulo: "Perfil",
-      icono: "fal fa-fw fa-user-cog",
       esconder: true,
     },
-  },
-  {
-    path: "/cuenta",
-    name: "cuenta",
-    component: Cuenta,
-    children: rutasCuenta,
-    meta: {
-      titulo: "Cuenta",
-      icono: "fal fa-fw fa-warehouse-alt",
-      esconder: true,
-    },
+    children: [
+      {
+        path: "usuario",
+        name: "usuario",
+        component: Usuario,
+        meta: {
+          titulo: "Perfil",
+          icono: "fal fa-fw fa-user-cog",
+          esconder: true,
+        },
+      },
+      {
+        path: "cuenta",
+        name: "cuenta",
+        component: Cuenta,
+        children: rutasCuenta,
+        meta: {
+          titulo: "Cuenta",
+          icono: "fal fa-fw fa-warehouse-alt",
+          esconder: true,
+        },
+      },
+    ],
   },
 ];
