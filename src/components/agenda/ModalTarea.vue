@@ -136,12 +136,31 @@
 import isEmpty from "lodash/isEmpty";
 import clienteApi from "../clientes/clienteApi";
 
+export default {
+  computed: {
+    empleados() {
+      this.$store.state.empleados.listado;
+    },
+  },
+  data,
+  methods: {
+    buscarLugar,
+    abrirModal,
+    cerrarModal,
+    editarModal,
+    buscarClientes,
+    verificarYAceptar,
+    isEmpty,
+  },
+};
+
 function data() {
   return {
     mapCenter: { lat: 9.93, lng: -84.07 },
     modalVisible: false,
     clientes: [],
     submitted: false,
+    tarea: {},
   };
 }
 
@@ -179,6 +198,7 @@ function cerrarModal() {
 }
 
 function editarModal(tarea) {
+  this.tarea = tarea;
   if (this.tarea) {
     tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
   }
@@ -213,20 +233,6 @@ function buscarClientes(txt) {
     return resp;
   });
 }
-
-export default {
-  data,
-  store: ["tarea", "empleados"],
-  methods: {
-    buscarLugar,
-    abrirModal,
-    cerrarModal,
-    editarModal,
-    buscarClientes,
-    verificarYAceptar,
-    isEmpty,
-  },
-};
 </script>
 
 <style lang="scss">

@@ -10,17 +10,16 @@ import VueI18n from "vue-i18n";
 import * as VueGoogleMaps from "vue2-google-maps";
 import VueWebsocket from "vue-socket.io";
 import VueToastr from "@deveodk/vue-toastr";
-import VueStash from "vue-stash";
 import bugsnagVue from "bugsnag-vue";
 import Multiselect from "vue-multiselect";
 import money from "v-money";
-import store from "./config/store";
 import App from "./App.vue";
 import router from "./config/router";
 import Auth from "./config/auth.js";
 import Notify from "./config/notify.js";
 import axios from "./config/axios.js";
 import messages from "./i18n";
+import vuexStore from "./config/store";
 import bugsnagClient from "./components/comunes/bugsnag";
 import "./config/filtros.js";
 import "./components/comunes";
@@ -40,7 +39,6 @@ Vue.use(Notify);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
 Vue.use(VueWebsocket, process.env.SOCKET_URL);
-Vue.use(VueStash);
 Vue.use(money, { precision: 4 });
 Vue.use(VueGoogleMaps, {
   load: {
@@ -72,10 +70,8 @@ Vue.use(VeeValidate, {
 export default new Vue({
   el: "#app",
   router,
+  store: vuexStore,
   components: { App },
-  data: {
-    store,
-  },
   template: "<App/>",
   i18n,
 });
