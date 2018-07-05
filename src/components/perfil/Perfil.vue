@@ -1,7 +1,7 @@
 <template lang="html">
   <section>
     <h1 class="h1 inline"><strong class="text--bold">Datos</strong> de perfil</h1>
-    <nav class="boton-group float--right" >
+    <nav class="boton-group float--right" v-if="cuenta.empresarial">
       <router-link class="boton boton--indigo boton--s"
                    :to="{ name: 'usuario' }" tag="a">
         <i class="fal fa-fw fa-calendar"/>
@@ -19,12 +19,26 @@
 </template>
 
 <script>
+import store from "../../config/store";
+
 export default {
-  mounted,
+  beforeRouteEnter,
+  computed: computed(),
 };
 
-function mounted() {
-  this.$router.replace({ name: "usuario" });
+function computed() {
+  return {
+    cuenta() {
+      return this.$store.state.perfil.cuenta;
+    },
+  };
+}
+
+function beforeRouteEnter(to, from, next) {
+  return store.dispatch("perfil/cargarDatos").then(() =>
+    next(vm => vm.$router.replace({ name: "usuario" }))).catch(() => {
+    this.$toastr("error", "Error al cargar sus datos", "Error");
+  });
 }
 </script>
 

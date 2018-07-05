@@ -5,10 +5,14 @@
         <i class="fal fa-sign-out"/>
         <span>Cerrar sesión</span>
       </button>
+      <button class="boton boton--indigo" v-if="!cuenta.empresarial" @click="migrarEmpresarial">
+        <i class="fal fa-building"/>
+        <span>Migrar a cuenta empresarial</span>
+      </button>
     </div>
     <h2 class="h3"><strong class="text--bold">Info</strong>rmación de mi usuario</h2>
     <div class="grid">
-      <div class="col-6">
+      <div class="col-md-6">
         <h3 class="h4">Datos básicos</h3>
         <form novalidate @submit.stop.prevent="guardarUsuario(usuario)">
           <form-group>
@@ -26,7 +30,7 @@
           <button type="submit" class="boton boton--guardar"/>
         </form>
       </div>
-      <div class="col-6">
+      <div class="col-md-6">
         <h3 class="h4">Cambiar mi contraseña</h3>
         <form novalidate @submit.stop.prevent="mostrarModalCambioClave(claveActual)">
           <form-group>
@@ -38,6 +42,12 @@
             <span>Nueva contraseña</span>
           </button>
         </form>
+      </div>
+      <div class="col-md-6">
+        <h3 class="h4">Tipo de cuenta</h3>
+        <p class="text text--indigo text--l text--bold">
+          {{ cuenta.empresarial ? "Empresarial" : "Personal" }}
+        </p>
       </div>
     </div>
     <modal :visible="modalclave">
@@ -60,6 +70,7 @@
 <script>
 import cloneDeep from "lodash/cloneDeep";
 import D from "debug";
+import swal from "sweetalert2";
 import api from "./perfilApi.js";
 
 const debug = D("ciris:Perfil.vue");
@@ -67,8 +78,10 @@ const debug = D("ciris:Perfil.vue");
 export default {
   beforeRouteEnter,
   data,
+  computed: computed(),
   methods: {
     logout,
+    migrarEmpresarial,
     guardarUsuario,
     mostrarModalCambioClave,
     cerrarModal,
@@ -76,12 +89,26 @@ export default {
   },
 };
 
+function beforeRouteEnter(to, from, next) {
+  next((vm) => {
+    vm.usuario = cloneDeep(vm.$store.state.perfil.usuario);
+  });
+}
+
 function data() {
   return {
     usuario: {},
     claveActual: "",
     modalclave: false,
     claveNueva: "",
+  };
+}
+
+function computed() {
+  return {
+    cuenta() {
+      return this.$store.state.perfil.cuenta;
+    },
   };
 }
 
@@ -136,10 +163,11 @@ function guardarUsuario(usuario) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      api.actualizarUsuario(usuario)
+      this.$store.dispatch("perfil/actualizarDatosUsuario", usuario)
         .then((resp) => {
           debug(resp);
           this.$toastr("success", "La información ha sido guardada", "Éxito");
+          this.usuario = cloneDeep(this.$store.state.perfil.usuario);
           return resp;
         })
         .catch((err) => {
@@ -151,15 +179,13 @@ function guardarUsuario(usuario) {
   });
 }
 
-function beforeRouteEnter(to, from, next) {
-  api.datosUsuario().then(resp => next((vm) => {
-    vm.usuario = resp;
-    vm.copiaUsuario = cloneDeep(vm.usuario);
-    vm.editando = to.params.edit;
-  }))
-    .catch((err) => {
-      this.$toastr("error", err, "Error");
-    });
+function migrarEmpresarial() {
+  swal({
+    title: "Migrar a cuenta empresarial",
+    text: "¿Está seguro que desea migrar a una cuenta empresarial? Esta acción es irreversible.",
+    type: "question",
+    showCancelButton: true,
+  });
 }
 </script>
 

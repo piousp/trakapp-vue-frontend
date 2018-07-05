@@ -1,7 +1,7 @@
 import D from "debug";
 import perfilApi from "./perfilApi";
 
-const debug = D("ciris:storeEmpleados");
+const debug = D("ciris:storePerfil");
 
 const state = {
   usuario: {},
@@ -10,10 +10,12 @@ const state = {
 
 const actions = {
   cargarDatos,
+  actualizarDatosUsuario,
 };
 
 const mutations = {
-  setListado,
+  setUsuario,
+  setCuenta,
 };
 
 
@@ -21,19 +23,36 @@ const store = {
   state,
   actions,
   mutations,
+  namespaced: true,
 };
 
 export default store;
 
+function actualizarDatosUsuario(context, usuario) {
+  debug("Actualizando datos del usuario");
+  return perfilApi.actualizarUsuario(usuario)
+    .then((resp) => {
+      context.commit("setUsuario", usuario);
+      return resp;
+    });
+}
+
 function cargarDatos(context) {
   debug("Cargando los datos del usuario y cuenta al store");
-  return perfilApi.listarConMensajes().then((empleados) => {
+  const promesas = [perfilApi.datosUsuario(), perfilApi.datosCuenta()];
+  return Promise.all(promesas).then((resp) => {
+    const [usuario, cuenta] = resp;
     debug("Commiteando la lista de empleados");
-    context.commit("setListado", empleados.docs);
+    context.commit("setUsuario", usuario);
+    context.commit("setCuenta", cuenta);
     return null;
   });
 }
 
-function setListado(pState, listado) {
-  pState.listado = listado;
+function setUsuario(pState, usuario) {
+  pState.usuario = usuario;
+}
+
+function setCuenta(pState, cuenta) {
+  pState.cuenta = cuenta;
 }
