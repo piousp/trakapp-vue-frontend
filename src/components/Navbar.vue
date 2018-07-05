@@ -63,7 +63,7 @@ function version() {
 function mounted() {
   return perfilApi.datosUsuario().then((usuario) => {
     if (!usuario.tourVisto) {
-      return tour(this.$router, () => {
+      return tour(this.$router, 3000, () => {
         usuario.tourVisto = true;
         return perfilApi.actualizarUsuario(usuario);
       });
