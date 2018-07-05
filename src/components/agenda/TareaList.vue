@@ -98,6 +98,8 @@ function abrir(tarea) {
 function aceptar(tarea) {
   return agendaApi.guardar(tarea).then((resp) => {
     const index = findIndex(this.tareas.docs, { _id: resp._id });
+    resp.empleado = tarea.empleado;
+    resp.cliente = tarea.cliente;
     this.tareas.docs.splice(index, 1, resp);
     this.$refs.tareaform.cerrarModal();
     return resp;

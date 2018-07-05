@@ -3,7 +3,7 @@
 import "babel-polyfill";
 import Vue from "vue";
 import "moment/locale/es";
-import Datepicker from "vuejs-datepicker";
+import Datetime from "vue-datetime";
 import VeeValidate from "vee-validate";
 import es from "vee-validate/dist/locale/es";
 import VueI18n from "vue-i18n";
@@ -47,8 +47,8 @@ Vue.use(VueGoogleMaps, {
   },
   autobindAllEvents: true,
 });
+Vue.use(Datetime);
 
-Vue.component("datepicker", Datepicker);
 Vue.component("infoWindow", VueGoogleMaps.InfoWindow);
 Vue.component("multiselect", Multiselect);
 
