@@ -22,29 +22,6 @@ export default($router, delayInicio, cbFinal) => {
   setTimeout(() => {
     const annoTour = new Anno([
       {
-        target: ".navbar__logo",
-        content: "<strong>¡Bienvenido a Trakapp!</strong><br><br>Vamos a guiarle por algunas de " +
-        "las características más importantes que ofrece el sistema. Si lo desea puede omitir el " +
-        "tutorial por ahora y verlo luego usando el botón de ayuda en la esquina inferior " +
-        "derecha <i class='far fa-fw fa-question-circle'></i>",
-        buttons: [
-          {
-            text: "Omitir",
-            click(a) {
-              a.hide();
-              cbFinal();
-            },
-          },
-          {
-            text: "Siguiente",
-            click(a) {
-              a.hide();
-              a.switchToChainNext();
-            },
-          },
-        ],
-      },
-      {
         target: "#empleadolist",
         content: "Gestione aquí su personal.",
         buttons: getBotonRuta("empleadolist"),
