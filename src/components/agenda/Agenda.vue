@@ -24,7 +24,6 @@ export default {
     "modal-tarea": ModalTarea,
   },
   data,
-  store: ["tarea"],
   mounted() {
     window.eventBus.$on("abrirModalTarea", () => {
       setTimeout(() => {

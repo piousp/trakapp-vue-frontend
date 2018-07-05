@@ -55,7 +55,6 @@ export default {
   sockets: {
     actualizar,
   },
-  store: ["empleado"],
 };
 
 function data() {
@@ -65,6 +64,9 @@ function data() {
     modalVisible: false,
     mensajes: [],
     mensaje: {},
+    empleado: {
+      ubicacion: {},
+    },
   };
 }
 
@@ -81,8 +83,9 @@ function generarCoords(coordinates) {
   return new google.maps.LatLng(coordinates[1], coordinates[0]);
 }
 
-function abrirModal() {
+function abrirModal(empleado) {
   this.modalVisible = true;
+  this.empleado = empleado;
   if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
     this.empleado.ubicacion.pos = generarCoords(this.empleado.ubicacion.pos.coordinates);
   }
