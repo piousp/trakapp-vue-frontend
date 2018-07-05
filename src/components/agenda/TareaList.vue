@@ -22,7 +22,10 @@
             <td @click="abrir(tarea)">{{ tarea.start | fecha('DD/MM/YYYY hh:mm a') }}</td>
             <td @click="abrir(tarea)">{{ tarea.end | fecha('DD/MM/YYYY hh:mm a') }}</td>
             <td @click="abrir(tarea)">
-              {{ tarea.cliente.nombre }} {{ tarea.cliente.apellidos }}
+              <span v-if="tarea.cliente">
+                {{ tarea.cliente.nombre }} {{ tarea.cliente.apellidos }}
+              </span>
+              <span v-else>N/A</span>
             </td>
             <td @click="abrir(tarea)">
               {{ tarea.empleado.nombre }} {{ tarea.empleado.apellidos }}
@@ -95,6 +98,8 @@ function abrir(tarea) {
 function aceptar(tarea) {
   return agendaApi.guardar(tarea).then((resp) => {
     const index = findIndex(this.tareas.docs, { _id: resp._id });
+    resp.empleado = tarea.empleado;
+    resp.cliente = tarea.cliente;
     this.tareas.docs.splice(index, 1, resp);
     this.$refs.tareaform.cerrarModal();
     return resp;

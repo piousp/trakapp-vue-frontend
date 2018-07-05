@@ -96,7 +96,7 @@ function eliminarTarea(tarea) {
 }
 
 function agregarCamposCalendario(tarea) {
-  const colores = obtenerColor(tarea.empleado);
+  const colores = obtenerColor(tarea.empleado._id || tarea.empleado);
   tarea.id = tarea._id;
   tarea.color = colores.fondo;
   tarea.textColor = colores.texto;

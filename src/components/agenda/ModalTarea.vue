@@ -39,7 +39,7 @@
                         required
                         :disabled="tarea.activa === false"
                         v-validate="'required'">
-                  <option v-for="emp in empleados" :value="emp._id" :key="emp._id">
+                  <option v-for="emp in empleados" :value="emp" :key="emp._id">
                     {{ emp.nombre }} {{ emp.apellidos }}
                   </option>
                 </select>
@@ -53,28 +53,41 @@
               </form-group>
               <div class="grid grid--bleed" id="fecha-tarea">
                 <div class="col-6">
-                  <form-group>
+                  <form-group id="fecha-desde" :error="errors.has('fecha-desde') && submitted">
                     <label class="form__label form__label--required">Desde</label>
-                    <datepicker
+                    <datetime
                       v-if="tarea.activa"
-                      language="es"
+                      v-model="tarea.start"
+                      v-validate="'required'"
+                      :disabled="tarea.activa === false"
+                      :minute-step="15"
+                      :use12-hour="true"
                       input-class="form__input"
-                      v-model="tarea.start"/>
+                      name="fecha-desde"
+                      type="datetime"/>
                     <p v-else class="form__input">
                       {{ tarea.start | fecha("DD MMM YYYY hh:mm a") }}
                     </p>
                   </form-group>
                 </div>
                 <div class="col-6">
-                  <form-group>
+                  <form-group id="fecha-hasta" :error="errors.has('fecha-hasta')">
                     <label class="form__label form__label--required">Hasta</label>
-                    <datepicker
+                    <datetime
                       v-if="tarea.activa"
-                      language="es"
+                      v-model="tarea.end"
+                      v-validate="{rules: {is: tarea.start > tarea.end, required: true}}"
+                      :disabled="tarea.activa === false"
+                      :minute-step="15"
+                      :use12-hour="true"
                       input-class="form__input"
-                      v-model="tarea.end"/>
+                      name="fecha-hasta"
+                      type="datetime"/>
                     <p v-else class="form__input">
                       {{ tarea.end | fecha("DD MMM YYYY hh:mm a") }}
+                    </p>
+                    <p class="form__error-message text--small" v-show="errors.has('fecha-hasta')">
+                      Debe ser mayor que 'Desde'
                     </p>
                   </form-group>
                 </div>
@@ -121,7 +134,7 @@
         </div>
         <div class="modal__footer">
           <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
-          <button type="button" class="boton boton--guardar" @click="verificarYAceptar()"/>
+          <button type="button" class="boton boton--guardar" @click="verificarYAceptar(tarea)"/>
           <button type="button"
                   class="boton boton--eliminar"
                   @click="$emit('eliminar', tarea)"
@@ -133,7 +146,10 @@
 </template>
 
 <script>
+import moment from "moment";
 import isEmpty from "lodash/isEmpty";
+import find from "lodash/find";
+import cloneDeep from "lodash/cloneDeep";
 import clienteApi from "../clientes/clienteApi";
 
 export default {
@@ -164,14 +180,14 @@ function data() {
   };
 }
 
-function verificarYAceptar() {
+function verificarYAceptar(tarea) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
-    if (valido && this.tarea.ubicacion.coordinates) {
-      return this.$emit("aceptar", this.tarea);
+    if (valido && tarea.ubicacion.coordinates) {
+      return this.$emit("aceptar", tarea);
     } else if (!valido) {
       this.$toastr("error", "Falta información por llenar", "Campos vacios");
-    } else if (!this.tarea.ubicacion.coordinates) {
+    } else if (!tarea.ubicacion.coordinates) {
       this.$toastr("error", "La tarea tiene que tener una ubicación", "Campos vacios");
     }
     return null;
@@ -179,13 +195,14 @@ function verificarYAceptar() {
 }
 
 function abrirModal(evt) {
-  this.tarea = {
+  const tarea = {
     start: evt.start,
     end: evt.end,
     ubicacion: {},
     post: {},
     activa: true,
   };
+  this.tarea = formatearFechas(tarea);
   this.modalVisible = true;
 }
 
@@ -198,11 +215,11 @@ function cerrarModal() {
 }
 
 function editarModal(tarea) {
-  this.tarea = tarea;
-  if (this.tarea) {
+  if (tarea && tarea.cliente) {
     tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
   }
-  this.tarea = tarea;
+  tarea.empleado = find(this.empleados, { _id: tarea.empleado });
+  this.tarea = formatearFechas(tarea);
   this.modalVisible = true;
   // Hay que esperar a que el mapa cargue. No hay forma de hacer un watch sobre $refs.
   setTimeout(() => {
@@ -232,6 +249,13 @@ function buscarClientes(txt) {
     this.clientes = resp;
     return resp;
   });
+}
+
+function formatearFechas(tarea) {
+  const tareaMod = cloneDeep(tarea);
+  tareaMod.start = moment.isMoment(tarea.start) ? tarea.start.format() : tarea.start;
+  tareaMod.end = moment.isMoment(tarea.end) ? tarea.end.format() : tarea.end;
+  return tareaMod;
 }
 </script>
 
