@@ -180,11 +180,26 @@ function guardarUsuario(usuario) {
 }
 
 function migrarEmpresarial() {
-  swal({
+  return swal({
     title: "Migrar a cuenta empresarial",
     text: "¿Está seguro que desea migrar a una cuenta empresarial? Esta acción es irreversible.",
     type: "question",
     showCancelButton: true,
+  }).then((swalRes) => {
+    if (swalRes.value) {
+      this.$store.commit("perfil/migrarEmpresarial");
+      this.$store.dispatch("perfil/actualizarDatosCuenta", this.$store.state.perfil.cuenta)
+        .then((resp) => {
+          debug(resp);
+          this.$toastr("success", "Se ha migrado su cuenta a una cuenta empresarial", "Éxito");
+          return resp;
+        })
+        .catch((err) => {
+          debug(err);
+          this.$toastr("error", "Error al guardar sus datos", "Error");
+        });
+    }
+    return null;
   });
 }
 </script>

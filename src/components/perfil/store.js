@@ -11,11 +11,13 @@ const state = {
 const actions = {
   cargarDatos,
   actualizarDatosUsuario,
+  actualizarDatosCuenta,
 };
 
 const mutations = {
   setUsuario,
   setCuenta,
+  migrarEmpresarial,
 };
 
 
@@ -33,6 +35,15 @@ function actualizarDatosUsuario(context, usuario) {
   return perfilApi.actualizarUsuario(usuario)
     .then((resp) => {
       context.commit("setUsuario", usuario);
+      return resp;
+    });
+}
+
+function actualizarDatosCuenta(context, cuenta) {
+  debug("Actualizando datos del cuenta");
+  return perfilApi.actualizarCuenta(cuenta)
+    .then((resp) => {
+      context.commit("setCuenta", cuenta);
       return resp;
     });
 }
@@ -55,4 +66,8 @@ function setUsuario(pState, usuario) {
 
 function setCuenta(pState, cuenta) {
   pState.cuenta = cuenta;
+}
+
+function migrarEmpresarial(pState) {
+  pState.cuenta.empresarial = true;
 }
