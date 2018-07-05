@@ -5,7 +5,7 @@ import DatosCuenta from "./sub/DatosCuenta.vue";
 
 const rutasCuenta = [
   {
-    path: "/datos",
+    path: "cuenta-datos",
     name: "cuenta-datos",
     component: DatosCuenta,
     meta: {
