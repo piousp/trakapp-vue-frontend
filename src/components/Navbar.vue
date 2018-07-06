@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import swal from "sweetalert2";
 import pkg from "../../package.json";
 import Menu from "./Menu.vue";
 import tour from "./tour.js";
@@ -63,10 +64,24 @@ function version() {
 function mounted() {
   return perfilApi.datosUsuario().then((usuario) => {
     if (!usuario.tourVisto) {
-      return tour(this.$router, () => {
+      setTimeout(() => swal({ // para que no salga de un solo apenas inicia sesión
+        title: "Bienvenido a Trakapp",
+        html: "Vamos a guiarlo por algunas de las características más importantes que ofrece el" +
+        "sistema. Si lo desea, puede omitir el tutorial por ahora y verlo después usando el botón" +
+        "de ayuda en la esquina inferior derecha <i class='fa fa-fw fa-question-circle'></i>",
+        imageUrl: "/static/icono.png",
+        imageWidth: 175,
+        imageHeight: 175,
+        showCancelButton: true,
+        confirmButtonText: "Ver tutorial",
+        cancelButtonText: "Omitir",
+      }).then((resp) => {
         usuario.tourVisto = true;
+        if (resp && !resp.dismiss) {
+          tour(this.$router, 0);
+        }
         return perfilApi.actualizarUsuario(usuario);
-      });
+      }), 2000);
     }
     return null;
   });

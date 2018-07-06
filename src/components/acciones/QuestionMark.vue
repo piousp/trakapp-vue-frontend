@@ -12,19 +12,28 @@
           <li @click="reportar">
             <i class="fa fa-fw fa-bug"/>&nbsp;Reportar un fallo
           </li>
+          <li @click="tutorial">
+            <i class="fa fa-fw fa-sign"/>&nbsp;Ver tutorial
+          </li>
         </ul>
       </div>
-      <i class="far fa-2x fa-question-circle" @click="mostrarPopup = !mostrarPopup"/>
+      <i class="far fa-2x fa-question-circle icono-ayuda" @click="mostrarPopup = !mostrarPopup"/>
     </div>
   </section>
 </template>
 
 <script>
+import noop from "lodash/noop";
 import ModalBug from "./ModalBug.vue";
+import tour from "../tour";
 
 function reportar() {
   this.$refs.modalBug.abrir();
   this.mostrarPopup = false;
+}
+
+function tutorial() {
+  return tour(this.$router, 0, noop);
 }
 
 export default {
@@ -36,12 +45,13 @@ export default {
   },
   methods: {
     reportar,
+    tutorial,
   },
 };
 </script>
 
 <style lang="scss">
-.fa-question-circle {
+.icono-ayuda {
   position: fixed;
   right: 10px;
   bottom: 15px;
@@ -52,7 +62,7 @@ export default {
   position: fixed;
   right: 20px;
   min-width: 175px;
-  height: 96px;
+  min-height: 96px;
   bottom: 60px;
   z-index: 9;
   border-radius: 5px;
