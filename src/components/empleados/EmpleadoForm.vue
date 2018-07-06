@@ -279,7 +279,7 @@ function data() {
 
 function guardar(empleado) {
   this.submitted = true;
-  this.$validator.validateAll().then((valido) => {
+  return this.$validator.validateAll().then((valido) => {
     if (valido) {
       return empleadoApi
         .guardar(empleado)
@@ -291,14 +291,18 @@ function guardar(empleado) {
           return resp;
         })
         .catch((err) => {
-          this.$toastr("error", err, "Error");
+          if (err.response.status === 409) {
+            return this.$toastr(
+              "error",
+              "El correo del empleado ya fue registrado anteriormente por alguien más",
+              "No se puede crear",
+            );
+          }
+          return this.$toastr("error", err, "Error");
         });
     }
     return this.$toastr("error", "Hay campos requeridos sin completar", "Error");
-  })
-    .catch((err) => {
-      this.$toastr("error", err, "Error");
-    });
+  });
 }
 
 function verificarHorarios(configHoras) {
