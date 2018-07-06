@@ -26,7 +26,7 @@ import obtenerColor from "./colores.js";
 import chatApi from "../chat/chatApi";
 
 function mounted() {
-  this.$store.dispatch("cargarListado");
+  this.$store.dispatch("empleados/cargarListado");
 }
 
 function abrirEmpleado(emp) {
