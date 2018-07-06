@@ -11,7 +11,6 @@
           <tr>
             <th>Cédula</th>
             <th>Nombre</th>
-            <th>Apellidos</th>
             <th>Dirección</th>
             <th/>
           </tr>
@@ -28,11 +27,8 @@
             </router-link>
             <router-link tag="td"
                          :to="{name: 'clienteform', params: {id: cliente._id}}">
-              {{ cliente.apellidos }}
-            </router-link>
-            <router-link tag="td"
-                         :to="{name: 'clienteform', params: {id: cliente._id}}">
-              {{ cliente.direccion }}
+              <span v-if="cliente.direccion">{{ cliente.direccion }}</span>
+              <span v-else>N/A</span>
             </router-link>
             <td>
               <ul class="tabla__opciones">

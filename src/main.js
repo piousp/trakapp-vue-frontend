@@ -13,6 +13,7 @@ import VueToastr from "@deveodk/vue-toastr";
 import bugsnagVue from "bugsnag-vue";
 import Multiselect from "vue-multiselect";
 import money from "v-money";
+import VueTheMask from "vue-the-mask";
 import App from "./App.vue";
 import router from "./config/router";
 import Auth from "./config/auth.js";
@@ -48,6 +49,7 @@ Vue.use(VueGoogleMaps, {
   autobindAllEvents: true,
 });
 Vue.use(Datetime);
+Vue.use(VueTheMask);
 
 Vue.component("infoWindow", VueGoogleMaps.InfoWindow);
 Vue.component("multiselect", Multiselect);
