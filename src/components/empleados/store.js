@@ -1,11 +1,12 @@
 import D from "debug";
 import reject from "lodash/reject";
+import filter from "lodash/filter";
 import empleadoApi from "./empleadoApi";
 
 const debug = D("ciris:storeEmpleados");
 
 const state = {
-  listado: [],
+  listado: { docs: [] },
 };
 
 const actions = {
@@ -20,11 +21,15 @@ const mutations = {
   eliminarEmpleado,
 };
 
+const getters = {
+  listadoSinNuevos,
+};
 
 const store = {
   state,
   actions,
   mutations,
+  getters,
   namespaced: true,
 };
 
@@ -34,7 +39,7 @@ function cargarListado(context) {
   debug("Cargando la lista de empleados al store");
   return empleadoApi.listarConMensajes().then((empleados) => {
     debug("Commiteando la lista de empleados");
-    context.commit("setListado", empleados.docs);
+    context.commit("setListado", empleados);
     return null;
   });
 }
@@ -63,9 +68,16 @@ function setListado(pState, listado) {
 }
 
 function agregarEmpleado(pState, empleado) {
-  pState.listado.push([empleado]);
+  pState.listado.docs.push(empleado);
 }
 
 function eliminarEmpleado(pState, empleado) {
-  pState.listado = reject(pState.listado, ["_id", empleado._id]);
+  pState.listado.docs = reject(pState.listado.docs, ["_id", empleado._id]);
+}
+
+function listadoSinNuevos(pState) {
+  return {
+    docs: filter(pState.listado.docs, obj => !!obj.ubicacion),
+    cant: pState.listado.cant,
+  };
 }

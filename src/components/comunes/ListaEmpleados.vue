@@ -2,12 +2,12 @@
   <section id="chat-empleados">
     <h1 class="h5 text--blanco text--center">Chat empleados</h1>
     <ul class="lista-empleados">
-      <li class="text--center text--grisa text--small" v-show="!empleados.length">
+      <li class="text--center text--grisa text--small" v-show="!empleados.docs.length">
         No hay empleados.
       </li>
       <li class="lista-empleados__item"
           @click="abrirEmpleado(emp)"
-          v-for="emp in empleados"
+          v-for="emp in empleados.docs"
           :key="emp._id">
         <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
         <span class="text">{{ emp.nombre }} {{ emp.apellidos }}</span>
@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     empleados() {
-      return this.$store.state.empleados.listado;
+      return this.$store.getters["empleados/listadoSinNuevos"];
     },
   },
   mounted,

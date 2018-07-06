@@ -22,6 +22,12 @@
       <section class="grid">
         <div class="col-md-6">
           <h1 class="h1"><strong class="text--bold">Info</strong>rmación básica</h1>
+
+          <div class="checkbox">
+            <input type="checkbox" id="ckbxEmpresa" v-model="esEmpresa">
+            <label class="form__label" for="ckbxEmpresa">Es una empresa</label>
+          </div>
+
           <form-group :error="errors.has('nombre') && submitted">
             <input
               name="nombre"
@@ -32,19 +38,45 @@
               v-validate="'required'" >
             <label class="form__label">Nombre</label>
           </form-group>
-          <form-group>
+          <form-group v-if="!esEmpresa">
             <input class="form__input"
                    v-model="cliente.apellidos"
                    :disabled="!editando">
             <label class="form__label">Apellidos</label>
           </form-group>
 
-          <form-group :error="errors.has('cedula') && submitted">
-            <input class="form__input"
-                   v-model="cliente.cedula"
-                   :disabled="!editando"
-                   name="cedula">
+          <form-group v-if="esEmpresa" :error="errors.has('cedula') && submitted">
+            <the-mask
+              class="form__input"
+              v-model="cliente.cedula"
+              :disabled="!editando"
+              :masked="true"
+              mask="#-###-######"
+              name="cedula"
+              required
+              v-validate="'required'"/>
             <label class="form__label">Cédula</label>
+          </form-group>
+
+          <form-group v-else>
+            <the-mask
+              class="form__input"
+              v-model="cliente.cedula"
+              :disabled="!editando"
+              :masked="true"
+              mask="#-####-####"
+              name="cedula"/>
+            <label class="form__label">Cédula</label>
+          </form-group>
+
+          <form-group v-if="esEmpresa" :error="errors.has('correo') && submitted">
+            <input class="form__input"
+                   v-model="cliente.correo"
+                   :disabled="!editando"
+                   required
+                   name="correo"
+                   v-validate="'required'">
+            <label class="form__label">Correo de contacto</label>
           </form-group>
 
         </div>
@@ -101,6 +133,7 @@ function data() {
     copia: {},
     editando: true,
     submitted: false,
+    esEmpresa: false,
   };
 }
 

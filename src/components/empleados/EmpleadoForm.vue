@@ -281,12 +281,10 @@ function guardar(empleado) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      return empleadoApi
-        .guardar(empleado)
+      return this.$store.dispatch("empleados/agregarEmpleado", empleado)
         .then((resp) => {
           this.$toastr("success", "Empleado guardado exitosamente", "Éxito");
           this.$router.push({ name: "empleadoform", params: { id: resp._id } });
-          this.empleado._id = resp._id;
           this.editando = false;
           return resp;
         })
