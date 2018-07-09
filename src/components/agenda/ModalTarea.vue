@@ -8,52 +8,110 @@
           <span class="text--italic text--gris8" v-if="tarea.activa === false">Finalizada</span>
         </div>
       </div>
-      <div class="modal__body">
-        <form>
+      <form ref="form" novalidate>
+        <div class="modal__body">
           <div class="grid">
             <div class="col-6">
-              <form-group>
+              <form-group id="title" :error="errors.has('title') && submitted">
+                <input class="form__input"
+                       name="title"
+                       v-model="tarea.title"
+                       :disabled="tarea.activa === false"
+                       required
+                       v-validate="'required'">
                 <label class="form__label">Título</label>
-                <input class="form__input" v-model="tarea.title"
-                       :disabled="tarea.activa === false">
               </form-group>
-              <div class="form-group" id="asignar-tarea">
-                <label class="form__label">Asignar a</label>
-                <select class="form__input" v-model="tarea.empleado"
-                        :disabled="tarea.activa === false">
-                  <option v-for="emp in empleados" :value="emp._id" :key="emp._id">
+              <form-group>
+                <label class="form__label">Cliente dueño</label>
+                <multiselect
+                  v-model="tarea.cliente"
+                  :options="clientes"
+                  :disabled="tarea.activa === false"
+                  label="nombreCompleto"
+                  placeholder="Buscar por nombre..."
+                  @search-change="buscarClientes"
+                />
+              </form-group>
+              <form-group id="asignar-tarea" :error="errors.has('empleado') && submitted">
+                <select class="form__input"
+                        name="empleado"
+                        v-model="tarea.empleado"
+                        required
+                        :disabled="tarea.activa === false"
+                        v-validate="'required'">
+                  <option v-for="emp in empleados" :value="emp" :key="emp._id">
                     {{ emp.nombre }} {{ emp.apellidos }}
                   </option>
                 </select>
-              </div>
+                <label class="form__label">Asignar a</label>
+              </form-group>
               <form-group>
-                <label class="form__label">Descripción</label>
                 <textarea class="form__input" rows="3"
                           v-model="tarea.descripcion"
                           :disabled="tarea.activa === false"/>
+                <label class="form__label">Descripción</label>
               </form-group>
               <div class="grid grid--bleed" id="fecha-tarea">
                 <div class="col-6">
-                  <form-group>
-                    <label class="form__label">Desde</label>
-                    <p class="form__input">{{ tarea.start | fecha("LLL") }}</p>
+                  <form-group id="fecha-desde" :error="errors.has('fecha-desde') && submitted">
+                    <label class="form__label form__label--required">Desde</label>
+                    <datetime
+                      v-if="tarea.activa"
+                      v-model="tarea.start"
+                      v-validate="'required'"
+                      :disabled="tarea.activa === false"
+                      :minute-step="15"
+                      :use12-hour="true"
+                      input-class="form__input"
+                      name="fecha-desde"
+                      type="datetime"/>
+                    <p v-else class="form__input">
+                      {{ tarea.start | fecha("DD MMM YYYY hh:mm a") }}
+                    </p>
                   </form-group>
                 </div>
                 <div class="col-6">
-                  <form-group>
-                    <label class="form__label">Hasta</label>
-                    <p class="form__input">{{ tarea.end | fecha("LLL") }}</p>
+                  <form-group id="fecha-hasta" :error="errors.has('fecha-hasta')">
+                    <label class="form__label form__label--required">Hasta</label>
+                    <datetime
+                      v-if="tarea.activa"
+                      v-model="tarea.end"
+                      v-validate="{rules: {is: tarea.start > tarea.end, required: true}}"
+                      :disabled="tarea.activa === false"
+                      :minute-step="15"
+                      :use12-hour="true"
+                      input-class="form__input"
+                      name="fecha-hasta"
+                      type="datetime"/>
+                    <p v-else class="form__input">
+                      {{ tarea.end | fecha("DD MMM YYYY hh:mm a") }}
+                    </p>
+                    <p class="form__error-message text--small" v-show="errors.has('fecha-hasta')">
+                      Debe ser mayor que 'Desde'
+                    </p>
                   </form-group>
+                </div>
+              </div>
+              <div class="grid" v-if="!isEmpty(tarea.post)">
+                <div class="col-md-6 form__group">
+                  <label class="form__label">Firma</label><br>
+                  <img :src="`data:image/svg+xml;base64,${tarea.post.firma}`" height="100px">
+                </div>
+                <div class="col-md-6 form__group">
+                  <label class="form__label">Apuntes</label>
+                  <p class="text text--gris8">{{ tarea.post.apuntes }}</p>
                 </div>
               </div>
             </div>
             <div class="col-6">
               <form-group id="ubicacion-tarea">
-                <label class="form__label">Ubicación</label>
                 <gmap-autocomplete class="form__input" ref="gmapAutocomplete"
                                    :disabled="tarea.activa === false"
+                                   required
                                    :options="{componentRestrictions: {country: 'cr'}}"
-                                   @place_changed="buscarLugar"/>
+                                   @place_changed="buscarLugar"
+                                   placeholder=""/>
+                <label class="form__label form__label--required">Ubicación</label>
               </form-group>
               <gmap-map
                 class="mapa-agenda"
@@ -73,46 +131,95 @@
               </gmap-map>
             </div>
           </div>
-        </form>
-      </div>
-      <div class="modal__footer">
-        <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
-        <button type="button" class="boton boton--guardar" @click="$emit('aceptar', tarea)"/>
-        <button type="button"
-                class="boton boton--eliminar"
-                @click="$emit('eliminar', tarea)"
-                v-show="tarea._id"/>
-      </div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
+          <button type="button" class="boton boton--guardar" @click="verificarYAceptar(tarea)"/>
+          <button type="button"
+                  class="boton boton--eliminar"
+                  @click="$emit('eliminar', tarea)"
+                  v-show="tarea._id"/>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
+import isEmpty from "lodash/isEmpty";
+import find from "lodash/find";
+import cloneDeep from "lodash/cloneDeep";
+import clienteApi from "../clientes/clienteApi";
+
+export default {
+  data,
+  computed: {
+    empleados() {
+      return this.$store.state.empleados.listado;
+    },
+  },
+  methods: {
+    buscarLugar,
+    abrirModal,
+    cerrarModal,
+    editarModal,
+    buscarClientes,
+    verificarYAceptar,
+    isEmpty,
+  },
+};
 
 function data() {
   return {
     mapCenter: { lat: 9.93, lng: -84.07 },
     modalVisible: false,
+    clientes: [],
+    submitted: false,
+    tarea: {},
   };
 }
 
+function verificarYAceptar(tarea) {
+  this.submitted = true;
+  return this.$validator.validateAll().then((valido) => {
+    if (valido && tarea.ubicacion.coordinates) {
+      return this.$emit("aceptar", tarea);
+    } else if (!valido) {
+      this.$toastr("error", "Falta información por llenar", "Campos vacios");
+    } else if (!tarea.ubicacion.coordinates) {
+      this.$toastr("error", "La tarea tiene que tener una ubicación", "Campos vacios");
+    }
+    return null;
+  });
+}
+
 function abrirModal(evt) {
-  this.tarea = {
+  const tarea = {
     start: evt.start,
     end: evt.end,
     ubicacion: {},
+    post: {},
+    activa: true,
   };
+  this.tarea = formatearFechas(tarea);
   this.modalVisible = true;
 }
 
 function cerrarModal() {
-  this.tarea = {};
+  this.submitted = false;
+  this.tarea = { post: {} };
   this.$refs.gmapAutocomplete.$el.value = null;
+  this.clienteBuscado = null;
   this.modalVisible = false;
 }
 
 function editarModal(tarea) {
-  this.tarea = tarea;
+  if (tarea && tarea.cliente) {
+    tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
+  }
+  tarea.empleado = find(this.empleados, { _id: tarea.empleado });
+  this.tarea = formatearFechas(tarea);
   this.modalVisible = true;
   // Hay que esperar a que el mapa cargue. No hay forma de hacer un watch sobre $refs.
   setTimeout(() => {
@@ -134,21 +241,37 @@ function buscarLugar(lugar) {
   });
 }
 
-export default {
-  data,
-  store: ["tarea", "empleados"],
-  methods: {
-    buscarLugar,
-    abrirModal,
-    cerrarModal,
-    editarModal,
-  },
-};
+function buscarClientes(txt) {
+  if (!txt) {
+    return [];
+  }
+  return clienteApi.buscar(txt, 0, 10).then((resp) => {
+    this.clientes = resp;
+    return resp;
+  });
+}
+
+function formatearFechas(tarea) {
+  const tareaMod = cloneDeep(tarea);
+  tareaMod.start = moment.isMoment(tarea.start) ? tarea.start.format() : tarea.start;
+  tareaMod.end = moment.isMoment(tarea.end) ? tarea.end.format() : tarea.end;
+  return tareaMod;
+}
 </script>
 
 <style lang="scss">
 .mapa-agenda{
   height: 300px;
   width: 100%;
+}
+#fecha-tarea {
+  .col-6 {
+    padding-top: 0;
+    padding-bottom: 0;
+    .form__group {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
 }
 </style>

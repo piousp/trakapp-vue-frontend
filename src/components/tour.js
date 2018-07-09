@@ -1,4 +1,4 @@
-export default($router, cbFinal) => {
+export default($router, delayInicio, cbFinal) => {
   function getBotonRuta(ruta) {
     return [{
       click(anno) {
@@ -22,10 +22,6 @@ export default($router, cbFinal) => {
   setTimeout(() => {
     const annoTour = new Anno([
       {
-        target: ".navbar__logo",
-        content: "¡Descubra Trakapp!",
-      },
-      {
         target: "#empleadolist",
         content: "Gestione aquí su personal.",
         buttons: getBotonRuta("empleadolist"),
@@ -43,10 +39,10 @@ export default($router, cbFinal) => {
         "credenciales enviados al correo electrónico.",
       },
       {
-        target: "#agenda",
+        target: "#tareas",
         position: "right",
         content: "Gestione aquí las tareas de su personal.",
-        buttons: getBotonRuta("agenda"),
+        buttons: getBotonRuta("tareas"),
       },
       {
         target: ".fc-toolbar",
@@ -126,7 +122,7 @@ export default($router, cbFinal) => {
       },
       {
         target: ".navbar__user",
-        content: "Gestione la información de su perfil.",
+        content: "Gestione la información de su perfil y su cuenta.",
         buttons: getBotonRuta("perfil"),
       },
       {
@@ -136,5 +132,5 @@ export default($router, cbFinal) => {
       },
     ]);
     annoTour.start();
-  }, 3000);
+  }, delayInicio);
 };

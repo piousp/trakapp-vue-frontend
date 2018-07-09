@@ -8,7 +8,7 @@ export default [
     component: EmpleadoList,
     meta: {
       titulo: "Empleados",
-      icono: "fal fa-fw fa-user",
+      icono: "fal fa-fw fa-id-card",
     },
   },
   {

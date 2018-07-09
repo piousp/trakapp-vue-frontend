@@ -24,7 +24,6 @@ export default {
     "modal-tarea": ModalTarea,
   },
   data,
-  store: ["tarea"],
   mounted() {
     window.eventBus.$on("abrirModalTarea", () => {
       setTimeout(() => {
@@ -81,6 +80,9 @@ function guardarTarea(tarea) {
     if (tarea._id) {
       return self.$refs.calendario.fireMethod("updateEvent", agregarCamposCalendario(tarea));
     }
+    if (tarea.cliente) {
+      resp.cliente = tarea.cliente;
+    }
     return self.$refs.calendario.fireMethod("renderEvent", agregarCamposCalendario(resp));
   });
 }
@@ -94,7 +96,7 @@ function eliminarTarea(tarea) {
 }
 
 function agregarCamposCalendario(tarea) {
-  const colores = obtenerColor(tarea.empleado);
+  const colores = obtenerColor(tarea.empleado._id || tarea.empleado);
   tarea.id = tarea._id;
   tarea.color = colores.fondo;
   tarea.textColor = colores.texto;
@@ -112,6 +114,7 @@ function limpiarParaGuardar(tarea) {
     empleado: tarea.empleado,
     descripcion: tarea.descripcion,
     ubicacion: tarea.ubicacion,
+    cliente: tarea.cliente,
   };
 }
 

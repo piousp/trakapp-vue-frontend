@@ -9,7 +9,7 @@
 
 .form__group {
   position: relative;
-  margin: .5em 0;
+  margin: 1.5em 0;
   padding: .3em 0;
 }
 
@@ -31,6 +31,23 @@
   font-size: .8em;
   transition: all .35s ease;
   width: 100%;
+}
+
+.form__label--opcional{
+  &::after{
+    content: '(Opcional)';
+    margin-left: 4px;
+    font-size: 70%;
+    font-weight: 200px;
+    opacity: 70%;
+  }
+}
+
+.form__label--required{
+  @extend .text--bold;
+  &::after{
+    content: '*';
+  }
 }
 
 .form__icon{
@@ -94,6 +111,7 @@
     color: $azul;
     border: 0;
     outline-color: transparent;
+    outline: none;
   }
 
   & + .form__label {
@@ -104,7 +122,7 @@
     left: 0;
     bottom: 0;
     transition: all .35s ease;
-    &::after{
+    &::before{
       content: '';
       position: absolute;
       bottom: 4px;
@@ -122,12 +140,20 @@
     top: -8px;
   }
 
+  &:required + .form__label {
+    @extend .form__label--required;
+  }
+
+  &:not(:required) + .form__label {
+    @extend .form__label--opcional;
+  }
+
   &:focus + .form__label,
   &:active + .form__label{
     color: $celeste-tema;
     font-size: .8em;
     top: -8px;
-    &::after{
+    &::before{
       visibility: visible;
       width: 100%;
       left: 0;
@@ -139,6 +165,7 @@
     color: $grisa;
     box-shadow: 0 0 0 $negro;
     cursor: not-allowed;
+    pointer-events: none;
 
     &:focus,
     &:active {

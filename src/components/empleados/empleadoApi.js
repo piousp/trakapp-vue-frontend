@@ -12,9 +12,15 @@ function listar(pagina, cantidad) {
     .then(resp => resp.data);
 }
 
-function listarConMensajes() {
+function listarConMensajes(pagina, cantidad) {
+  const query = {
+    params: {
+      pagina: pagina || 0,
+      cantidad: cantidad || 0,
+    },
+  };
   return axios
-    .get(`${axios.defaults.baseUrl}/api/empleado/conmensajes`)
+    .get(`${axios.defaults.baseUrl}/api/empleado/conmensajes`, query)
     .then(resp => resp.data);
 }
 

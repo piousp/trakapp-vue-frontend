@@ -47,6 +47,60 @@
           <password class="text--blanco"
                     @password="usuario.password = $event"
                     :submitted="submitted"/>
+          <form-group>
+            <div class="switch switch--indigo">
+              <input type="checkbox" :id="ids.empresarial" :name="ids.empresarial"
+                     v-model="usuario.empresarial">
+              <label class="form__label text--grisc" :for="ids.empresarial">
+                Estoy creando una cuenta empresarial
+              </label>
+            </div>
+          </form-group>
+
+        </div>
+      </div>
+      <div class="grid animated bounceIn" v-if="usuario.empresarial">
+        <div class="col-sm-6 margin-top-none">
+          <form-group :error="errors.has(ids.empresa) && submitted" class="margin-top-none">
+            <input class="form__input form__input--blanco"
+                   :id="ids.empresa"
+                   :name="ids.empresa"
+                   required
+                   v-model="usuario.cuenta.nombre"
+                   v-validate="'required'"
+            >
+            <label :for="ids.empresa" class="form__label">Empresa</label>
+          </form-group>
+          <form-group :error="errors.has(ids.cedula) && submitted">
+            <input class="form__input form__input--blanco"
+                   :id="ids.cedula"
+                   :name="ids.cedula"
+                   required
+                   v-model="usuario.cuenta.cedula"
+                   v-validate="'required'"
+            >
+            <label :for="ids.cedula" class="form__label">Cédula Jurídica</label>
+          </form-group>
+        </div>
+        <div class="col-sm-6 margin-top-none">
+          <form-group :error="errors.has(ids.correoEmpresa) && submitted" class="margin-top-none">
+            <input class="form__input form__input--blanco"
+                   :id="ids.correoEmpresa"
+                   :name="ids.correoEmpresa"
+                   required
+                   v-model="usuario.cuenta.correo"
+                   v-validate="'required'"
+            >
+            <label :for="ids.correoEmpresa" class="form__label">Correo Empresa</label>
+          </form-group>
+          <form-group :error="errors.has(ids.direccion) && submitted">
+            <textarea class="form__input form__input--blanco"
+                      :id="ids.direccion"
+                      :name="ids.direccion"
+                      v-model="usuario.cuenta.direccion"
+            />
+            <label :for="ids.direccion" class="form__label">Dirección</label>
+          </form-group>
         </div>
       </div>
       <div class="text--center">
@@ -137,5 +191,10 @@ function id() {
   return Math.random().toString(36).substr(2, 9);
 }
 </script>
-
+<style lang="scss" scoped="true" >
+.margin-top-none {
+  margin-top: 0;
+  padding-top: 0;
+}
+</style>
 <style src="./login.scss" lang="scss"/>

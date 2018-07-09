@@ -31,7 +31,10 @@
         </div>
       </div>
       <div class="modal__footer">
-        <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
+        <button type="button" class="boton boton--negro" @click="cerrarModal">
+          <i class="far fa-times-circle rojo"/>
+          Cerrar chat
+        </button>
       </div>
     </div>
   </div>
@@ -52,7 +55,6 @@ export default {
   sockets: {
     actualizar,
   },
-  store: ["empleado"],
 };
 
 function data() {
@@ -62,6 +64,9 @@ function data() {
     modalVisible: false,
     mensajes: [],
     mensaje: {},
+    empleado: {
+      ubicacion: {},
+    },
   };
 }
 
@@ -78,8 +83,9 @@ function generarCoords(coordinates) {
   return new google.maps.LatLng(coordinates[1], coordinates[0]);
 }
 
-function abrirModal() {
+function abrirModal(empleado) {
   this.modalVisible = true;
+  this.empleado = empleado;
   if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
     this.empleado.ubicacion.pos = generarCoords(this.empleado.ubicacion.pos.coordinates);
   }
@@ -110,5 +116,8 @@ function cerrarModal() {
 <style scoped lang="scss">
 .map-container {
   height: 300px;
+}
+.rojo {
+  color: red;
 }
 </style>

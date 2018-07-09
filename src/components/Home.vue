@@ -9,6 +9,7 @@
       <div class="layout__content__bar"/>
       <div class="layout__padding">
         <router-view/>
+        <question-mark/>
       </div>
     </div>
   </div>
@@ -16,6 +17,7 @@
 
 <script>
 import Navbar from "./Navbar.vue";
+import QuestionMark from "./acciones/QuestionMark.vue";
 
 function data() {
   return {
@@ -31,7 +33,7 @@ function created() {
 
 export default {
   name: "App",
-  components: { Navbar },
+  components: { Navbar, QuestionMark },
   data,
   created,
   sockets: {
@@ -40,6 +42,11 @@ export default {
     },
     recibirMensaje(msj) {
       this.$notify(`${msj.emisor.nombre} dice: `, msj.texto);
+    },
+    notificarTarea(tarea) {
+      const titulo = `${tarea.empleado.nombre} ${tarea.empleado.apellidos} completó: `;
+      this.$toastr("success", tarea.title, titulo);
+      this.$notify(titulo, tarea.title);
     },
   },
 };
@@ -60,7 +67,6 @@ export default {
   }
 
   .layout {
-    height: 100%;
     display: flex;
   }
 
@@ -68,14 +74,13 @@ export default {
   .layout__chat{
     @extend .sombra;
     background: transparentize($negro2, .3);
-    height: 100%;
     width: 260px;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
   .layout__content{
-    height: 100%;
+    min-height: 100vh;
     padding-top: 40px;
     flex-grow: 2;
     width: 100%;

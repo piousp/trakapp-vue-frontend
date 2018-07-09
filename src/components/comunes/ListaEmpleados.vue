@@ -2,12 +2,12 @@
   <section id="chat-empleados">
     <h1 class="h5 text--blanco text--center">Chat empleados</h1>
     <ul class="lista-empleados">
-      <li class="text--center text--grisa text--small" v-show="!empleados.length">
+      <li class="text--center text--grisa text--small" v-show="!empleados.docs.length">
         No hay empleados.
       </li>
       <li class="lista-empleados__item"
           @click="abrirEmpleado(emp)"
-          v-for="emp in empleados"
+          v-for="emp in empleados.docs"
           :key="emp._id">
         <i :style="{background:obtenerColor(emp._id).fondo}" class="colorEmpleado"/>
         <span class="text">{{ emp.nombre }} {{ emp.apellidos }}</span>
@@ -22,24 +22,19 @@
 
 <script>
 import ModalEmpleado from "./ModalEmpleado.vue";
-import empleadoApi from "../empleados/empleadoApi";
 import obtenerColor from "./colores.js";
 import chatApi from "../chat/chatApi";
 
 function mounted() {
-  return empleadoApi.listarConMensajes().then((empleados) => {
-    this.empleados = empleados.docs;
-    return null;
-  });
+  this.$store.dispatch("empleados/cargarListado");
 }
 
 function abrirEmpleado(emp) {
-  this.empleado = emp;
   if (emp.cantMensajesNoVistos > 0) {
     chatApi.marcarComoVistos(emp._id);
     this.setIndicadorMensajes(emp._id, 0);
   }
-  this.$refs.modalempleado.abrirModal();
+  this.$refs.modalempleado.abrirModal(emp);
 }
 
 function setIndicadorMensajes(id, val) {
@@ -51,7 +46,11 @@ export default {
   components: {
     "modal-empleado": ModalEmpleado,
   },
-  store: ["empleados", "empleado"],
+  computed: {
+    empleados() {
+      return this.$store.getters["empleados/listadoSinNuevos"];
+    },
+  },
   mounted,
   methods: {
     obtenerColor,

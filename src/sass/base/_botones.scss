@@ -302,7 +302,7 @@
 .boton-group {
   @extend .sombra;
   border-radius: 4px;
-  display: inline-table;
+  display: inline-flex;
 
   .boton {
     border-radius: 0;

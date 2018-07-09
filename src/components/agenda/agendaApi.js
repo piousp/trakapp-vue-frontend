@@ -37,11 +37,18 @@ function eliminar(id) {
   return axios.delete(`${axios.defaults.baseUrl}/api/tarea/${id}`);
 }
 
+function getTareas() {
+  return axios
+    .get(`${axios.defaults.baseUrl}/api/tarea/lista`)
+    .then(resp => resp.data);
+}
+
 const agendaApi = {
   listar,
   obtener,
   guardar,
   eliminar,
+  getTareas,
 };
 
 export default agendaApi;

@@ -5,7 +5,7 @@
                    class="boton boton--nuevo"
                    :to="{name: 'empleadoform'}"/>
     </div>
-    <div v-if="empleados.cant > 0">
+    <div v-if="empleados.docs.length > 0">
       <table class="tabla tabla--responsive">
         <thead class="tabla__header">
           <tr>
@@ -56,24 +56,19 @@
   </section>
 </template>
 <script>//
-import reject from "lodash/reject";
 import noop from "lodash/noop";
 import swal from "sweetalert2";
-import empleadoApi from "./empleadoApi.js";
 
 export default {
-  data,
+  computed: {
+    empleados() {
+      return this.$store.state.empleados.listado;
+    },
+  },
   methods: {
     eliminar,
   },
-  beforeRouteEnter,
 };
-
-function data() {
-  return {
-    empleados: [],
-  };
-}
 
 function eliminar(empleado) {
   swal({
@@ -83,32 +78,11 @@ function eliminar(empleado) {
     showCancelButton: true,
   }).then((resp) => {
     if (resp && !resp.dismiss) {
-      return empleadoApi
-        .eliminar(empleado._id)
-        .then(() => {
-          this.$toastr("success", "El empleado ha sido eliminado", "Éxito");
-          this.empleados.docs = reject(this.empleados.docs, ["_id", empleado._id]);
-          this.empleados.cant -= 1;
-          return this.empleados;
-        })
-        .catch((err) => {
-          this.$toastr("error", err, "Error");
-        });
+      return this.$store.dispatch("empleados/eliminarEmpleado", empleado)
+        .then(() => this.$toastr("success", "El empleado ha sido eliminado", "Éxito"))
+        .catch(err => this.$toastr("error", err, "Error"));
     }
     return noop;
-  })
-    .catch((err) => {
-      this.$toastr("error", err, "Error");
-    });
-}
-
-function beforeRouteEnter(to, from, next) {
-  empleadoApi.listar(0, 10)
-    .then(resp => next((vm) => {
-      vm.empleados = resp;
-    }))
-    .catch((err) => {
-      this.$toastr("error", err, "Error");
-    });
+  }).catch(err => this.$toastr("error", err, "Error"));
 }
 </script>

@@ -8,7 +8,7 @@
         <span class="text">{{ nombreUsuario }}</span>
       </p>
       <hr class="navbar__user__hr">
-      <p class="navbar__user__version text--gris6 text text--small
+      <p class="navbar__user__version text--gris8 text--small
        text--right text--center text--italic">Versión: {{ version }}</p>
     </router-link>
     <directorio/>
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import swal from "sweetalert2";
 import pkg from "../../package.json";
 import Menu from "./Menu.vue";
 import tour from "./tour.js";
@@ -63,10 +64,24 @@ function version() {
 function mounted() {
   return perfilApi.datosUsuario().then((usuario) => {
     if (!usuario.tourVisto) {
-      return tour(this.$router, () => {
+      setTimeout(() => swal({ // para que no salga de un solo apenas inicia sesión
+        title: "Bienvenido a Trakapp",
+        html: "Vamos a guiarlo por algunas de las características más importantes que ofrece el" +
+        "sistema. Si lo desea, puede omitir el tutorial por ahora y verlo después usando el botón" +
+        "de ayuda en la esquina inferior derecha <i class='fa fa-fw fa-question-circle'></i>",
+        imageUrl: "/static/icono.png",
+        imageWidth: 175,
+        imageHeight: 175,
+        showCancelButton: true,
+        confirmButtonText: "Ver tutorial",
+        cancelButtonText: "Omitir",
+      }).then((resp) => {
         usuario.tourVisto = true;
+        if (resp && !resp.dismiss) {
+          tour(this.$router, 0);
+        }
         return perfilApi.actualizarUsuario(usuario);
-      });
+      }), 2000);
     }
     return null;
   });
@@ -91,7 +106,7 @@ function mounted() {
 
   .navbar__user{
     @extend .text--blanco;
-    padding: 1em;
+    padding: .25em 1em;
     user-select: none;
     cursor: pointer;
     transition: all ease .5s;
@@ -121,19 +136,5 @@ function mounted() {
       @extend .text--blanco;
       background: $fondo;
     }
-  }
-
-  .navbar__popover {
-    cursor: pointer;
-    text-align: right;
-    line-height: 45px;
-  }
-  .navbar__version {
-    padding: 8px 16px;
-  }
-  .estilo {
-    z-index: 9999 !important;
-    background:white !important;
-    color: black !important;
   }
 </style>
