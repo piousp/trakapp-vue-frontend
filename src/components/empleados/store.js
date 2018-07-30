@@ -1,12 +1,13 @@
 import D from "debug";
 import reject from "lodash/reject";
 import filter from "lodash/filter";
+import findIndex from "lodash/findIndex";
 import empleadoApi from "./empleadoApi";
 
 const debug = D("ciris:storeEmpleados");
 
 const state = {
-  listado: { docs: [] },
+  listado: { docs: [], cant: 0 },
 };
 
 const actions = {
@@ -19,6 +20,7 @@ const mutations = {
   setListado,
   agregarEmpleado,
   eliminarEmpleado,
+  modificarEmpleado,
 };
 
 const getters = {
@@ -65,6 +67,11 @@ function agregarEmpleadoAction(context, empleado) {
 
 function setListado(pState, listado) {
   pState.listado = listado;
+}
+
+function modificarEmpleado(pState, pempleado) {
+  const index = findIndex(pState.listado.docs, { _id: pempleado._id });
+  pState.listado.docs.splice(index, 1, pempleado);
 }
 
 function agregarEmpleado(pState, empleado) {
