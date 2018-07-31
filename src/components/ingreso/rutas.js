@@ -13,6 +13,22 @@ export default [
     },
   },
   {
+    path: "/invitacion/:id",
+    name: "invitacion",
+    component: Login,
+    meta: {
+      esPublica: true,
+    },
+  },
+  {
+    path: "/invitacionRegistro/:id",
+    name: "invitacionRegistro",
+    component: Registro,
+    meta: {
+      esPublica: true,
+    },
+  },
+  {
     path: "/registro",
     name: "registro",
     component: Registro,

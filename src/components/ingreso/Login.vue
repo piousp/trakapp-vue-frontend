@@ -42,8 +42,12 @@
       </div>
     </form>
     <p class="text text--right text--blanco text--registro">
-      ¿No tiene cuenta? <router-link to="registro"
-                                     class="text--cyan">¡Regístrese ahora!</router-link>
+      ¿No tiene cuenta?
+      <router-link :to="{
+                     name: idCuenta ? 'invitacionRegistro' : 'registro',
+                     params: idCuenta ? {idCuenta} : {}
+                   }"
+                   params="class=&quot;text--cyan&quot;">¡Regístrese ahora!</router-link>
     </p>
     <modal :visible="modalVisible">
       <form novalidate @submit.stop.prevent="recuperar()">
@@ -83,6 +87,9 @@
 <script>
 import D from "debug";
 import noop from "lodash/noop";
+import cloneDeep from "lodash/cloneDeep";
+import find from "lodash/find";
+import usuarioAPI from "../perfil/perfilApi";
 import id from "../ids.js";
 
 const debug = D("ciris:Login.vue");
@@ -94,6 +101,7 @@ export default {
     recuperar,
     cerrarModal,
   },
+  beforeRouteEnter,
 };
 
 function data() {
@@ -106,7 +114,17 @@ function data() {
     modalSubmitted: false,
     modalVisible: false,
     modalCorreo: "",
+    idCuenta: null,
   };
+}
+
+function beforeRouteEnter(to, from, next) {
+  if (to.params.id) {
+    next((vm) => {
+      vm.idCuenta = to.params.id;
+    });
+  }
+  return next();
 }
 
 function created() {
@@ -118,15 +136,34 @@ function created() {
 }
 
 function login() {
+  const comp = this;
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
       return this.$auth.login(this.usuario, this.password, this.recordar)
         .then((resp) => {
-          debug(resp);
-          this.$router.push({ name: "agenda" });
-          this.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
-          return resp;
+          function redirijir() {
+            debug(resp);
+            comp.$router.push({ name: "agenda" });
+            comp.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
+            return resp;
+          }
+          if (this.idCuenta && !find(this.usuario.cuentas, n => n === this.idCuenta)) {
+            const usuario = cloneDeep(resp.usuario);
+            usuario.cuentas.push(this.idCuenta);
+            return usuarioAPI.actualizarUsuario(usuario)
+              .then(() => {
+                this.$toastr("success", this.$t("invitation.success"), "Éxito");
+                return redirijir();
+              })
+              .catch((err) => {
+                debug(err);
+                return this.$toastr("error", this.$t("invitation.error"), "Error");
+              });
+          } else if (find(this.usuario.cuentas, n => n === this.idCuenta)) {
+            this.$toastr("error", this.$t("invitation.alreadyBelongs"), "Error");
+          }
+          return redirijir();
         })
         .catch((err) => {
           debug(err);
