@@ -20,6 +20,11 @@ export default {
       titulo: "Usuario invalido",
     },
   },
+  invitation: {
+    success: "Se le agregó exitosamente a la cuenta",
+    error: "Hubo un error agregandolo a la cuenta",
+    alreadyBelongs: "Ya pertenece a esta cuenta, no se realizaron cambios",
+  },
   navbar: {
     home: "Inicio",
     signin: "Ingresar",

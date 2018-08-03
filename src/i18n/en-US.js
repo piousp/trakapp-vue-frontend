@@ -20,6 +20,11 @@ export default {
       titulo: "Invalid user",
     },
   },
+  invitation: {
+    success: "Added you successfully to the account",
+    error: "There was an error adding you to the account",
+    alreadyBelongs: "You already belong to this account, no changes were made",
+  },
   navbar: {
     home: "Home",
     signin: "Sign in",

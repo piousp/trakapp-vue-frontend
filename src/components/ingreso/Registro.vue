@@ -129,6 +129,7 @@ export default {
   methods: {
     registrarse,
   },
+  beforeRouteEnter,
 };
 
 function data() {
@@ -143,7 +144,17 @@ function data() {
       cuenta: {},
     },
     submitted: false,
+    idCuenta: null,
   };
+}
+
+function beforeRouteEnter(to, from, next) {
+  if (to.params.id) {
+    next((vm) => {
+      vm.idCuenta = to.params.id;
+    });
+  }
+  return next();
 }
 
 function created() {
@@ -163,6 +174,9 @@ function registrarse() {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
+      if (this.idCuenta) {
+        this.usuario.cuentas = [this.idCuenta];
+      }
       this.$auth.registro(this.usuario)
         .then((resp) => {
           debug(resp);

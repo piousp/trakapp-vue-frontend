@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import cloneDeep from "lodash/cloneDeep";
 import ModalEmpleado from "./ModalEmpleado.vue";
 import obtenerColor from "./colores.js";
 import chatApi from "../chat/chatApi";
@@ -38,8 +39,9 @@ function abrirEmpleado(emp) {
 }
 
 function setIndicadorMensajes(id, val) {
-  const emisor = this.empleados.find(e => e._id === id);
+  const emisor = cloneDeep(this.empleados.docs.find(e => e._id === id));
   emisor.cantMensajesNoVistos = val ? emisor.cantMensajesNoVistos + val : val;
+  this.$store.commit("empleados/modificarEmpleado", emisor);
 }
 
 export default {

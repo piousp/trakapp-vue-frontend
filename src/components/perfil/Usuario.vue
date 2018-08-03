@@ -9,6 +9,11 @@
         <i class="fal fa-building"/>
         <span>Migrar a cuenta empresarial</span>
       </button>
+      <button class="boton boton--indigo" v-if="cuenta.empresarial"
+              @click="()=>{ modalInvitaciones = true}">
+        <i class="fal fa-envelope"/>
+        <span>Invitar usuarios</span>
+      </button>
     </div>
     <h2 class="h3"><strong class="text--bold">Info</strong>rmación de mi usuario</h2>
     <div class="grid">
@@ -64,18 +69,46 @@
         </button>
       </div>
     </modal>
+    <modal :visible="modalInvitaciones">
+      <div class="modal__header">
+        <p class="h1">Enviar invitaciones</p>
+      </div>
+      <div class="modal__body">
+        <p class="h4">Ingrese los correos que desea invitar</p>
+        <vue-tags-input
+          v-model="tag"
+          :tags="tags"
+          :validation="validation"
+          :autocomplete-items="autocompleteItems"
+          @tags-changed="newTags => tags = newTags"
+        />
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
+        <button type="button" class="boton boton--verde" @click="invitarUsuarios()">
+          <i class="fa fal fa-thumbs-up"/>
+          <span>Enviar</span>
+        </button>
+      </div>
+    </modal>
   </section>
 </template>
 
 <script>
+import VueTagsInput from "@johmun/vue-tags-input";
 import cloneDeep from "lodash/cloneDeep";
+import map from "lodash/map";
 import D from "debug";
 import swal from "sweetalert2";
 import api from "./perfilApi.js";
+import cuentaApi from "./cuentaAPI.js";
 
 const debug = D("ciris:Perfil.vue");
 
 export default {
+  components: {
+    VueTagsInput,
+  },
   beforeRouteEnter,
   data,
   computed: computed(),
@@ -86,6 +119,7 @@ export default {
     mostrarModalCambioClave,
     cerrarModal,
     actualizarContrasena,
+    invitarUsuarios,
   },
 };
 
@@ -100,7 +134,18 @@ function data() {
     usuario: {},
     claveActual: "",
     modalclave: false,
+    modalInvitaciones: false,
     claveNueva: "",
+    tag: "",
+    tags: [],
+    autocompleteItems: [{ text: "Tiene que ingresar un correo valido" }],
+    validation: [
+      {
+        type: "error",
+        rule: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        disableAdd: true,
+      },
+    ],
   };
 }
 
@@ -119,6 +164,22 @@ function logout() {
 
 function cerrarModal() {
   this.modalclave = false;
+  this.modalInvitaciones = false;
+}
+
+function invitarUsuarios() {
+  const comp = this;
+  const correos = map(this.tags, "text");
+  const usuario = cloneDeep(this.usuario);
+  usuario.cuenta = cloneDeep(this.$store.state.perfil.cuenta);
+  cuentaApi.invitarUsuarios(usuario, correos)
+    .then(() => {
+      comp.tag = "";
+      comp.tags = [];
+      comp.modalInvitaciones = false;
+      return comp.$toastr("success", "Se enviaron correos de invitación a los correos especificados", "Éxito");
+    })
+    .catch(err => console.log(err));
 }
 
 function mostrarModalCambioClave(claveActual) {
