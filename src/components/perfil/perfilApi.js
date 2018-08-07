@@ -8,6 +8,7 @@ const perfilApi = {
   verificarPasswordCorrecto,
   actualizarContrasena,
   reportarBug,
+  getCuenta,
 };
 
 export default perfilApi;
@@ -33,6 +34,12 @@ function datosUsuario() {
 function datosCuenta() {
   return axios
     .get(`${axios.defaults.baseUrl}/api/usuario/cuenta`)
+    .then(resp => resp.data);
+}
+
+function getCuenta(idCuenta) {
+  return axios
+    .get(`${axios.defaults.baseUrl}/api/cuenta/${idCuenta}`)
     .then(resp => resp.data);
 }
 

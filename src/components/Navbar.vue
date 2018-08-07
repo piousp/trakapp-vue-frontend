@@ -1,7 +1,11 @@
 <template lang="html">
   <nav class="navbar">
     <img src="/static/logo-peq-contra.png" alt="Logo" class="img-responsive navbar__logo">
-    <router-link :to="{ name: 'perfil' }" tag="div"
+    <p class="nom--cuenta">
+      <i class="far fa-fw fa-building"/>
+      <span class="text">{{ cuenta.nombre }}</span>
+    </p>
+    <router-link :to="{ name: 'usuario' }" tag="div"
                  class="navbar__user" active-class="navbar__user--active">
       <p>
         <i class="far fa-fw fa-user-circle"/>
@@ -30,6 +34,8 @@ export default {
   computed: {
     nombreUsuario,
     version,
+    usuario() { return this.$store.state.perfil.usuario; },
+    cuenta() { return this.$store.state.perfil.cuenta; },
   },
   watch: {
     $route: route,
@@ -53,8 +59,7 @@ function route(val) {
 }
 
 function nombreUsuario() {
-  const { usuario } = this.$auth;
-  return `${usuario.nombre} ${usuario.apellidos || ""}`;
+  return `${this.usuario.nombre} ${this.usuario.apellidos || ""}`;
 }
 
 function version() {
@@ -62,29 +67,27 @@ function version() {
 }
 
 function mounted() {
-  return perfilApi.datosUsuario().then((usuario) => {
-    if (!usuario.tourVisto) {
-      setTimeout(() => swal({ // para que no salga de un solo apenas inicia sesión
-        title: "Bienvenido a Trakapp",
-        html: "Vamos a guiarlo por algunas de las características más importantes que ofrece el" +
-        "sistema. Si lo desea, puede omitir el tutorial por ahora y verlo después usando el botón" +
-        "de ayuda en la esquina inferior derecha <i class='fa fa-fw fa-question-circle'></i>",
-        imageUrl: "/static/icono.png",
-        imageWidth: 175,
-        imageHeight: 175,
-        showCancelButton: true,
-        confirmButtonText: "Ver tutorial",
-        cancelButtonText: "Omitir",
-      }).then((resp) => {
-        usuario.tourVisto = true;
-        if (resp && !resp.dismiss) {
-          tour(this.$router, 0);
-        }
-        return perfilApi.actualizarUsuario(usuario);
-      }), 2000);
-    }
-    return null;
-  });
+  if (!this.usuario.tourVisto) {
+    setTimeout(() => swal({ // para que no salga de un solo apenas inicia sesión
+      title: "Bienvenido a Trakapp",
+      html: "Vamos a guiarlo por algunas de las características más importantes que ofrece el" +
+      "sistema. Si lo desea, puede omitir el tutorial por ahora y verlo después usando el botón" +
+      "de ayuda en la esquina inferior derecha <i class='fa fa-fw fa-question-circle'></i>",
+      imageUrl: "/static/icono.png",
+      imageWidth: 175,
+      imageHeight: 175,
+      showCancelButton: true,
+      confirmButtonText: "Ver tutorial",
+      cancelButtonText: "Omitir",
+    }).then((resp) => {
+      this.usuario.tourVisto = true;
+      if (resp && !resp.dismiss) {
+        tour(this.$router, 0);
+      }
+      return perfilApi.actualizarUsuario(this.usuario);
+    }), 2000);
+  }
+  return null;
 }
 </script>
 
@@ -120,6 +123,12 @@ function mounted() {
   .navbar__user__hr{
     border: 0;
     border-top: 1px solid $azul-tema;
+  }
+
+  .nom--cuenta {
+    background-color: white;
+    color: black;
+    padding: .25em 1em;
   }
 
   .navbar__user__version{

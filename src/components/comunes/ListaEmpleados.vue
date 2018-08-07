@@ -26,10 +26,6 @@ import ModalEmpleado from "./ModalEmpleado.vue";
 import obtenerColor from "./colores.js";
 import chatApi from "../chat/chatApi";
 
-function mounted() {
-  this.$store.dispatch("empleados/cargarListado");
-}
-
 function abrirEmpleado(emp) {
   if (emp.cantMensajesNoVistos > 0) {
     chatApi.marcarComoVistos(emp._id);
@@ -53,7 +49,6 @@ export default {
       return this.$store.getters["empleados/listadoSinNuevos"];
     },
   },
-  mounted,
   methods: {
     obtenerColor,
     abrirEmpleado,

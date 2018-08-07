@@ -4,6 +4,20 @@
     <div class="botones-pagina">
       <button type="button" class="boton boton--guardar"
               onclick="document.getElementById('prueba').click()"/>
+      <button class="boton boton--indigo" v-if="!cuenta.empresarial" @click="migrarEmpresarial">
+        <i class="fal fa-building"/>
+        <span>Migrar a cuenta empresarial</span>
+      </button>
+      <button class="boton boton--indigo" v-if="cuenta.empresarial"
+              @click="$store.commit('modal/showModal', 'InvitarUsuarios')">
+        <i class="fal fa-envelope"/>
+        <span>Invitar usuarios</span>
+      </button>
+      <button class="boton boton--morado" v-if="cuentas.length > 1"
+              @click="$store.commit('modal/showModal', 'SelectCuenta')">
+        <i class="fal fa-exchange"/>
+        <span>Cambiar de cuenta</span>
+      </button>
     </div>
     <form class="grid" novalidate @submit.stop.prevent="guardarCuenta(cuenta)">
       <div class="col-md-6">
@@ -39,6 +53,12 @@
                     :name="ids.direccion"/>
           <label :for="ids.direccion" class="form__label">Dirección</label>
         </form-group>
+        <div class="col-md-6">
+          <h3 class="h4">Tipo de cuenta</h3>
+          <p class="text text--indigo text--l text--bold">
+            {{ cuenta.empresarial ? "Empresarial" : "Personal" }}
+          </p>
+        </div>
         <button type="submit" class="no-display" id="prueba"/>
       </div>
     </form>
@@ -47,17 +67,34 @@
 
 <script>
 import D from "debug";
+import swal from "sweetalert2";
 import cloneDeep from "lodash/cloneDeep";
 import id from "../ids";
 
 const debug = D("ciris:DatosCuenta.vue");
 
 export default {
-  beforeRouteEnter,
   data,
+  computed: {
+    sCuenta() {
+      return this.$store.state.perfil.cuenta;
+    },
+    cuentas() {
+      return this.$store.state.perfil.usuario.cuentas;
+    },
+  },
+  watch: {
+    sCuenta(newVal) {
+      this.cuenta = cloneDeep(newVal);
+    },
+  },
+  mounted() {
+    this.cuenta = cloneDeep(this.$store.state.perfil.cuenta);
+  },
   created,
   methods: {
     guardarCuenta,
+    migrarEmpresarial,
   },
 };
 
@@ -65,6 +102,7 @@ function data() {
   return {
     cuenta: {},
     ids: [],
+    submitted: false,
   };
 }
 
@@ -89,12 +127,6 @@ function guardarCuenta(cuenta) {
   });
 }
 
-function beforeRouteEnter(to, from, next) {
-  next((vm) => {
-    vm.cuenta = cloneDeep(vm.$store.state.perfil.cuenta);
-  });
-}
-
 function created() {
   this.ids = {
     correo: `correo-${id()}`,
@@ -102,6 +134,30 @@ function created() {
     cedula: `cedula-${id()}`,
     direccion: `direccion-${id()}`,
   };
+}
+
+function migrarEmpresarial() {
+  return swal({
+    title: "Migrar a cuenta empresarial",
+    text: "¿Está seguro que desea migrar a una cuenta empresarial? Esta acción es irreversible.",
+    type: "question",
+    showCancelButton: true,
+  }).then((swalRes) => {
+    if (swalRes.value) {
+      this.$store.commit("perfil/migrarEmpresarial");
+      this.$store.dispatch("perfil/actualizarDatosCuenta", this.cuenta)
+        .then((resp) => {
+          debug(resp);
+          this.$toastr("success", "Se ha migrado su cuenta a una cuenta empresarial", "Éxito");
+          return resp;
+        })
+        .catch((err) => {
+          debug(err);
+          this.$toastr("error", "Error al guardar sus datos", "Error");
+        });
+    }
+    return null;
+  });
 }
 </script>
 
