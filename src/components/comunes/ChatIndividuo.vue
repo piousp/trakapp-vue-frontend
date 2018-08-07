@@ -58,7 +58,7 @@ function data() {
   return {
     mensajes: { docs: [], cant: 0 },
     mensaje: {},
-    idEmisor: this.$auth.usuario._id,
+    idEmisor: this.$store.state.perfil.usuario._id,
     idReceptor: "",
     limiteItems: 20,
     cargando: false,

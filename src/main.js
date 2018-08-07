@@ -22,6 +22,7 @@ import axios from "./config/axios.js";
 import messages from "./i18n";
 import vuexStore from "./config/store";
 import bugsnagClient from "./components/comunes/bugsnag";
+import AppModal from "./components/acciones/BaseModal.vue";
 import "./config/filtros.js";
 import "./components/comunes";
 import "./config/anno.js";
@@ -51,6 +52,7 @@ Vue.use(VueGoogleMaps, {
 Vue.use(Datetime);
 Vue.use(VueTheMask);
 
+Vue.component("app-modal", AppModal);
 Vue.component("infoWindow", VueGoogleMaps.InfoWindow);
 Vue.component("multiselect", Multiselect);
 
@@ -67,6 +69,7 @@ Vue.use(VeeValidate, {
     es,
   },
 });
+
 
 /* eslint-disable no-new */
 export default new Vue({

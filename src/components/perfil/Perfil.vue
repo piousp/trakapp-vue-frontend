@@ -4,12 +4,12 @@
     <nav class="boton-group float--right" v-if="cuenta.empresarial">
       <router-link class="boton boton--indigo boton--s"
                    :to="{ name: 'usuario' }" tag="a">
-        <i class="fal fa-fw fa-calendar"/>
+        <i class="fal fa-fw fa-user"/>
         <span>Mi Usuario</span>
       </router-link>
       <router-link class="boton boton--indigo boton--s"
                    :to="{ name: 'cuenta' }" tag="a">
-        <i class="fal fa-fw fa-tasks"/>
+        <i class="fal fa-fw fa-id-badge"/>
         <span>Datos Cuenta</span>
       </router-link>
     </nav>
@@ -19,10 +19,8 @@
 </template>
 
 <script>
-import store from "../../config/store";
 
 export default {
-  beforeRouteEnter,
   computed: computed(),
 };
 
@@ -32,13 +30,6 @@ function computed() {
       return this.$store.state.perfil.cuenta;
     },
   };
-}
-
-function beforeRouteEnter(to, from, next) {
-  return store.dispatch("perfil/cargarDatos").then(() =>
-    next(vm => vm.$router.replace({ name: "usuario" }))).catch(() => {
-    this.$toastr("error", "Error al cargar sus datos", "Error");
-  });
 }
 </script>
 

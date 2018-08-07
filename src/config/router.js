@@ -33,7 +33,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (Vue.auth.usuario.estaAutenticado) {
+  if (Vue.prototype.$store.state.perfil.usuario.estaAutenticado) {
     if (to.name === "login") {
       next({ name: "agenda" });
     } else {

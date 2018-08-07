@@ -2,6 +2,7 @@ import axios from "../../config/axios";
 
 const cuentaApi = {
   invitarUsuarios,
+  cargarBulk,
 };
 
 function invitarUsuarios(usuario, correos) {
@@ -10,6 +11,17 @@ function invitarUsuarios(usuario, correos) {
   };
   return axios
     .post(`${axios.defaults.baseUrl}/api/cuenta/invitarUsuarios`, query)
+    .then(resp => resp.data);
+}
+
+function cargarBulk(cuentas) {
+  const query = {
+    params: {
+      cuentas,
+    },
+  };
+  return axios
+    .get(`${axios.defaults.baseUrl}/api/cuenta/cargarBulk`, query)
     .then(resp => resp.data);
 }
 

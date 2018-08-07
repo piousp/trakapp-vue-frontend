@@ -24,6 +24,16 @@ export default {
     "modal-tarea": ModalTarea,
   },
   data,
+  computed: {
+    cuenta() {
+      return this.$store.state.perfil.cuenta;
+    },
+  },
+  watch: {
+    cuenta() {
+      this.$forceUpdate();
+    },
+  },
   mounted() {
     window.eventBus.$on("abrirModalTarea", () => {
       setTimeout(() => {

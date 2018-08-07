@@ -16,8 +16,11 @@
 </template>
 
 <script>
+import D from "debug";
 import Navbar from "./Navbar.vue";
 import QuestionMark from "./acciones/QuestionMark.vue";
+
+const debug = D("ciris:Home.vue");
 
 function data() {
   return {
@@ -26,6 +29,7 @@ function data() {
 }
 
 function created() {
+  debug("Home created");
   this.$on("mostrarMenu", () => {
     this.estaMostrado = !this.estaMostrado;
   });
@@ -38,7 +42,7 @@ export default {
   created,
   sockets: {
     connect() {
-      this.$socket.emit("sesionIniciada", this.$auth.usuario);
+      this.$socket.emit("sesionIniciada", this.$store.state.perfil.usuario);
     },
     recibirMensaje(msj) {
       this.$notify(`${msj.emisor.nombre} dice: `, msj.texto);

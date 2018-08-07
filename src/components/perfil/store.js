@@ -1,5 +1,6 @@
 import D from "debug";
 import perfilApi from "./perfilApi";
+import axios from "../../config/axios";
 
 const debug = D("ciris:storePerfil");
 
@@ -12,6 +13,7 @@ const actions = {
   cargarDatos,
   actualizarDatosUsuario,
   actualizarDatosCuenta,
+  cargarCuenta,
 };
 
 const mutations = {
@@ -48,6 +50,16 @@ function actualizarDatosCuenta(context, cuenta) {
     });
 }
 
+function cargarCuenta(context, params) {
+  const { cuenta, recordarme } = params;
+  return perfilApi.getCuenta(cuenta._id)
+    .then((resp) => {
+      context.commit("setCuenta", { cuenta: resp, recordarme });
+      context.dispatch("empleados/cargarListado", null, { root: true });
+      return resp;
+    });
+}
+
 function cargarDatos(context) {
   debug("Cargando los datos del usuario y cuenta al store");
   const promesas = [perfilApi.datosUsuario(), perfilApi.datosCuenta()];
@@ -64,7 +76,15 @@ function setUsuario(pState, usuario) {
   pState.usuario = usuario;
 }
 
-function setCuenta(pState, cuenta) {
+function setCuenta(pState, params) {
+  const { cuenta, recordarme } = params;
+  console.log(cuenta._id, recordarme);
+  if (recordarme) {
+    localStorage.setItem("trakappCuenta", cuenta._id);
+  } else {
+    localStorage.removeItem("trakappCuenta");
+  }
+  axios.defaults.headers.common.Cuenta = cuenta._id;
   pState.cuenta = cuenta;
 }
 

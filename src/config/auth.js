@@ -14,8 +14,25 @@ const Auth = {
         email: usuario.correo,
       };
     }
+    function resolverCuenta(usuario) {
+      const cuenta = {
+        _id: localStorage.getItem("trakappCuenta"),
+      };
+      if (cuenta) {
+        Vue.prototype.$store.dispatch("perfil/cargarCuenta", {
+          cuenta,
+          recordarme: true,
+        });
+      } else if (usuario.cuentas.length > 1) {
+        Vue.prototype.$store.commit("modal/showModal", "SelectCuenta");
+      } else {
+        Vue.prototype.$store.dispatch("perfil/cargarCuenta", {
+          cuenta: usuario.cuentas[0],
+          recordarme: true,
+        });
+      }
+    }
     Vue.auth = {
-      usuario: {},
       registro(obj) {
         return axios
           .post(`${axios.defaults.baseUrl}/api/auth/registro`, obj)
@@ -30,10 +47,12 @@ const Auth = {
           .then((resp) => {
             const storage = recuerdame ? localStorage : sessionStorage;
             storage.setItem(options.pkg, JSON.stringify(resp.data));
-            this.usuario = resp.data.usuario;
-            this.usuario.estaAutenticado = true;
+            const { usuario } = resp.data;
+            usuario.estaAutenticado = true;
+            Vue.prototype.$store.commit("perfil/setUsuario", usuario);
             axios.defaults.headers.common.Authorization = `Bearer ${resp.data.token}`;
-            identificarSocket(resp.data.usuario);
+            resolverCuenta(usuario);
+            identificarSocket(usuario);
             return resp.data;
           });
       },
@@ -41,6 +60,7 @@ const Auth = {
         sessionStorage.removeItem(options.pkg);
         localStorage.removeItem(options.pkg);
         this.usuario.estaAutenticado = false;
+        Vue.prototype.$store.commit("perfil/setUsuario", null);
       },
       checkAuth() {
         debug("checkAuth");
@@ -48,10 +68,12 @@ const Auth = {
           JSON.parse(localStorage.getItem(options.pkg)) ||
           JSON.parse(sessionStorage.getItem(options.pkg));
         if (credenciales) {
-          this.usuario = credenciales.usuario;
-          this.usuario.estaAutenticado = !!credenciales.token;
+          const { usuario } = credenciales;
+          usuario.estaAutenticado = !!credenciales.token;
+          Vue.prototype.$store.commit("perfil/setUsuario", usuario);
           axios.defaults.headers.common.Authorization = `Bearer ${credenciales.token}`;
-          identificarSocket(this.usuario);
+          resolverCuenta(usuario);
+          identificarSocket(usuario);
         }
       },
       solicitarCambio(correo) {
