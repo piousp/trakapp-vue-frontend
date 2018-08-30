@@ -24,7 +24,7 @@
           <h1 class="h1"><strong class="text--bold">Info</strong>rmación básica</h1>
 
           <div class="checkbox">
-            <input type="checkbox" id="ckbxEmpresa" v-model="esEmpresa">
+            <input type="checkbox" id="ckbxEmpresa" v-model="cliente.esEmpresa">
             <label class="form__label" for="ckbxEmpresa">Es una empresa</label>
           </div>
 
@@ -38,14 +38,14 @@
               v-validate="'required'" >
             <label class="form__label">Nombre</label>
           </form-group>
-          <form-group v-if="!esEmpresa">
+          <form-group v-if="!cliente.esEmpresa">
             <input class="form__input"
                    v-model="cliente.apellidos"
                    :disabled="!editando">
             <label class="form__label">Apellidos</label>
           </form-group>
 
-          <form-group v-if="esEmpresa" :error="errors.has('cedula') && submitted">
+          <form-group v-if="cliente.esEmpresa" :error="errors.has('cedula') && submitted">
             <the-mask
               class="form__input"
               v-model="cliente.cedula"
@@ -69,7 +69,7 @@
             <label class="form__label">Cédula</label>
           </form-group>
 
-          <form-group v-if="esEmpresa" :error="errors.has('correo') && submitted">
+          <form-group v-if="cliente.esEmpresa" :error="errors.has('correo') && submitted">
             <input class="form__input"
                    v-model="cliente.correo"
                    :disabled="!editando"
@@ -133,7 +133,6 @@ function data() {
     copia: {},
     editando: true,
     submitted: false,
-    esEmpresa: false,
   };
 }
 
