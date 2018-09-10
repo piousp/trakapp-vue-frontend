@@ -39,7 +39,7 @@
                         required
                         :disabled="tarea.activa === false"
                         v-validate="'required'">
-                  <option v-for="emp in empleados" :value="emp" :key="emp._id">
+                  <option v-for="emp in empleados.docs" :value="emp" :key="emp._id">
                     {{ emp.nombre }} {{ emp.apellidos }}
                   </option>
                 </select>
@@ -149,6 +149,7 @@
 import moment from "moment";
 import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
+import debounce from "lodash/debounce";
 import cloneDeep from "lodash/cloneDeep";
 import clienteApi from "../clientes/clienteApi";
 
@@ -164,7 +165,7 @@ export default {
     abrirModal,
     cerrarModal,
     editarModal,
-    buscarClientes,
+    buscarClientes: debounce(buscarClientesDebounce, 500),
     verificarYAceptar,
     isEmpty,
   },
@@ -241,7 +242,7 @@ function buscarLugar(lugar) {
   });
 }
 
-function buscarClientes(txt) {
+function buscarClientesDebounce(txt) {
   if (!txt) {
     return [];
   }
