@@ -256,6 +256,7 @@ function formatearFechas(tarea) {
   const tareaMod = cloneDeep(tarea);
   tareaMod.start = moment.isMoment(tarea.start) ? tarea.start.format() : tarea.start;
   tareaMod.end = moment.isMoment(tarea.end) ? tarea.end.format() : tarea.end;
+  console.log(tareaMod.start, tareaMod.end);
   return tareaMod;
 }
 </script>

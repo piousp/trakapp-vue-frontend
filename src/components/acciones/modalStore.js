@@ -1,4 +1,4 @@
-export const mutations = {
+const mutations = {
   showModal(state, componentName) {
     state.modalVisible = true;
     state.modalComponent = componentName;
@@ -9,12 +9,12 @@ export const mutations = {
   },
 };
 
-export const state = {
+const state = {
   modalVisible: false,
   modalComponent: null,
 };
 
-export const store = {
+const store = {
   mutations,
   state,
   namespaced: true,
