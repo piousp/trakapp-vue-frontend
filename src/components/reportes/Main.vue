@@ -21,7 +21,7 @@ export default {
       reportes: [
         { nombre: "Tareas realizadas", pathName: "tareasrealizadas", icono: "fal fa-check-circle" },
         { nombre: "Tareas pendientes", pathName: "tareaspendientes", icono: "fal fa-clock" },
-        { nombre: "Tareas retrasadas", pathName: "reporte1", icono: "fal fa-exclamation-circle" },
+        { nombre: "Tareas atrasadas", pathName: "tareasatrasadas", icono: "fal fa-exclamation-circle" },
       ],
     };
   },

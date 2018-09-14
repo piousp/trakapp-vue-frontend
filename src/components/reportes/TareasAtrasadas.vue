@@ -1,7 +1,7 @@
 <template>
   <section>
     <div>
-      <h1 class="titulo"><strong class="text--bold">Tare</strong>as realizadas</h1>
+      <h1 class="titulo"><strong class="text--bold">Tare</strong>as atrasadas</h1>
     </div>
     <filtros @exportarFiltro="buscar"/>
     <br>
@@ -62,10 +62,10 @@ import D from "debug";
 import api from "./reporteAPI";
 import Filtros from "./util/Filtros.vue";
 
-const debug = D("ciris:ReporteTareasRealizadas.vue");
+const debug = D("ciris:ReporteTareasAtrasadas.vue");
 
 export default {
-  name: "ReporteTareasRealizadas",
+  name: "ReporteTareasAtrasadas",
   components: {
     Filtros,
   },
@@ -82,7 +82,7 @@ export default {
 
 function buscar(filtro) {
   this.primeraBusqueda = false;
-  api.getTareasRealizadas(filtro)
+  api.getTareasAtrasadas(filtro)
     .then((resp) => { this.lista = resp.docs; return resp; })
     .catch(debug);
 }

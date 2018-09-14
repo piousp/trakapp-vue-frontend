@@ -1,6 +1,7 @@
 import Main from "./Main.vue";
 import TareasRealizadas from "./TareasRealizadas.vue";
 import TareasPendientes from "./TareasPendientes.vue";
+import TareasAtrasadas from "./TareasAtrasadas.vue";
 
 export default [
   {
@@ -27,6 +28,15 @@ export default [
     component: TareasPendientes,
     meta: {
       titulo: "Tareas pendientes",
+      esconder: true,
+    },
+  },
+  {
+    path: "/reportes/atrasadas",
+    name: "tareasatrasadas",
+    component: TareasAtrasadas,
+    meta: {
+      titulo: "Tareas atrasadas",
       esconder: true,
     },
   },
