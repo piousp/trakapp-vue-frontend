@@ -12,38 +12,10 @@ export default [
     },
   },
   {
-    path: "/reportes/realizadas",
-    name: "tareasrealizadas",
+    path: "/reportes/:tipo",
+    name: "reportetareas",
     component: ReporteTareas,
-    props: {
-      tipoReporte: "Realizadas",
-    },
     meta: {
-      titulo: "Tareas realizadas",
-      esconder: true,
-    },
-  },
-  {
-    path: "/reportes/pendientes",
-    name: "tareaspendientes",
-    component: ReporteTareas,
-    props: {
-      tipoReporte: "Pendientes",
-    },
-    meta: {
-      titulo: "Tareas pendientes",
-      esconder: true,
-    },
-  },
-  {
-    path: "/reportes/atrasadas",
-    name: "tareasatrasadas",
-    component: ReporteTareas,
-    props: {
-      tipoReporte: "Atrasadas",
-    },
-    meta: {
-      titulo: "Tareas atrasadas",
       esconder: true,
     },
   },

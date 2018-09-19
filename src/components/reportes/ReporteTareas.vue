@@ -20,7 +20,6 @@
           <tr>
             <th/>
             <th/>
-            <th/>
             <th colspan="2">Hora Programada</th>
             <th colspan="2">Horas Trabajadas</th>
           </tr>
@@ -63,6 +62,7 @@
 
 <script>
 import D from "debug";
+import capitalize from "lodash/capitalize";
 import api from "./reporteAPI";
 import Filtros from "./util/Filtros.vue";
 
@@ -73,16 +73,11 @@ export default {
   components: {
     Filtros,
   },
-  props: {
-    tipoReporte: {
-      type: String,
-      default: null,
-    },
-  },
   data() {
     return {
       lista: [],
       primeraBusqueda: true,
+      tipoReporte: capitalize(this.$router.currentRoute.params.tipo),
     };
   },
   methods: {

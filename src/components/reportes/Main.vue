@@ -5,7 +5,7 @@
     </div>
     <div class="container">
       <div class="item" v-for="reporte in reportes"
-           :key="reporte.nombre + reporte.path" @click="ir(reporte.pathName)">
+           :key="reporte.nombre + reporte.path" @click="ir(reporte.path)">
         <i :class="reporte.icono"/>
         <p class="text text--center">{{ reporte.nombre }}</p>
       </div>
@@ -19,9 +19,21 @@ export default {
   data() {
     return {
       reportes: [
-        { nombre: "Tareas realizadas", pathName: "tareasrealizadas", icono: "fal fa-check-circle" },
-        { nombre: "Tareas pendientes", pathName: "tareaspendientes", icono: "fal fa-clock" },
-        { nombre: "Tareas atrasadas", pathName: "tareasatrasadas", icono: "fal fa-exclamation-circle" },
+        {
+          nombre: "Tareas realizadas",
+          path: { name: "reportetareas", params: { tipo: "realizadas" } },
+          icono: "fal fa-check-circle",
+        },
+        {
+          nombre: "Tareas pendientes",
+          path: { name: "reportetareas", params: { tipo: "pendientes" } },
+          icono: "fal fa-clock",
+        },
+        {
+          nombre: "Tareas atrasadas",
+          path: { name: "reportetareas", params: { tipo: "atrasadas" } },
+          icono: "fal fa-exclamation-circle",
+        },
       ],
     };
   },
@@ -30,8 +42,8 @@ export default {
   },
 };
 
-function ir(pathName) {
-  this.$router.push({ name: pathName });
+function ir(path) {
+  this.$router.push(path);
 }
 </script>
 
