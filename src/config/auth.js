@@ -18,9 +18,9 @@ const Auth = {
       const cuenta = {
         _id: localStorage.getItem("trakappCuenta"),
       };
-      if (cuenta) {
+      if (cuenta._id) {
         Vue.prototype.$store.dispatch("perfil/cargarCuenta", {
-          cuenta,
+          cuenta: cuenta._id,
           recordarme: true,
         });
       } else if (usuario.cuentas.length > 1) {
@@ -59,7 +59,6 @@ const Auth = {
       logout() {
         sessionStorage.removeItem(options.pkg);
         localStorage.removeItem(options.pkg);
-        this.usuario.estaAutenticado = false;
         Vue.prototype.$store.commit("perfil/setUsuario", null);
       },
       checkAuth() {

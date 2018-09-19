@@ -1,35 +1,53 @@
 <template>
   <section>
-    <div class="contenedor">
-      <form-group id="fecha-desde" :error="errors.has('fecha-desde') && submitted">
-        <label class="form__label form__label--required">Desde</label>
-        <datetime
-          v-model="filtro.inicio"
-          v-validate="'required'"
-          input-class="form__input"
-          class="w-25"
-          name="fecha-desde"
-          type="date"
-          zone="local"
-          value-zone="UTC-6"
-          :phrases="frases"/>
-      </form-group>
-      <form-group id="fecha-hasta" :error="errors.has('fecha-hasta') && submitted">
-        <label class="form__label form__label--required">Hasta</label>
-        <datetime
-          v-model="filtro.fin"
-          v-validate="'required'"
-          input-class="form__input"
-          class="w-25"
-          name="fecha-hasta"
-          type="date"
-          zone="local"
-          value-zone="UTC-6"
-          :phrases="frases"/>
-      </form-group>
-      <span class="form__input-group__addon--color clickable" @click="exportarFiltro">
-        <i class="fa fa-fw fa-search"/>
-      </span>
+    <div class="contenedor grid">
+      <div class="col-md-4">
+        <form-group id="fecha-desde" :error="errors.has('fecha-desde') && submitted">
+          <label class="form__label form__label--required">Desde</label>
+          <datetime
+            v-model="filtro.inicio"
+            v-validate="'required'"
+            input-class="form__input"
+            name="fecha-desde"
+            type="date"
+            zone="local"
+            value-zone="UTC-6"
+            :phrases="frases"/>
+        </form-group>
+      </div>
+      <div class="col-md-4">
+        <form-group id="fecha-hasta" :error="errors.has('fecha-hasta') && submitted">
+          <label class="form__label form__label--required">Hasta</label>
+          <datetime
+            v-model="filtro.fin"
+            v-validate="'required'"
+            input-class="form__input"
+            name="fecha-hasta"
+            type="date"
+            zone="local"
+            value-zone="UTC-6"
+            :phrases="frases"/>
+        </form-group>
+      </div>
+      <div class="col-md-4">
+        <div class="grid v-center">
+          <div class="col-md-10">
+            <form-group>
+              <select class="form__input" v-model="filtro.empleado">
+                <option v-for="emp in empleados.docs" :value="emp" :key="emp._id">
+                  {{ emp.nombre }} {{ emp.apellidos }}
+                </option>
+              </select>
+              <label class="form__label">Empleado</label>
+            </form-group>
+          </div>
+          <div class="col-md-2">
+            <span class="clickable text--center" @click="exportarFiltro">
+              <i class="fa fa-fw fa-search"/>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -40,6 +58,11 @@ import cloneDeep from "lodash/cloneDeep";
 
 export default {
   data,
+  computed: {
+    empleados() {
+      return this.$store.state.empleados.listado;
+    },
+  },
   methods: {
     exportarFiltro,
   },
@@ -62,6 +85,7 @@ function exportarFiltro() {
   const resp = cloneDeep(this.filtro);
   resp.inicio = moment(resp.inicio).startOf("day").format();
   resp.fin = moment(resp.fin).endOf("day").format();
+  resp.empleado = resp.empleado ? resp.empleado._id : null;
   this.$emit("exportarFiltro", resp);
 }
 </script>
@@ -79,19 +103,14 @@ function exportarFiltro() {
   width: 100%;
 }
 
-.w-25 {
-  width: 25vw;
-}
-
 .contenedor {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-evenly;
   align-items: center;
-  align-content: center;
   border: 1px solid gray;
   border-radius: 5px;
   background-color: white;
+}
+
+.v-center {
+  align-items: center;
 }
 </style>

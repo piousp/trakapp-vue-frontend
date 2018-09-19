@@ -1,7 +1,5 @@
 import Main from "./Main.vue";
-import TareasRealizadas from "./TareasRealizadas.vue";
-import TareasPendientes from "./TareasPendientes.vue";
-import TareasAtrasadas from "./TareasAtrasadas.vue";
+import ReporteTareas from "./ReporteTareas.vue";
 
 export default [
   {
@@ -16,7 +14,10 @@ export default [
   {
     path: "/reportes/realizadas",
     name: "tareasrealizadas",
-    component: TareasRealizadas,
+    component: ReporteTareas,
+    props: {
+      tipoReporte: "Realizadas",
+    },
     meta: {
       titulo: "Tareas realizadas",
       esconder: true,
@@ -25,7 +26,10 @@ export default [
   {
     path: "/reportes/pendientes",
     name: "tareaspendientes",
-    component: TareasPendientes,
+    component: ReporteTareas,
+    props: {
+      tipoReporte: "Pendientes",
+    },
     meta: {
       titulo: "Tareas pendientes",
       esconder: true,
@@ -34,7 +38,10 @@ export default [
   {
     path: "/reportes/atrasadas",
     name: "tareasatrasadas",
-    component: TareasAtrasadas,
+    component: ReporteTareas,
+    props: {
+      tipoReporte: "Atrasadas",
+    },
     meta: {
       titulo: "Tareas atrasadas",
       esconder: true,
