@@ -1,7 +1,7 @@
 <template lang="html">
   <section>
     <h1 class="h1 inline"><strong class="text--bold">Datos</strong> de perfil</h1>
-    <nav class="boton-group float--right" v-if="cuenta.empresarial">
+    <nav class="boton-group float--right">
       <router-link class="boton boton--indigo boton--s"
                    :to="{ name: 'usuario' }" tag="a">
         <i class="fal fa-fw fa-user"/>

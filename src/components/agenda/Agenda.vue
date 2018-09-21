@@ -31,7 +31,7 @@ export default {
   },
   watch: {
     cuenta() {
-      this.$forceUpdate();
+      this.$refs.calendario.fireMethod("refetchEvents");
     },
   },
   mounted() {
@@ -125,6 +125,7 @@ function limpiarParaGuardar(tarea) {
     descripcion: tarea.descripcion,
     ubicacion: tarea.ubicacion,
     cliente: tarea.cliente,
+    subtareas: tarea.subtareas,
   };
 }
 

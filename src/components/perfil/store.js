@@ -52,7 +52,7 @@ function actualizarDatosCuenta(context, cuenta) {
 
 function cargarCuenta(context, params) {
   const { cuenta, recordarme } = params;
-  return perfilApi.getCuenta(cuenta._id)
+  return perfilApi.getCuenta(cuenta)
     .then((resp) => {
       context.commit("setCuenta", { cuenta: resp, recordarme });
       context.dispatch("empleados/cargarListado", null, { root: true });
@@ -78,7 +78,6 @@ function setUsuario(pState, usuario) {
 
 function setCuenta(pState, params) {
   const { cuenta, recordarme } = params;
-  console.log(cuenta._id, recordarme);
   if (recordarme) {
     localStorage.setItem("trakappCuenta", cuenta._id);
   } else {
