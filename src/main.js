@@ -37,6 +37,7 @@ Vue.use(Notify);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
 Vue.use(money, { precision: 4 });
+Vue.use(VueWebsocket, process.env.VUE_APP_SOCKET_URL);
 Vue.use(VueGoogleMaps, {
   load: {
     key: "AIzaSyDn5jFd9F1zSo3XhhCD5r5bf3AQnpph5kI",

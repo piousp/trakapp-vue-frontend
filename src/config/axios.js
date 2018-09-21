@@ -4,7 +4,7 @@ import VueProgressBar from "vue-progressbar";
 import axios from "axios";
 
 const ax = axios.create({
-  baseUrl: process.env.API_URL,
+  baseUrl: process.env.VUE_APP_API_URL,
 });
 
 Vue.use(VueProgressBar, { thickness: "3px" });
