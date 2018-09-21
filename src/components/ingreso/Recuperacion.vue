@@ -2,7 +2,7 @@
   <section class="cuadro-ingreso">
     <div v-if="!exito" class="cuadro-ingreso__body">
       <div class="text--center">
-        <img src="/static/logo-peq-contra.png" class="logo-login img--center" alt="Trakapp Logo">
+        <img src="/logo-peq-contra.png" class="logo-login img--center" alt="Trakapp Logo">
       </div>
       <form v-if="validarRecuperacion(recuperacion)"
             novalidate @submit.stop.prevent="recuperar()">

@@ -1,4 +1,3 @@
-import "babel-polyfill";
 import Vue from "vue";
 import "moment/locale/es";
 import Datetime from "vue-datetime";
@@ -23,7 +22,6 @@ import bugsnagClient from "./components/comunes/bugsnag";
 import AppModal from "./components/acciones/BaseModal.vue";
 import "./config/filtros.js";
 import "./components/comunes";
-import "./config/anno.js";
 
 window.eventBus = new Vue({});
 
@@ -38,7 +36,6 @@ Vue.use(VueToastr);
 Vue.use(Notify);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
-Vue.use(VueWebsocket, process.env.SOCKET_URL);
 Vue.use(money, { precision: 4 });
 Vue.use(VueGoogleMaps, {
   load: {

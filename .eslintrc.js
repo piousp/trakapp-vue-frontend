@@ -17,7 +17,7 @@ module.exports = {
     "plugin:promise/recommended",
   ],
   rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
+    "no-console": "error",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
     "semi": ["error", "always"],
     "quotes": ["error", "double"],

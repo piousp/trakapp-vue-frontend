@@ -2,7 +2,7 @@
   <section class="cuadro-ingreso">
     <form class="cuadro-ingreso__body" novalidate @submit.stop.prevent="login()">
       <div class="text--center">
-        <img src="/static/logo-peq-contra.png" class="logo-login img--center" alt="Trakapp Logo">
+        <img src="/logo-peq-contra.png" class="logo-login img--center" alt="Trakapp Logo">
       </div>
       <h1 class="h4 text--blanco text--center">Ingrese sus credenciales</h1>
       <form-group :error="errors.has(ids.correo) && submitted">
