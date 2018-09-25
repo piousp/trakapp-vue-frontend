@@ -78,7 +78,6 @@ function setUsuario(pState, usuario) {
 
 function setCuenta(pState, params) {
   const { cuenta, recordarme } = params;
-  console.log(cuenta._id, recordarme);
   if (recordarme) {
     localStorage.setItem("trakappCuenta", cuenta._id);
   } else {

@@ -11,7 +11,7 @@ module.exports = {
     "promise"
   ],
   extends: [
-    "plugin:vue/recommended",
+    "plugin:vue/essential",
     "@vue/airbnb",
     "plugin:lodash/recommended",
     "plugin:promise/recommended",
@@ -35,4 +35,8 @@ module.exports = {
   parserOptions: {
     parser: "babel-eslint",
   },
+  globals: {
+    "google": true,
+    "Anno": true
+  }
 };
