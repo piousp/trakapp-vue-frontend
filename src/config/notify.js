@@ -1,5 +1,4 @@
 import D from "debug";
-import modernizr from "modernizr";
 
 const debug = D("ciris:notify.js");
 
@@ -19,29 +18,24 @@ const Notificacion = {
 };
 
 function notificar(mensaje, cuerpo) {
-  if (modernizr.notification) {
-    debug("notificando", document.hasFocus());
-    if (document.hasFocus() === false) {
-      const options = {
-        body: cuerpo || "Trakapp",
-        icon: "/static/icono.png",
-      };
-      return new Notification(mensaje, options);
-    }
-    return debug("La página tiene el foco, no hace falta hacer una notificación");
+  debug("notificando", document.hasFocus());
+  if (document.hasFocus() === false) {
+    const options = {
+      body: cuerpo || "Trakapp",
+      icon: "/static/icono.png",
+    };
+    return new Notification(mensaje, options);
   }
-  return null;
+  return debug("La página tiene el foco, no hace falta hacer una notificación");
 }
 
 function permiso() {
-  if (modernizr.notification) {
-    debug("Permiso para Notification?", Notification.permission);
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission(() => {
-        const c = new Notification("Ahora recibirás notificaciones");
-        return c;
-      });
-    }
+  debug("Permiso para Notification?", Notification.permission);
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission(() => {
+      const c = new Notification("Ahora recibirás notificaciones");
+      return c;
+    });
   }
 }
 

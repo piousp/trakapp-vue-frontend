@@ -1,6 +1,3 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import "babel-polyfill";
 import Vue from "vue";
 import "moment/locale/es";
 import Datetime from "vue-datetime";
@@ -25,7 +22,6 @@ import bugsnagClient from "./components/comunes/bugsnag";
 import AppModal from "./components/acciones/BaseModal.vue";
 import "./config/filtros.js";
 import "./components/comunes";
-import "./config/anno.js";
 
 window.eventBus = new Vue({});
 
@@ -40,8 +36,8 @@ Vue.use(VueToastr);
 Vue.use(Notify);
 Vue.use(Auth, axios, { pkg });
 Vue.use(VueI18n);
-Vue.use(VueWebsocket, process.env.SOCKET_URL);
 Vue.use(money, { precision: 4 });
+Vue.use(VueWebsocket, process.env.VUE_APP_SOCKET_URL);
 Vue.use(VueGoogleMaps, {
   load: {
     key: "AIzaSyDn5jFd9F1zSo3XhhCD5r5bf3AQnpph5kI",
@@ -77,6 +73,6 @@ export default new Vue({
   router,
   store: vuexStore,
   components: { App },
-  template: "<App/>",
+  render: h => h(App),
   i18n,
 });

@@ -65,7 +65,7 @@ export default {
   @import "../sass/tema/globales";
 
   body{
-    background: url("/static/hero2.jpg");
+    background: url("/hero2.jpg");
     background-attachment: fixed;
     background-size: cover;
   }

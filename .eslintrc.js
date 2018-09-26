@@ -1,32 +1,24 @@
-{
-  "env": {
-    "browser": true,
-    "es6": true,
-    "commonjs": true,
-    "node": true
+module.exports = {
+  root: true,
+  env: {
+    browser: true,
+    es6: true,
+    commonjs: true,
+    node: true
   },
-  "globals": {
-    "google": true,
-    "Anno": true
-  },
-  "plugins": [
+  plugins: [
     "lodash",
     "promise"
   ],
-  "extends": [
-    "airbnb-base",
+  extends: [
+    "plugin:vue/essential",
+    "@vue/airbnb",
     "plugin:lodash/recommended",
     "plugin:promise/recommended",
-    "plugin:vue/recommended"
   ],
-  "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 8
-  },
-  "settings": {
-    "import/resolver": "eslint-import-resolver-webpack"
-  },
-  "rules": {
+  rules: {
+    "no-console": "error",
+    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
     "semi": ["error", "always"],
     "quotes": ["error", "double"],
     "no-param-reassign": ["error", { "props": false }],
@@ -39,5 +31,12 @@
     "lodash/prefer-lodash-method": "off",
     "promise/no-callback-in-promise": "off",
     "promise/no-nesting": "off"
+  },
+  parserOptions: {
+    parser: "babel-eslint",
+  },
+  globals: {
+    "google": true,
+    "Anno": true
   }
-}
+};
