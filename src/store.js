@@ -1,16 +1,22 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
+import empleadosStore from "./components/empleados/store";
+import perfilStore from "./components/perfil/store";
+import modalStore from "./components/acciones/modalStore";
+
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
-
+const store = new Vuex.Store({
+  modules: {
+    empleados: empleadosStore,
+    perfil: perfilStore,
+    modal: modalStore,
   },
-  mutations: {
-
-  },
-  actions: {
-
-  },
+  strict: true,
 });
+
+
+Vue.prototype.$store = store;
+
+export default store;

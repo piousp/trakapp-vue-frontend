@@ -1,25 +1,51 @@
 import Vue from "vue";
 import Router from "vue-router";
+import union from "lodash/union";
 import Home from "./components/Home.vue";
+import RutasIngreso from "./components/ingreso/rutas.js";
+import RutasMapa from "./components/mapa/rutas.js";
+import RutasEmpleados from "./components/empleados/rutas.js";
+import RutasAgenda from "./components/agenda/rutas.js";
+import RutasChat from "./components/chat/rutas.js";
+import RutasPerfil from "./components/perfil/rutas.js";
+import RutasCliente from "./components/clientes/rutas.js";
+import RutasReportes from "./components/reportes/rutas.js";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
-  base: process.env.BASE_URL,
-  routes: [
+  routes: union([
     {
       path: "/",
       name: "home",
       component: Home,
+      children: union(
+        RutasMapa,
+        RutasAgenda,
+        RutasCliente,
+        RutasChat,
+        RutasEmpleados,
+        RutasPerfil,
+        RutasReportes,
+      ),
+      redirect: "/agenda",
     },
-    {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ "./views/About.vue"),
-    },
-  ],
+  ], RutasIngreso),
 });
+
+router.beforeEach((to, from, next) => {
+  if (Vue.prototype.$store.state.perfil.usuario.estaAutenticado) {
+    if (to.name === "login") {
+      next({ name: "agenda" });
+    } else {
+      next();
+    }
+  } else if (to.meta.esPublica) {
+    next();
+  } else {
+    next({ name: "login" });
+  }
+});
+
+export default router;
