@@ -131,6 +131,42 @@
               </gmap-map>
             </div>
           </div>
+          <div class="col-12 text">
+            <h4 class="h4">
+              <strong>Sub</strong>tareas
+              <small class="float--right clickable toggle-subtareas">
+                <span v-show="!mostrarSubtareas">Mostrar</span>
+                <span v-show="mostrarSubtareas">Ocultar</span>
+                <i
+                  class="fa fa-fw"
+                  :class="{'fa-chevron-down': !mostrarSubtareas, 'fa-chevron-up': mostrarSubtareas}"
+                  @click="mostrarSubtareas = !mostrarSubtareas"/>
+              </small>
+            </h4>
+            <div v-show="mostrarSubtareas">
+              <ul class="lista-subtareas">
+                <li
+                  v-for="(sub, i) in tarea.subtareas"
+                  :key="i"
+                  :class="{'form__group--error': errors.has(`sub${i}`) && submitted}">
+                  <input
+                    class="form__input"
+                    :name="`sub${i}`"
+                    v-model="sub.texto"
+                    v-validate="'required'"
+                    :disabled="tarea.activa === false" >
+                </li>
+              </ul>
+              <p class="text--center" v-show="!tarea.subtareas.length">No hay subtareas</p>
+              <div class="text--center">
+                <br>
+                <button type="button" class="boton boton--redondo boton--xs" @click="crearSubtarea">
+                  <i class="fa fa-fw fa-plus"/>
+                  <span>Crear subtarea</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="modal__footer">
           <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
@@ -147,6 +183,7 @@
 
 <script>
 import moment from "moment";
+import some from "lodash/some";
 import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
 import debounce from "lodash/debounce";
@@ -168,6 +205,7 @@ export default {
     buscarClientes: debounce(buscarClientesDebounce, 500),
     verificarYAceptar,
     isEmpty,
+    crearSubtarea,
   },
 };
 
@@ -177,7 +215,10 @@ function data() {
     modalVisible: false,
     clientes: [],
     submitted: false,
-    tarea: {},
+    mostrarSubtareas: true,
+    tarea: {
+      subtareas: [],
+    },
   };
 }
 
@@ -202,6 +243,7 @@ function abrirModal(evt) {
     ubicacion: {},
     post: {},
     activa: true,
+    subtareas: [],
   };
   this.tarea = formatearFechas(tarea);
   this.modalVisible = true;
@@ -209,7 +251,7 @@ function abrirModal(evt) {
 
 function cerrarModal() {
   this.submitted = false;
-  this.tarea = { post: {} };
+  this.tarea = { post: {}, subtareas: [] };
   this.$refs.gmapAutocomplete.$el.value = null;
   this.clienteBuscado = null;
   this.modalVisible = false;
@@ -219,7 +261,7 @@ function editarModal(tarea) {
   if (tarea && tarea.cliente) {
     tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
   }
-  tarea.empleado = find(this.empleados, { _id: tarea.empleado });
+  tarea.empleado = find(this.empleados.docs, { _id: tarea.empleado });
   this.tarea = formatearFechas(tarea);
   this.modalVisible = true;
   // Hay que esperar a que el mapa cargue. No hay forma de hacer un watch sobre $refs.
@@ -258,12 +300,31 @@ function formatearFechas(tarea) {
   tareaMod.end = moment.isMoment(tarea.end) ? tarea.end.format() : tarea.end;
   return tareaMod;
 }
+
+function crearSubtarea() {
+  if (some(this.tarea.subtareas, { texto: "" })) {
+    return false;
+  }
+  return this.tarea.subtareas.push({
+    texto: "",
+    completado: false,
+  });
+}
 </script>
 
 <style lang="scss">
 .mapa-agenda{
   height: 300px;
   width: 100%;
+}
+.lista-subtareas {
+  margin-left: 20px;
+  li {
+    padding: 0 0 15px 0;
+  }
+}
+.toggle-subtareas {
+  font-size: 12px;
 }
 #fecha-tarea {
   .col-6 {

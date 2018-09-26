@@ -1,7 +1,9 @@
 {
-  "name": "hello-world",
-  "version": "0.1.0",
+  "name": "trakapp",
+  "version": "1.11.0",
   "private": true,
+  "description": "UI del rastreador",
+  "author": "Ciris Informatic Solutions <ventas@ciriscr.com>",
   "scripts": {
     "start": "vue-cli-service serve --port 3000",
     "build": "vue-cli-service build",
