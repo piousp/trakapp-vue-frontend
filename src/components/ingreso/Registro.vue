@@ -2,7 +2,7 @@
   <section class="cuadro-ingreso">
     <form class="cuadro-ingreso__body cuadro-ingreso__body--l"
           novalidate @submit.stop.prevent="registrarse()">
-      <img src="/static/logo-peq-contra.png" class="img-center" alt="Trakapp Logo">
+      <img src="/logo-peq-contra.png" class="img-center" alt="Trakapp Logo">
       <div class="text--center"/>
       <p class="text text--center text--blanco">
         Por favor rellene los campos con los datos solicitados

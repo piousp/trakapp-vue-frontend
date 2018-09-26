@@ -1,6 +1,6 @@
 <template lang="html">
   <nav class="navbar">
-    <img src="/static/logo-peq-contra.png" alt="Logo" class="img-responsive navbar__logo">
+    <img src="/logo-peq-contra.png" alt="Logo" class="img-responsive navbar__logo">
     <p class="nom--cuenta">
       <i class="far fa-fw fa-building"/>
       <span class="text">{{ cuenta.nombre }}</span>
