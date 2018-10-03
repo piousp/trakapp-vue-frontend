@@ -61,9 +61,6 @@ export default {
       this.$store.dispatch("perfil/cargarCuenta", { cuenta, recordarme: this.recordarme });
       return this.hideModal();
     },
-    escogerCuenta() {
-      this.hideModal();
-    },
   },
 };
 </script>

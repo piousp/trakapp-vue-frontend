@@ -1,6 +1,5 @@
 <template>
   <section>
-    <modal-bug ref="modalBug"/>
     <div class="text text--negro4">
       <div class="question__menu" v-if="mostrarPopup">
         <div class="question__menu__header">
@@ -24,11 +23,12 @@
 
 <script>
 import noop from "lodash/noop";
-import ModalBug from "./ModalBug.vue";
 import tour from "../tour";
 
 function reportar() {
-  this.$refs.modalBug.abrir();
+  this.$store.commit("modal/showModal", {
+    componentName: "ModalBug",
+  });
   this.mostrarPopup = false;
 }
 
@@ -37,7 +37,6 @@ function tutorial() {
 }
 
 export default {
-  components: { ModalBug },
   data() {
     return {
       mostrarPopup: false,

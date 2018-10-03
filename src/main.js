@@ -23,8 +23,6 @@ import AppModal from "./components/acciones/BaseModal.vue";
 import "./config/filtros.js";
 import "./components/comunes";
 
-window.eventBus = new Vue({});
-
 const pkg = require("../package.json").name;
 
 if (process.env.NODE_ENV === "production") {

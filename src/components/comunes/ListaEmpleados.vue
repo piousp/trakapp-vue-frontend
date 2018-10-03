@@ -16,13 +16,11 @@
         </span>
       </li>
     </ul>
-    <modal-empleado ref="modalempleado"/>
   </section>
 </template>
 
 <script>
 import cloneDeep from "lodash/cloneDeep";
-import ModalEmpleado from "./ModalEmpleado.vue";
 import obtenerColor from "./colores.js";
 import chatApi from "../chat/chatApi";
 
@@ -31,7 +29,14 @@ function abrirEmpleado(emp) {
     chatApi.marcarComoVistos(emp._id);
     this.setIndicadorMensajes(emp._id, 0);
   }
-  this.$refs.modalempleado.abrirModal(emp);
+  return this.$store.commit("modal/showModal", {
+    componentName: "ModalEmpleado",
+    params: {
+      emp,
+      grande: true,
+    },
+  });
+  // this.$refs.modalempleado.abrirModal(emp);
 }
 
 function setIndicadorMensajes(id, val) {
@@ -41,9 +46,6 @@ function setIndicadorMensajes(id, val) {
 }
 
 export default {
-  components: {
-    "modal-empleado": ModalEmpleado,
-  },
   computed: {
     empleados() {
       return this.$store.getters["empleados/listadoSinNuevos"];

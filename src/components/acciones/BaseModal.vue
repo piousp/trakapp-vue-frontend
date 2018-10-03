@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="backdrop" v-if="visible">
-    <div class="modal">
-      <component :is="component"/>
+    <div class="modal" :class="{'modal--l' : params && params.grande}">
+      <component :is="component" :params="params"/>
     </div>
 
   </div>
@@ -12,12 +12,18 @@ import Vue from "vue";
 import D from "debug";
 import SelectCuenta from "./modalTemplates/SelectCuenta.vue";
 import InvitarUsuarios from "./modalTemplates/InvitarUsuarios.vue";
+import ModalBug from "./modalTemplates/ModalBug.vue";
+import ModalTarea from "./modalTemplates/ModalTarea.vue";
+import ModalEmpleado from "./modalTemplates/ModalEmpleado.vue";
 
 const debug = D("ciris:BaseModal.vue");
 
 const modales = {
   SelectCuenta,
   InvitarUsuarios,
+  ModalBug,
+  ModalTarea,
+  ModalEmpleado,
 };
 
 export default {
@@ -31,6 +37,7 @@ export default {
   computed: {
     visible() { return this.$store.state.modal.modalVisible; },
     modalComponent() { return this.$store.state.modal.modalComponent; },
+    params() { return this.$store.state.modal.params; },
   },
   watch: {
     modalComponent(componentName) {

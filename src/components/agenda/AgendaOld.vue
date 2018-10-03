@@ -1,23 +1,27 @@
 <template>
   <section>
     <full-calendar class="text" :events="cargarTareas" :config="config" ref="calendario"
-                   @event-created="abrirModal"
-                   @event-selected="abrirModal"/>
+                   @event-created="(evt) => { $refs.modaltarea.abrirModal(evt) }"
+                   @event-selected="(evt) => { $refs.modaltarea.editarModal(evt) }"/>
+    <modal-tarea ref="modaltarea"
+                 @aceptar="(t) => { aceptarTarea(t) }"
+                 @eliminar="(t) => { eliminarTarea(t) }"/>
   </section>
 </template>
 
 <script>
 import { FullCalendar } from "vue-full-calendar";
-import clone from "lodash/clone";
 import D from "debug";
 import obtenerColor from "../comunes/colores.js";
 import agendaApi from "./agendaApi";
+import ModalTarea from "./ModalTarea.vue";
 
 const debug = D("ciris:Agenda.vue");
 
 export default {
   components: {
     FullCalendar,
+    "modal-tarea": ModalTarea,
   },
   data,
   computed: {
@@ -30,8 +34,23 @@ export default {
       this.$refs.calendario.fireMethod("refetchEvents");
     },
   },
+  mounted() {
+    window.eventBus.$on("abrirModalTarea", () => {
+      setTimeout(() => {
+        if (this.$refs.modaltarea) {
+          this.$refs.modaltarea.abrirModal({});
+        }
+      }, 100);
+    });
+    window.eventBus.$on("cerrarModalTarea", () => {
+      setTimeout(() => {
+        if (this.$refs.modaltarea) {
+          this.$refs.modaltarea.cerrarModal();
+        }
+      }, 100);
+    });
+  },
   methods: {
-    abrirModal,
     guardarTarea,
     aceptarTarea,
     eliminarTarea,
@@ -58,25 +77,9 @@ function data() {
   };
 }
 
-function abrirModal(pevt) {
-  const evt = clone(pevt);
-  delete evt.view;
-  delete evt.resource;
-  delete evt.source;
-  return this.$store.commit("modal/showModal", {
-    componentName: "ModalTarea",
-    params: {
-      evt,
-      aceptar: this.aceptarTarea,
-      eliminar: this.eliminarTarea,
-      grande: true,
-    },
-  });
-}
-
 function aceptarTarea(tarea) {
   const self = this;
-  return self.guardarTarea(tarea);
+  return self.guardarTarea(tarea).then(() => self.$refs.modaltarea.cerrarModal());
 }
 
 function guardarTarea(tarea) {
@@ -96,7 +99,10 @@ function guardarTarea(tarea) {
 
 function eliminarTarea(tarea) {
   const self = this;
-  return agendaApi.eliminar(tarea._id).then(() => self.$refs.calendario.fireMethod("removeEvents", tarea._id));
+  return agendaApi.eliminar(tarea._id).then(() => {
+    self.$refs.calendario.fireMethod("removeEvents", tarea._id);
+    return self.$refs.modaltarea.cerrarModal();
+  });
 }
 
 function agregarCamposCalendario(tarea) {
@@ -105,10 +111,6 @@ function agregarCamposCalendario(tarea) {
   tarea.color = colores.fondo;
   tarea.textColor = colores.texto;
   tarea.className = tarea.activa === false ? "tarea--finalizada" : "";
-  tarea.subtareas = tarea.subtareas.map((st) => {
-    st.editando = false;
-    return st;
-  });
   debug("Tarea modificada para el calendario", tarea);
   return tarea;
 }
