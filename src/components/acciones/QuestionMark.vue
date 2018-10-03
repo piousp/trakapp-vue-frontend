@@ -25,17 +25,6 @@
 import noop from "lodash/noop";
 import tour from "../tour";
 
-function reportar() {
-  this.$store.commit("modal/showModal", {
-    componentName: "ModalBug",
-  });
-  this.mostrarPopup = false;
-}
-
-function tutorial() {
-  return tour(this.$router, 0, noop);
-}
-
 export default {
   name: "QuestionMark",
   data() {
@@ -48,6 +37,17 @@ export default {
     tutorial,
   },
 };
+
+function reportar() {
+  this.$store.commit("modal/showModal", {
+    componentName: "ModalBug",
+  });
+  this.mostrarPopup = false;
+}
+
+function tutorial() {
+  return tour(this.$router, 0, noop);
+}
 </script>
 
 <style lang="scss">

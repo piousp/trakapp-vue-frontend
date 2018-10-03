@@ -93,6 +93,7 @@ import usuarioAPI from "../perfil/perfilApi";
 import id from "../ids.js";
 
 const debug = D("ciris:Login.vue");
+
 export default {
   name: "Login",
   data,

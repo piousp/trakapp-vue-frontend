@@ -36,25 +36,27 @@ export default {
   components: {
     VueTagsInput,
   },
-  data() {
-    return {
-      tag: "",
-      tags: [],
-      autocompleteItems: [{ text: "Tiene que ingresar un correo valido" }],
-      validation: [
-        {
-          type: "error",
-          rule: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-          disableAdd: true,
-        },
-      ],
-    };
-  },
+  data,
   methods: {
     invitarUsuarios,
     hideModal() { return this.$store.commit("modal/hideModal"); },
   },
 };
+
+function data() {
+  return {
+    tag: "",
+    tags: [],
+    autocompleteItems: [{ text: "Tiene que ingresar un correo valido" }],
+    validation: [
+      {
+        type: "error",
+        rule: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        disableAdd: true,
+      },
+    ],
+  };
+}
 
 function invitarUsuarios() {
   const comp = this;

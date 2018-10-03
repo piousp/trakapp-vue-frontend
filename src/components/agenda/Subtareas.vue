@@ -45,6 +45,23 @@
 <script>
 import noop from "lodash/noop";
 
+export default {
+  name: "Subtareas",
+  props: {
+    lista: {
+      type: Array,
+      default: noop,
+    },
+  },
+  data,
+  methods: {
+    editar,
+    guardar,
+    eliminar,
+    agregar,
+  },
+};
+
 function data() {
   return {
     subtareaNva: null,
@@ -77,23 +94,6 @@ function agregar(str) {
 function eliminar(index) {
   this.lista.splice(index, 1);
 }
-
-export default {
-  name: "Subtareas",
-  props: {
-    lista: {
-      type: Array,
-      default: noop,
-    },
-  },
-  data,
-  methods: {
-    editar,
-    guardar,
-    eliminar,
-    agregar,
-  },
-};
 </script>
 
 <style lang="scss">

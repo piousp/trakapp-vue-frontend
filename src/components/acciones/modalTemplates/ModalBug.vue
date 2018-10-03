@@ -31,6 +31,15 @@
 <script>
 import perfilAPi from "../../perfil/perfilApi.js";
 
+export default {
+  name: "ModalBug",
+  data,
+  methods: {
+    enviar,
+    hideModal,
+  },
+};
+
 function hideModal() {
   return this.$store.commit("modal/hideModal");
 }
@@ -62,13 +71,4 @@ function enviar() {
     return null;
   });
 }
-
-export default {
-  name: "ModalBug",
-  data,
-  methods: {
-    enviar,
-    hideModal,
-  },
-};
 </script>

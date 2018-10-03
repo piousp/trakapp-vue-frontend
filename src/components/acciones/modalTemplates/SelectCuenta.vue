@@ -36,25 +36,8 @@ export default {
   components: {
     Avatar,
   },
-  data() {
-    return {
-      cuentas: [],
-      cargando: false,
-      recordarme: false,
-    };
-  },
-  created() {
-    this.cargando = true;
-    cuentaAPI.cargarBulk(this.$store.state.perfil.usuario.cuentas)
-      .then((resp) => {
-        this.cargando = false;
-        this.cuentas = resp.docs;
-        return resp;
-      })
-      .catch(() => {
-        this.$toastr("error", "Error al cargar sus cuentas", "Error");
-      });
-  },
+  data,
+  created,
   methods: {
     hideModal() { return this.$store.commit("modal/hideModal"); },
     cargarCuenta(cuenta) {
@@ -63,6 +46,27 @@ export default {
     },
   },
 };
+
+function data() {
+  return {
+    cuentas: [],
+    cargando: false,
+    recordarme: false,
+  };
+}
+
+function created() {
+  this.cargando = true;
+  cuentaAPI.cargarBulk(this.$store.state.perfil.usuario.cuentas)
+    .then((resp) => {
+      this.cargando = false;
+      this.cuentas = resp.docs;
+      return resp;
+    })
+    .catch(() => {
+      this.$toastr("error", "Error al cargar sus cuentas", "Error");
+    });
+}
 </script>
 <style>
 .cuentaContainer {

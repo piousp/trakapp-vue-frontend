@@ -45,6 +45,7 @@ import cloneDeep from "lodash/cloneDeep";
 import estilos from "../../comunes/estilosMapa";
 
 const debug = D("ciris:ModalEmpleado.vue");
+
 export default {
   name: "ModalEmpleado",
   data,

@@ -55,7 +55,7 @@
     </div>
   </section>
 </template>
-<script>//
+<script>
 import reject from "lodash/reject";
 import noop from "lodash/noop";
 import swal from "sweetalert2";

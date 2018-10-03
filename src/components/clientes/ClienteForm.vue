@@ -127,6 +127,18 @@ import clienteApi from "./clienteApi.js";
 
 const debug = D("ciris:ClienteForm.vue");
 
+export default {
+  name: "ClienteForm",
+  data,
+  methods: {
+    guardar,
+    editar,
+    cancelar,
+    buscarLugar,
+  },
+  beforeRouteEnter,
+};
+
 function data() {
   return {
     cliente: { ubicacion: { coordinates: [0, 0] } },
@@ -197,18 +209,6 @@ function beforeRouteEnter(to, from, next) {
   }
   return next();
 }
-
-export default {
-  name: "ClienteForm",
-  data,
-  methods: {
-    guardar,
-    editar,
-    cancelar,
-    buscarLugar,
-  },
-  beforeRouteEnter,
-};
 </script>
 
 <style>
