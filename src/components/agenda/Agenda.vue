@@ -16,6 +16,7 @@ import agendaApi from "./agendaApi";
 const debug = D("ciris:Agenda.vue");
 
 export default {
+  name: "Agenda",
   components: {
     FullCalendar,
   },

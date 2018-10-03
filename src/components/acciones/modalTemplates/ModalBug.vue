@@ -64,6 +64,7 @@ function enviar() {
 }
 
 export default {
+  name: "ModalBug",
   data,
   methods: {
     enviar,

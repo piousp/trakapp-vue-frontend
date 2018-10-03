@@ -32,8 +32,8 @@ import estilos from "../comunes/estilosMapa";
 const debug = D("ciris:Mapa.vue");
 
 export default {
+  name: "Mapa",
   data,
-  // beforeRouteEnter,
   sockets: {
     actualizar,
   },

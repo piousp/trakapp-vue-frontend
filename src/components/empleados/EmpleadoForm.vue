@@ -245,6 +245,7 @@ import empleadoApi from "./empleadoApi.js";
 const debug = D("ciris:EmpleadoForm.vue");
 
 export default {
+  name: "EmpleadoForm",
   data,
   computed: {
     horarios,

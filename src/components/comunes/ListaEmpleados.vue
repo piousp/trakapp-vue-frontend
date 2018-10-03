@@ -46,6 +46,7 @@ function setIndicadorMensajes(id, val) {
 }
 
 export default {
+  name: "ListaEmpleados",
   computed: {
     empleados() {
       return this.$store.getters["empleados/listadoSinNuevos"];

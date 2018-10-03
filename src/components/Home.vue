@@ -36,7 +36,7 @@ function created() {
 }
 
 export default {
-  name: "App",
+  name: "Home",
   components: { Navbar, QuestionMark },
   data,
   created,

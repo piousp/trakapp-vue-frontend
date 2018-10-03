@@ -34,6 +34,7 @@ import axios from "../../config/axios";
 const debug = D("ciris:Activacion.vue");
 
 export default {
+  name: "Activacion",
   data,
   mounted,
 };

@@ -62,6 +62,7 @@ import swal from "sweetalert2";
 import clienteApi from "./clienteApi.js";
 
 export default {
+  name: "ClienteList",
   data,
   methods: {
     eliminar,

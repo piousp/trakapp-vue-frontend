@@ -60,6 +60,7 @@ import noop from "lodash/noop";
 import swal from "sweetalert2";
 
 export default {
+  name: "EmpleadoList",
   computed: {
     empleados() {
       return this.$store.state.empleados.listado;

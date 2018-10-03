@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="botones-pagina">
-      <button class="boton boton--nuevo" @click="$refs.tareaform.abrirModal({})"/>
+      <button class="boton boton--nuevo" @click="abrirModal"/>
     </div>
     <div v-if="tareas.cant > 0">
       <table class="tabla tabla--responsive">
@@ -55,10 +55,6 @@
         <span>No hay tareas registradas.</span>
       </p>
     </div>
-    <modal-tarea
-      ref="tareaform"
-      @aceptar="(t) => { aceptar(t) }"
-      @eliminar="(t) => { eliminar(t) }"/>
   </section>
 </template>
 <script>//
@@ -67,17 +63,15 @@ import noop from "lodash/noop";
 import cloneDeep from "lodash/cloneDeep";
 import findIndex from "lodash/findIndex";
 import swal from "sweetalert2";
-import agendaApi from "../agenda/agendaApi.js";
-import ModalTarea from "../agenda/ModalTarea.vue";
+import agendaApi from "./agendaApi.js";
 
 export default {
-  components: {
-    "modal-tarea": ModalTarea,
-  },
+  name: "TareaList",
   data,
   methods: {
     eliminar,
     abrir,
+    abrirModal,
     aceptar,
   },
   beforeRouteEnter,
@@ -89,10 +83,22 @@ function data() {
   };
 }
 
+function abrirModal(tarea) {
+  return this.$store.commit("modal/showModal", {
+    componentName: "ModalTarea",
+    params: {
+      evt: tarea,
+      aceptar: this.aceptar,
+      eliminar: this.eliminar,
+      grande: true,
+    },
+  });
+}
+
 function abrir(tarea) {
   const copy = cloneDeep(tarea);
   copy.empleado = tarea.empleado._id;
-  this.$refs.tareaform.editarModal(copy);
+  return this.abrirModal(copy);
 }
 
 function aceptar(tarea) {
@@ -101,7 +107,6 @@ function aceptar(tarea) {
     resp.empleado = tarea.empleado;
     resp.cliente = tarea.cliente;
     this.tareas.docs.splice(index, 1, resp);
-    this.$refs.tareaform.cerrarModal();
     return resp;
   });
 }

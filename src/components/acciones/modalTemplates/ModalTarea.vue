@@ -139,7 +139,7 @@
         <button type="button" class="boton boton--guardar" @click="verificarYAceptar(tarea)"/>
         <button type="button"
                 class="boton boton--eliminar"
-                @click="params.eliminar(tarea)"
+                @click="eliminarTarea(tarea)"
                 v-show="tarea._id"/>
       </div>
     </form>
@@ -175,6 +175,7 @@ export default {
     return this.abrirModal(this.params.evt);
   },
   methods: {
+    eliminarTarea,
     buscarLugar,
     abrirModal,
     cerrarModal,
@@ -198,10 +199,16 @@ function data() {
   };
 }
 
+function eliminarTarea(ptarea) {
+  this.$store.commit("modal/hideModal");
+  return this.params.eliminar(ptarea);
+}
+
 function verificarYAceptar(tarea) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido && tarea.ubicacion.coordinates) {
+      this.$store.commit("modal/hideModal");
       return this.params.aceptar(tarea);
     } else if (!valido) {
       this.$toastr("error", "Falta información por llenar", "Campos vacios");
@@ -213,7 +220,6 @@ function verificarYAceptar(tarea) {
 }
 
 function abrirModal(evt) {
-  console.log("abrirModal", evt); //eslint-disable-line
   const tarea = {
     start: evt.start,
     end: evt.end,
@@ -233,8 +239,8 @@ function cerrarModal() {
   this.$store.commit("modal/hideModal");
 }
 
-function editarModal(tarea) {
-  console.log("editarModal", tarea); //eslint-disable-line
+function editarModal(ptarea) {
+  const tarea = cloneDeep(ptarea);
   if (tarea && tarea.cliente) {
     tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
   }

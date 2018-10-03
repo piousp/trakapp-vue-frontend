@@ -37,6 +37,7 @@ function tutorial() {
 }
 
 export default {
+  name: "QuestionMark",
   data() {
     return {
       mostrarPopup: false,

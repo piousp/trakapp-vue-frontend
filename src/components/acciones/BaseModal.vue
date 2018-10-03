@@ -27,7 +27,6 @@ const modales = {
 };
 
 export default {
-
   name: "AppModal",
   data() {
     return {

@@ -27,6 +27,7 @@ import tour from "./tour.js";
 import perfilApi from "./perfil/perfilApi.js";
 
 export default {
+  name: "Navbar",
   components: {
     directorio: Menu,
   },

@@ -74,6 +74,7 @@ import id from "../ids";
 const debug = D("ciris:DatosCuenta.vue");
 
 export default {
+  name: "Cuenta",
   data,
   computed: {
     sCuenta() {

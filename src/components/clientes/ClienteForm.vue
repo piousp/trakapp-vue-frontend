@@ -199,6 +199,7 @@ function beforeRouteEnter(to, from, next) {
 }
 
 export default {
+  name: "ClienteForm",
   data,
   methods: {
     guardar,

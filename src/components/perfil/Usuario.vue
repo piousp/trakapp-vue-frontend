@@ -65,6 +65,7 @@ import api from "./perfilApi.js";
 const debug = D("ciris:Perfil.vue");
 
 export default {
+  name: "Usuario",
   data,
   computed: {
     sUsuario() {

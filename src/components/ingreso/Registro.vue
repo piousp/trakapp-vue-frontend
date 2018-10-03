@@ -124,6 +124,7 @@ import noop from "lodash/noop";
 const debug = D("ciris:Registro.vue");
 
 export default {
+  name: "Registros",
   data,
   created,
   methods: {

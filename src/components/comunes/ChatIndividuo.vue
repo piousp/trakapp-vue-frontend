@@ -36,6 +36,7 @@ import chatApi from "../chat/chatApi.js";
 const debug = D("ciris:comunes/ChatIndividuo.vue");
 
 export default {
+  name: "ChatIndividuo",
   props: {
     privado: {
       type: Boolean,

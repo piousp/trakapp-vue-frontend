@@ -22,7 +22,7 @@
           </div>
         </div>
       </li>
-      <li v-if="!lista.length">
+      <li v-if="!lista || !lista.length">
         <span class="text--center">No hay subtareas</span>
       </li>
     </ul>
@@ -63,6 +63,9 @@ function guardar(item, valorNvo) {
 }
 
 function agregar(str) {
+  if (!str) {
+    return;
+  }
   this.lista.push({
     texto: str,
     completado: false,
@@ -76,6 +79,7 @@ function eliminar(index) {
 }
 
 export default {
+  name: "Subtareas",
   props: {
     lista: {
       type: Array,
