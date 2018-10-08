@@ -111,6 +111,10 @@ function agregarCamposCalendario(tarea) {
   tarea.color = colores.fondo;
   tarea.textColor = colores.texto;
   tarea.className = tarea.activa === false ? "tarea--finalizada" : "";
+  tarea.subtareas = tarea.subtareas.map((st) => {
+    st.editando = false;
+    return st;
+  });
   debug("Tarea modificada para el calendario", tarea);
   return tarea;
 }

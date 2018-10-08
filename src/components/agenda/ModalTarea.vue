@@ -132,40 +132,7 @@
             </div>
           </div>
           <div class="col-12 text">
-            <h4 class="h4">
-              <strong>Sub</strong>tareas
-              <small class="float--right clickable toggle-subtareas">
-                <span v-show="!mostrarSubtareas">Mostrar</span>
-                <span v-show="mostrarSubtareas">Ocultar</span>
-                <i
-                  class="fa fa-fw"
-                  :class="{'fa-chevron-down': !mostrarSubtareas, 'fa-chevron-up': mostrarSubtareas}"
-                  @click="mostrarSubtareas = !mostrarSubtareas"/>
-              </small>
-            </h4>
-            <div v-show="mostrarSubtareas">
-              <ul class="lista-subtareas">
-                <li
-                  v-for="(sub, i) in tarea.subtareas"
-                  :key="i"
-                  :class="{'form__group--error': errors.has(`sub${i}`) && submitted}">
-                  <input
-                    class="form__input"
-                    :name="`sub${i}`"
-                    v-model="sub.texto"
-                    v-validate="'required'"
-                    :disabled="tarea.activa === false" >
-                </li>
-              </ul>
-              <p class="text--center" v-show="!tarea.subtareas.length">No hay subtareas</p>
-              <div class="text--center">
-                <br>
-                <button type="button" class="boton boton--redondo boton--xs" @click="crearSubtarea">
-                  <i class="fa fa-fw fa-plus"/>
-                  <span>Crear subtarea</span>
-                </button>
-              </div>
-            </div>
+            <Subtareas :lista="tarea.subtareas"/>
           </div>
         </div>
         <div class="modal__footer">
@@ -183,14 +150,17 @@
 
 <script>
 import moment from "moment";
-import some from "lodash/some";
 import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
 import debounce from "lodash/debounce";
 import cloneDeep from "lodash/cloneDeep";
 import clienteApi from "../clientes/clienteApi";
+import Subtareas from "./Subtareas.vue";
 
 export default {
+  components: {
+    Subtareas,
+  },
   data,
   computed: {
     empleados() {
@@ -205,7 +175,6 @@ export default {
     buscarClientes: debounce(buscarClientesDebounce, 500),
     verificarYAceptar,
     isEmpty,
-    crearSubtarea,
   },
 };
 
@@ -215,7 +184,6 @@ function data() {
     modalVisible: false,
     clientes: [],
     submitted: false,
-    mostrarSubtareas: true,
     tarea: {
       subtareas: [],
     },
@@ -300,31 +268,12 @@ function formatearFechas(tarea) {
   tareaMod.end = moment.isMoment(tarea.end) ? tarea.end.format() : tarea.end;
   return tareaMod;
 }
-
-function crearSubtarea() {
-  if (some(this.tarea.subtareas, { texto: "" })) {
-    return false;
-  }
-  return this.tarea.subtareas.push({
-    texto: "",
-    completado: false,
-  });
-}
 </script>
 
 <style lang="scss">
 .mapa-agenda{
   height: 300px;
   width: 100%;
-}
-.lista-subtareas {
-  margin-left: 20px;
-  li {
-    padding: 0 0 15px 0;
-  }
-}
-.toggle-subtareas {
-  font-size: 12px;
 }
 #fecha-tarea {
   .col-6 {
