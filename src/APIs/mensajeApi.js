@@ -1,6 +1,20 @@
-import axios from "../../config/axios";
+import D from "debug";
+import axios from "../config/axios";
+import rutasGenericas from "./_base";
+
+const debug = D("ciris:mensajeApi.js");
+
+const apiSinBases = {
+  modelo: "mensaje",
+  listarPrivado,
+  listarPublico,
+  marcarComoVistos,
+};
+
+const mensajeApi = rutasGenericas(apiSinBases);
 
 function listarPrivado(cargados, cantidad, emisor, receptor) {
+  debug("Listando privado");
   const query = {
     params: {
       emisor,
@@ -14,6 +28,7 @@ function listarPrivado(cargados, cantidad, emisor, receptor) {
 }
 
 function listarPublico(cargados, cantidad) {
+  debug("Listando publico");
   const query = {
     params: {
       cargados,
@@ -25,28 +40,11 @@ function listarPublico(cargados, cantidad) {
     .then(resp => resp.data);
 }
 
-function guardar(obj) {
-  if (obj._id) {
-    return axios
-      .put(`${axios.defaults.baseUrl}/api/mensaje/${obj._id}`, obj)
-      .then(resp => resp.data);
-  }
-  return axios
-    .post(`${axios.defaults.baseUrl}/api/mensaje`, obj)
-    .then(resp => resp.data);
-}
-
 function marcarComoVistos(emisor) {
+  debug("Marcando como visto");
   return axios
     .put(`${axios.defaults.baseUrl}/api/mensaje/marcarvistos/${emisor}`)
     .then(resp => resp.data);
 }
 
-const chatApi = {
-  listarPrivado,
-  listarPublico,
-  guardar,
-  marcarComoVistos,
-};
-
-export default chatApi;
+export default mensajeApi;

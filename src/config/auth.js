@@ -99,6 +99,20 @@ const Auth = {
           })
           .then(resp => resp);
       },
+      recuperarContrasena(idRec, nvoPass, movil) {
+        const url = movil ? `${axios.defaults.baseUrl}/api/auth/recuperarContrasena/movil/` :
+          `${axios.defaults.baseUrl}/api/auth/recuperarContrasena/`;
+        return axios
+          .post(`${url}${idRec}`, {
+            password: nvoPass,
+          })
+          .then(resp => resp);
+      },
+      verificarPasswordCorrecto(password) {
+        return axios
+          .post(`${axios.defaults.baseUrl}/api/auth/verificarPasswordCorrecto`, { password })
+          .then(resp => resp.data);
+      },
     };
 
     Object.defineProperties(Vue.prototype, {
