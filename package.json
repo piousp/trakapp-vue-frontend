@@ -1,14 +1,15 @@
 {
   "name": "trakapp",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "private": true,
   "description": "UI del rastreador",
   "author": "Ciris Informatic Solutions <ventas@ciriscr.com>",
   "scripts": {
-    "start": "vue-cli-service serve --port 3000",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "start": "vue-cli-service serve --port 3000",
+    "test:unit": "vue-cli-service test:unit",
+    "serve": "vue-cli-service serve"
   },
   "dependencies": {
     "@deveodk/vue-toastr": "1.0.4",
@@ -25,6 +26,7 @@
     "moment": "2.22.2",
     "normalize.css": "8.0.0",
     "reflex-grid": "2.0.3",
+    "register-service-worker": "^1.0.0",
     "simplebar": "3.0.0-beta.4",
     "sweetalert2": "7.26.29",
     "v-money": "0.8.1",
@@ -53,6 +55,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "3.0.3",
     "@vue/cli-plugin-eslint": "3.0.3",
+    "@vue/cli-plugin-pwa": "3.0.4",
     "@vue/cli-plugin-unit-jest": "3.0.3",
     "@vue/cli-service": "3.0.3",
     "@vue/eslint-config-airbnb": "3.0.3",

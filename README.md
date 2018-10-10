@@ -38,3 +38,24 @@ Ejecuta todos los tests que se encuentren dentro de `src`. Los archivos debe ten
 ``` bash
 npm run test:unit
 ```
+
+### PWA
+Sólo sirven en producción con HTTPS. Para probarlo en desarrollo:
+
+1. Instalar librería para hacer un túnel a localhost
+``` bash
+npm install -g ngrok
+```
+2. Compilar para producción
+``` bash
+npm run build
+```
+3. Servir la carpeta dist
+``` bash
+npx serve dist
+```
+4. Crear el túnel
+``` bash
+ngrok http 5000
+```
+5. Ingresar desde el celular al link https creado por ngrok
