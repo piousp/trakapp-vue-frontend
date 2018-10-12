@@ -44,6 +44,7 @@ function cargarBulk(cuentas) {
 }
 
 function migrarEmpresarial(id) {
+  debug("migrarEmpresarial", id);
   return axios
     .put(`${axios.defaults.baseUrl}/api/cuenta/migrarEmpresarial/${id}`)
     .then(resp => resp.data);
