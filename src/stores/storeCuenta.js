@@ -5,10 +5,6 @@ import axios from "../config/axios";
 
 const debug = D("ciris:storeCuenta");
 
-/* TODO: implementar cambio a empresarial,
-pero con pedido al api para cambiarlo que antes solo se cambiaba local
-y DESPUES se mandaba a cambiar al back */
-
 const state = {
   cuenta: {},
   cuentaActiva: {},
@@ -25,6 +21,7 @@ const actions = {
   getCuentaActiva,
   invitarUsuarios,
   cargarBulk,
+  migrarEmpresarial,
 };
 
 const mutations = {
@@ -50,12 +47,18 @@ export default store;
 
 function getID(context, params) {
   debug("getID");
-  const { id } = params;
+  const { id, conservarComoActivo, recordarCuenta } = params;
   return cuentaApi.getID(id)
     .then((resp) => {
       context.commit("setCuenta", resp);
+      if (conservarComoActivo) {
+        context.commit("setCuentaActiva", { cuenta: resp, recordarme: recordarCuenta });
+        context.dispatch("storeEmpleado/cargarEmpleadosConMensajes", {}, { root: true });
+        context.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+      }
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function getBase(context, params) {
@@ -65,27 +68,40 @@ function getBase(context, params) {
     .then((resp) => {
       context.commit("setCuentas", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function putID(context, params) {
   debug("putID");
-  const { cuenta, conservar } = params;
+  const { cuenta, conservar, conservarComoActivo } = params;
   return cuentaApi.putID(cuenta)
     .then((resp) => {
       if (conservar) context.commit("setCuenta", resp);
+      if (conservarComoActivo) {
+        context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
+        context.dispatch("storeEmpleado/cargarEmpleadosConMensajes", {}, { root: true });
+        context.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+      }
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function postBase(context, params) {
   debug("postBase");
-  const { cuenta, conservar } = params;
+  const { cuenta, conservar, conservarComoActivo } = params;
   return cuentaApi.postBase(cuenta)
     .then((resp) => {
       if (conservar) context.commit("setCuenta", resp);
+      if (conservarComoActivo) {
+        context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
+        context.dispatch("storeEmpleado/cargarEmpleadosConMensajes", {}, { root: true });
+        context.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+      }
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function deleteID(context, params) {
@@ -93,19 +109,26 @@ function deleteID(context, params) {
   const { cuenta, delLocal } = params;
   return cuentaApi.deleteID(cuenta._id)
     .then(() => {
-      if (delLocal) context.commit("setCuenta", null);
+      if (delLocal) context.commit("resetCuenta");
       return null;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function guardar(context, params) {
   debug("guardar");
-  const { cuenta, conservar } = params;
+  const { cuenta, conservar, conservarComoActivo } = params;
   return cuentaApi.guardar(cuenta)
     .then((resp) => {
       if (conservar) context.commit("setCuenta", resp);
+      if (conservarComoActivo) {
+        context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
+        context.dispatch("storeEmpleado/cargarEmpleadosConMensajes", {}, { root: true });
+        context.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+      }
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function getCuentaActiva(context) {
@@ -113,9 +136,11 @@ function getCuentaActiva(context) {
   return cuentaApi.getCuentaActiva()
     .then((resp) => {
       context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
-      context.dispatch("empleados/cargarListado", null, { root: true });
+      context.dispatch("storeEmpleado/cargarEmpleadosConMensajes", {}, { root: true });
+      context.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function invitarUsuarios(context, params) {
@@ -126,7 +151,8 @@ function invitarUsuarios(context, params) {
       "Invitar usuarios",
       "Se ha enviado la invitación exitosamente",
       "success",
-    ));
+    ))
+    .catch(err => debug(err));
 }
 
 function cargarBulk(context, params) {
@@ -136,7 +162,24 @@ function cargarBulk(context, params) {
     .then((resp) => {
       context.commit("setCuentas", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
+}
+
+function migrarEmpresarial(context, params) {
+  debug("migrarEmpresarial");
+  const { cuenta, conservar, conservarComoActivo } = params;
+  return cuentaApi.migrarEmpresarial(cuenta)
+    .then((resp) => {
+      if (conservar) context.commit("setCuenta", resp);
+      if (conservarComoActivo) {
+        context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
+        context.dispatch("storeEmpleado/cargarEmpleadosConMensajes", {}, { root: true });
+        context.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+      }
+      return resp;
+    })
+    .catch(err => debug(err));
 }
 
 // mutations
@@ -149,13 +192,10 @@ function setCuenta(pState, cuenta) {
 function setCuentaActiva(pState, params) {
   debug("setCuentaActiva");
   const { cuenta, recordarme } = params;
-  if (recordarme) {
-    localStorage.setItem("trakappCuenta", cuenta._id);
-  } else {
-    localStorage.removeItem("trakappCuenta");
-  }
+  const storage = recordarme ? localStorage : sessionStorage;
+  storage.setItem("trakappCuenta", cuenta._id);
   axios.defaults.headers.common.Cuenta = cuenta._id;
-  pState.cuenta = cuenta;
+  pState.cuentaActiva = cuenta;
 }
 
 function setCuentas(pState, cuentas) {
@@ -170,6 +210,8 @@ function resetCuenta(pState) {
 
 function resetCuentaActiva(pState) {
   debug("resetCuentaActiva");
+  localStorage.removeItem("trakappCuenta");
+  sessionStorage.removeItem("trakappCuenta");
   pState.cuentaActiva = {};
 }
 

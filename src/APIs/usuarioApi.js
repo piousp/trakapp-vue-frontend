@@ -5,6 +5,7 @@ import rutasGenericas from "./_base";
 const debug = D("ciris:mensajeApi.js");
 
 const apiSinBases = {
+  modelo: "usuario",
   getUsuarioActivo,
   reportarBug,
 };

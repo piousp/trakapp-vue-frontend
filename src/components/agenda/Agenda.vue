@@ -8,10 +8,9 @@
 
 <script>
 import { FullCalendar } from "vue-full-calendar";
-import clone from "lodash/clone";
+import cloneDeep from "lodash/cloneDeep";
 import D from "debug";
 import obtenerColor from "../comunes/colores.js";
-import agendaApi from "./agendaApi";
 
 const debug = D("ciris:Agenda.vue");
 
@@ -23,7 +22,10 @@ export default {
   data,
   computed: {
     cuenta() {
-      return this.$store.state.perfil.cuenta;
+      return this.$store.state.storeCuenta.cuenta;
+    },
+    tareas() {
+      return this.$store.state.storeTarea.tareas;
     },
   },
   watch: {
@@ -60,14 +62,14 @@ function data() {
 }
 
 function abrirModal(pevt) {
-  const evt = clone(pevt);
-  delete evt.view;
-  delete evt.resource;
-  delete evt.source;
-  return this.$store.commit("modal/showModal", {
-    componentName: "ModalTarea",
+  const evt = cloneDeep(pevt);
+  if (evt.view) delete evt.view;
+  if (evt.resource) delete evt.resource;
+  if (evt.source) delete evt.source;
+  this.$store.commit("storeTarea/setTarea", evt);
+  return this.$store.commit("storeModal/showModal", {
+    componentName: "modalTarea",
     params: {
-      evt,
       aceptar: this.aceptarTarea,
       eliminar: this.eliminarTarea,
       grande: true,
@@ -76,28 +78,30 @@ function abrirModal(pevt) {
 }
 
 function aceptarTarea(tarea) {
-  const self = this;
-  return self.guardarTarea(tarea);
+  return this.guardarTarea(tarea);
 }
 
 function guardarTarea(tarea) {
   debug("Guardando tarea", tarea);
   const self = this;
-  return agendaApi.guardar(limpiarParaGuardar(tarea)).then((resp) => {
-    debug("Respuesta de guardado de tarea", resp);
-    if (tarea._id) {
-      return self.$refs.calendario.fireMethod("updateEvent", agregarCamposCalendario(tarea));
-    }
-    if (tarea.cliente) {
-      resp.cliente = tarea.cliente;
-    }
-    return self.$refs.calendario.fireMethod("renderEvent", agregarCamposCalendario(resp));
-  });
+  const tareaLimpia = limpiarParaGuardar(tarea);
+  return this.$store.dispatch("storeTarea/guardar", { tarea: tareaLimpia, conservar: true })
+    .then((resp) => {
+      debug("Tarea guardada. Refrescando calendario");
+      if (tarea._id) {
+        return self.$refs.calendario.fireMethod("updateEvent", agregarCamposCalendario(tarea));
+      }
+      if (tarea.cliente) {
+        resp.cliente = tarea.cliente;
+      }
+      return self.$refs.calendario.fireMethod("renderEvent", agregarCamposCalendario(resp));
+    });
 }
 
 function eliminarTarea(tarea) {
   const self = this;
-  return agendaApi.eliminar(tarea._id).then(() => self.$refs.calendario.fireMethod("removeEvents", tarea._id));
+  return this.$store.dispatch("storeTarea/eliminar", { tarea })
+    .then(() => self.$refs.calendario.fireMethod("removeEvents", tarea._id));
 }
 
 function agregarCamposCalendario(tarea) {
@@ -130,10 +134,14 @@ function limpiarParaGuardar(tarea) {
 
 function cargarTareas(inicio, fin, tz, cb) {
   debug("cargarTareas");
-  return agendaApi.listar(inicio.format(), fin.format())
-    .then((resp) => {
-      debug("cargarTareas resp", resp);
-      return cb(resp.docs.map(agregarCamposCalendario));
+  const comp = this;
+  return this.$store.dispatch("storeTarea/listarXFecha", {
+    fechaInicio: inicio.format(),
+    fechaFin: fin.format(),
+  })
+    .then(() => {
+      const clon = cloneDeep(comp.tareas);
+      return cb(clon.docs.map(agregarCamposCalendario));
     });
 }
 

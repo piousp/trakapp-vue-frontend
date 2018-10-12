@@ -1,10 +1,13 @@
 import D from "debug";
+import moment from "moment";
+import findIndex from "lodash/findIndex";
+import reject from "lodash/reject";
 import tareaApi from "../APIs/tareaApi";
 
 const debug = D("ciris:storeTarea");
 
 const state = {
-  tarea: {},
+  tarea: { subtareas: [] },
   tareas: { docs: [], cant: 0 },
 };
 
@@ -22,6 +25,8 @@ const actions = {
 const mutations = {
   setTarea,
   setTareas,
+  replaceEnTareas,
+  eliminarEnTareas,
   resetTarea,
   resetTareas,
 };
@@ -43,7 +48,8 @@ function getID(context, params) {
     .then((resp) => {
       context.commit("setTarea", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function getBase(context, params) {
@@ -53,47 +59,55 @@ function getBase(context, params) {
     .then((resp) => {
       context.commit("setTareas", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function putID(context, params) {
   debug("putID");
-  const { cuenta, conservar } = params;
-  return tareaApi.putID(cuenta)
+  const { tarea, conservar, actualizarLista } = params;
+  return tareaApi.putID(tarea)
     .then((resp) => {
       if (conservar) context.commit("setTarea", resp);
+      if (actualizarLista) context.commit("replaceEnTareas", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function postBase(context, params) {
   debug("postBase");
-  const { cuenta, conservar } = params;
-  return tareaApi.postBase(cuenta)
+  const { tarea, conservar } = params;
+  return tareaApi.postBase(tarea)
     .then((resp) => {
       if (conservar) context.commit("setTarea", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function deleteID(context, params) {
   debug("deleteID");
-  const { cuenta, delLocal } = params;
-  return tareaApi.deleteID(cuenta._id)
+  const { tarea, delLocal, deLista } = params;
+  return tareaApi.deleteID(tarea._id)
     .then(() => {
-      if (delLocal) context.commit("setTarea", null);
+      if (delLocal) context.commit("resetTarea");
+      if (deLista) context.commit("eliminarEnTareas", tarea);
       return null;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function guardar(context, params) {
   debug("guardar");
-  const { cuenta, conservar } = params;
-  return tareaApi.guardar(cuenta)
+  const { tarea, conservar, actualizarLista } = params;
+  return tareaApi.guardar(tarea)
     .then((resp) => {
       if (conservar) context.commit("setTarea", resp);
+      if (actualizarLista) context.commit("replaceEnTareas", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function listarXFecha(context, params) {
@@ -103,7 +117,8 @@ function listarXFecha(context, params) {
     .then((resp) => {
       context.commit("setTareas", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function getTareasPopuladas(context) {
@@ -112,19 +127,36 @@ function getTareasPopuladas(context) {
     .then((resp) => {
       context.commit("setTareas", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 // mutations
 
 function setTarea(pState, tarea) {
-  debug("setTarea");
+  tarea.start = moment(tarea.start);
+  tarea.end = moment(tarea.end);
+  if (tarea.empleado._id) tarea.empleado = tarea.empleado._id;
   pState.tarea = tarea;
 }
 
 function setTareas(pState, tareas) {
-  debug("setTarea");
+  debug("setTareas");
   pState.tareas = tareas;
+}
+
+function replaceEnTareas(pState, tarea) {
+  debug("replaceEnTareas");
+  const index = findIndex(pState.tareas.docs, { _id: tarea._id });
+  pState.tareas.docs.splice(index, 1, tarea);
+}
+
+function eliminarEnTareas(pState, tarea) {
+  debug("eliminarEnTareas");
+  pState.tareas = {
+    docs: reject(pState.tareas.docs, ["_id", tarea._id]),
+    cant: pState.tareas.cant - 1,
+  };
 }
 
 function resetTarea(pState) {

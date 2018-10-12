@@ -9,6 +9,7 @@ const apiSinBases = {
   getCuentaActiva,
   invitarUsuarios,
   cargarBulk,
+  migrarEmpresarial,
 };
 
 const cuentaApi = rutasGenericas(apiSinBases);
@@ -39,6 +40,12 @@ function cargarBulk(cuentas) {
   };
   return axios
     .get(`${axios.defaults.baseUrl}/api/cuenta/cargarBulk`, query)
+    .then(resp => resp.data);
+}
+
+function migrarEmpresarial(id) {
+  return axios
+    .put(`${axios.defaults.baseUrl}/api/cuenta/migrarEmpresarial/${id}`)
     .then(resp => resp.data);
 }
 

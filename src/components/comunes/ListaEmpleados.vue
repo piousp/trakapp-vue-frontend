@@ -22,13 +22,12 @@
 <script>
 import cloneDeep from "lodash/cloneDeep";
 import obtenerColor from "./colores.js";
-import chatApi from "../chat/chatApi";
 
 export default {
   name: "ListaEmpleados",
   computed: {
     empleados() {
-      return this.$store.getters["empleados/listadoSinNuevos"];
+      return this.$store.getters["storeEmpleado/listadoSinNuevos"];
     },
   },
   methods: {
@@ -48,13 +47,13 @@ export default {
 
 function abrirEmpleado(emp) {
   if (emp.cantMensajesNoVistos > 0) {
-    chatApi.marcarComoVistos(emp._id);
+    this.$store.dispatch("storeMensaje/marcarComoVistos", { emisor: emp._id });
     this.setIndicadorMensajes(emp._id, 0);
   }
-  return this.$store.commit("modal/showModal", {
-    componentName: "ModalEmpleado",
+  this.$store.commit("empleado/setEmpleado", emp);
+  return this.$store.commit("storeModal/showModal", {
+    componentName: "modalEmpleado",
     params: {
-      emp,
       grande: true,
     },
   });

@@ -58,36 +58,33 @@
   </section>
 </template>
 <script>//
-import reject from "lodash/reject";
 import noop from "lodash/noop";
 import cloneDeep from "lodash/cloneDeep";
-import findIndex from "lodash/findIndex";
 import swal from "sweetalert2";
-import agendaApi from "./agendaApi.js";
 
 export default {
   name: "TareaList",
-  data,
+  created() {
+    return this.$store.dispatch("storeTarea/getTareasPopuladas");
+  },
+  computed: {
+    tareas() {
+      return this.$store.state.storeTarea.tareas;
+    },
+  },
   methods: {
     eliminar,
     abrir,
     abrirModal,
     aceptar,
   },
-  beforeRouteEnter,
 };
 
-function data() {
-  return {
-    tareas: [],
-  };
-}
-
 function abrirModal(tarea) {
-  return this.$store.commit("modal/showModal", {
-    componentName: "ModalTarea",
+  this.$store.commit("storeTarea/setTarea", tarea);
+  return this.$store.commit("storeModal/showModal", {
+    componentName: "modalTarea",
     params: {
-      evt: tarea,
       aceptar: this.aceptar,
       eliminar: this.eliminar,
       grande: true,
@@ -102,13 +99,7 @@ function abrir(tarea) {
 }
 
 function aceptar(tarea) {
-  return agendaApi.guardar(tarea).then((resp) => {
-    const index = findIndex(this.tareas.docs, { _id: resp._id });
-    resp.empleado = tarea.empleado;
-    resp.cliente = tarea.cliente;
-    this.tareas.docs.splice(index, 1, resp);
-    return resp;
-  });
+  return this.$store.dispatch("storeTarea/guardar", { tarea, conservar: false, actualizarLista: true });
 }
 
 function eliminar(tarea) {
@@ -117,32 +108,13 @@ function eliminar(tarea) {
     text: "¿Está seguro que desea eliminar este tarea?",
     type: "warning",
     showCancelButton: true,
-  }).then((resp) => {
-    if (resp && !resp.dismiss) {
-      return agendaApi
-        .eliminar(tarea._id)
-        .then(() => {
-          this.$toastr("success", "La tarea ha sido eliminado", "Éxito");
-          this.tareas.docs = reject(this.tareas.docs, ["_id", tarea._id]);
-          this.tareas.cant -= 1;
-          return this.tareas;
-        })
-        .catch((err) => {
-          this.$toastr("error", err, "Error");
-        });
-    }
-    return noop;
   })
-    .catch((err) => {
-      this.$toastr("error", err, "Error");
-    });
-}
-
-function beforeRouteEnter(to, from, next) {
-  return agendaApi.getTareas(0, 10)
-    .then(resp => next((vm) => {
-      vm.tareas = resp;
-    }))
+    .then((resp) => {
+      if (resp && !resp.dismiss) {
+        return this.$store.dispatch("storeTarea/deleteID", { tarea, delLocal: true, deLista: true });
+      }
+      return noop;
+    })
     .catch((err) => {
       this.$toastr("error", err, "Error");
     });

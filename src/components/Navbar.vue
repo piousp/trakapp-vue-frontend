@@ -24,7 +24,6 @@ import swal from "sweetalert2";
 import pkg from "../../package.json";
 import Menu from "./Menu.vue";
 import tour from "./tour.js";
-import perfilApi from "./perfil/perfilApi.js";
 
 export default {
   name: "Navbar",
@@ -35,8 +34,8 @@ export default {
   computed: {
     nombreUsuario,
     version,
-    usuario() { return this.$store.state.perfil.usuario; },
-    cuenta() { return this.$store.state.perfil.cuenta; },
+    usuario() { return this.$store.state.storeUsuario.usuarioActivo; },
+    cuenta() { return this.$store.state.storeCuenta.cuentaActiva; },
   },
   watch: {
     $route: route,
@@ -85,7 +84,9 @@ function mounted() {
       if (resp && !resp.dismiss) {
         tour(this.$router, 0);
       }
-      return perfilApi.actualizarUsuario(this.usuario);
+      return this.$store.dispatch("storeUsuario/guardar", {
+        usuario: this.usuario, conservar: false, conservarActivo: true,
+      });
     }), 2000);
   }
   return null;

@@ -3,8 +3,8 @@
     <div class="modal__header text--center">
       <div class="modal__header__titulo">
         <i class="fal fa-fw fa-calendar"/>
-        {{ tarea.title || 'Nueva tarea' }}
-        <span class="text--italic text--gris8" v-if="tarea.activa === false">Finalizada</span>
+        {{ copia.title || 'Nueva tarea' }}
+        <span class="text--italic text--gris8" v-if="copia.activa === false">Finalizada</span>
       </div>
     </div>
     <form ref="form" novalidate>
@@ -14,8 +14,8 @@
             <form-group id="title" :error="errors.has('title') && submitted">
               <input class="form__input"
                      name="title"
-                     v-model="tarea.title"
-                     :disabled="tarea.activa === false"
+                     v-model="copia.title"
+                     :disabled="copia.activa === false"
                      required
                      v-validate="'required'">
               <label class="form__label">Título</label>
@@ -23,9 +23,9 @@
             <form-group>
               <label class="form__label">Cliente dueño</label>
               <multiselect
-                v-model="tarea.cliente"
-                :options="clientes"
-                :disabled="tarea.activa === false"
+                v-model="copia.cliente"
+                :options="clientes.docs"
+                :disabled="copia.activa === false"
                 label="nombreCompleto"
                 placeholder="Buscar por nombre..."
                 @search-change="buscarClientes"
@@ -34,9 +34,9 @@
             <form-group id="asignar-tarea" :error="errors.has('empleado') && submitted">
               <select class="form__input"
                       name="empleado"
-                      v-model="tarea.empleado"
+                      v-model="copia.empleado"
                       required
-                      :disabled="tarea.activa === false"
+                      :disabled="copia.activa === false"
                       v-validate="'required'">
                 <option v-for="emp in empleados.docs" :value="emp" :key="emp._id">
                   {{ emp.nombre }} {{ emp.apellidos }}
@@ -46,8 +46,8 @@
             </form-group>
             <form-group>
               <textarea class="form__input" rows="3"
-                        v-model="tarea.descripcion"
-                        :disabled="tarea.activa === false"/>
+                        v-model="copia.descripcion"
+                        :disabled="copia.activa === false"/>
               <label class="form__label">Descripción</label>
             </form-group>
             <div class="grid grid--bleed" id="fecha-tarea">
@@ -55,17 +55,17 @@
                 <form-group id="fecha-desde" :error="errors.has('fecha-desde') && submitted">
                   <label class="form__label form__label--required">Desde</label>
                   <datetime
-                    v-if="tarea.activa"
-                    v-model="tarea.start"
+                    v-if="copia.activa"
+                    v-model="copia.start"
                     v-validate="'required'"
-                    :disabled="tarea.activa === false"
+                    :disabled="copia.activa === false"
                     :minute-step="15"
                     :use12-hour="true"
                     input-class="form__input"
                     name="fecha-desde"
                     type="datetime"/>
                   <p v-else class="form__input">
-                    {{ tarea.start | fecha("DD MMM YYYY hh:mm a") }}
+                    {{ copia.start | fecha("DD MMM YYYY hh:mm a") }}
                   </p>
                 </form-group>
               </div>
@@ -73,17 +73,17 @@
                 <form-group id="fecha-hasta" :error="errors.has('fecha-hasta')">
                   <label class="form__label form__label--required">Hasta</label>
                   <datetime
-                    v-if="tarea.activa"
-                    v-model="tarea.end"
-                    v-validate="{rules: {is: tarea.start > tarea.end, required: true}}"
-                    :disabled="tarea.activa === false"
+                    v-if="copia.activa"
+                    v-model="copia.end"
+                    v-validate="{rules: {is: copia.start > copia.end, required: true}}"
+                    :disabled="copia.activa === false"
                     :minute-step="15"
                     :use12-hour="true"
                     input-class="form__input"
                     name="fecha-hasta"
                     type="datetime"/>
                   <p v-else class="form__input">
-                    {{ tarea.end | fecha("DD MMM YYYY hh:mm a") }}
+                    {{ copia.end | fecha("DD MMM YYYY hh:mm a") }}
                   </p>
                   <p class="form__error-message text--small" v-show="errors.has('fecha-hasta')">
                     Debe ser mayor que 'Desde'
@@ -91,21 +91,21 @@
                 </form-group>
               </div>
             </div>
-            <div class="grid" v-if="!isEmpty(tarea.post)">
+            <div class="grid" v-if="!isEmpty(copia.post)">
               <div class="col-md-6 form__group">
                 <label class="form__label">Firma</label><br>
-                <img :src="`data:image/svg+xml;base64,${tarea.post.firma}`" height="100px">
+                <img :src="`data:image/svg+xml;base64,${copia.post.firma}`" height="100px">
               </div>
               <div class="col-md-6 form__group">
                 <label class="form__label">Apuntes</label>
-                <p class="text text--gris8">{{ tarea.post.apuntes }}</p>
+                <p class="text text--gris8">{{ copia.post.apuntes }}</p>
               </div>
             </div>
           </div>
           <div class="col-6">
             <form-group id="ubicacion-tarea">
               <gmap-autocomplete class="form__input" ref="gmapAutocomplete"
-                                 :disabled="tarea.activa === false"
+                                 :disabled="copia.activa === false"
                                  required
                                  :options="{componentRestrictions: {country: 'cr'}}"
                                  @place_changed="buscarLugar"
@@ -120,27 +120,27 @@
               :options="{ disableDefaultUI : true }"
               map-type-id="terrain">
               <gmap-marker
-                v-if="tarea.ubicacion && tarea.ubicacion.coordinates"
-                :draggable="tarea.activa !== false"
+                v-if="copia.ubicacion && copia.ubicacion.coordinates"
+                :draggable="copia.activa !== false"
                 :position="{
-                  lat: tarea.ubicacion.coordinates[1],
-                  lng: tarea.ubicacion.coordinates[0]
+                  lat: copia.ubicacion.coordinates[1],
+                  lng: copia.ubicacion.coordinates[0]
                 }
               "/>
             </gmap-map>
           </div>
         </div>
         <div class="col-12 text">
-          <Subtareas :lista="tarea.subtareas"/>
+          <Subtareas :lista="copia.subtareas"/>
         </div>
       </div>
       <div class="modal__footer">
         <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
-        <button type="button" class="boton boton--guardar" @click="verificarYAceptar(tarea)"/>
+        <button type="button" class="boton boton--guardar" @click="verificarYAceptar(copia)"/>
         <button type="button"
                 class="boton boton--eliminar"
-                @click="eliminarTarea(tarea)"
-                v-show="tarea._id"/>
+                @click="eliminarTarea(copia)"
+                v-show="copia._id"/>
       </div>
     </form>
   </section>
@@ -153,8 +153,10 @@ import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
 import debounce from "lodash/debounce";
 import cloneDeep from "lodash/cloneDeep";
-import clienteApi from "../../clientes/clienteApi";
+import D from "debug";
 import Subtareas from "../../agenda/Subtareas.vue";
+
+const debug = D("ciris:ModalTarea.vue");
 
 export default {
   name: "ModalTarea",
@@ -165,14 +167,29 @@ export default {
   props: ["params"],
   computed: {
     empleados() {
-      return this.$store.state.empleados.listado;
+      return this.$store.state.storeEmpleado.empleados;
+    },
+    tarea() {
+      return this.$store.state.storeTarea.tarea;
+    },
+    clientes() {
+      return this.$store.state.storeCliente.clientes;
     },
   },
   created() {
-    if (this.params.evt._id) {
-      return this.editarModal(this.params.evt);
+    if (this.copia._id) {
+      return this.editarModal(this.copia);
     }
-    return this.abrirModal(this.params.evt);
+    return this.abrirModal(this.copia);
+  },
+  watch: {
+    tarea: {
+      handler(newV) {
+        this.copia = cloneDeep(newV);
+      },
+      immediate: true,
+      deep: true,
+    },
   },
   methods: {
     eliminarTarea,
@@ -189,27 +206,29 @@ export default {
 
 function data() {
   return {
+    copia: { subtareas: [] },
     mapCenter: { lat: 9.93, lng: -84.07 },
-    clientes: [],
     submitted: false,
     mostrarSubtareas: true,
-    tarea: {
-      subtareas: [],
-    },
   };
 }
 
 function eliminarTarea(ptarea) {
-  this.$store.commit("modal/hideModal");
-  return this.params.eliminar(ptarea);
+  debug("eliminarTarea");
+  this.$store.commit("storeModal/hideModal");
+  this.$store.commit("storeTarea/resetTarea");
+  if (this.params.eliminar) this.params.eliminar(ptarea);
 }
 
 function verificarYAceptar(tarea) {
+  debug("verificarYAceptar");
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido && tarea.ubicacion.coordinates) {
-      this.$store.commit("modal/hideModal");
-      return this.params.aceptar(tarea);
+      this.$store.commit("storeModal/hideModal");
+      this.$store.commit("storeTarea/resetTarea");
+      if (this.params.aceptar) this.params.aceptar(tarea);
+      return tarea;
     } else if (!valido) {
       this.$toastr("error", "Falta información por llenar", "Campos vacios");
     } else if (!tarea.ubicacion.coordinates) {
@@ -220,6 +239,7 @@ function verificarYAceptar(tarea) {
 }
 
 function abrirModal(evt) {
+  debug("abrirModal");
   const tarea = {
     start: evt.start,
     end: evt.end,
@@ -228,55 +248,59 @@ function abrirModal(evt) {
     activa: true,
     subtareas: [],
   };
-  this.tarea = formatearFechas(tarea);
+  this.copia = formatearFechas(tarea);
 }
 
 function cerrarModal() {
+  debug("cerrarModal");
   this.submitted = false;
-  this.tarea = { post: {}, subtareas: [] };
+  this.$store.commit("storeTarea/resetTarea");
   this.$refs.gmapAutocomplete.$el.value = null;
   this.clienteBuscado = null;
-  this.$store.commit("modal/hideModal");
+  this.$store.commit("storeModal/hideModal");
 }
 
 function editarModal(ptarea) {
+  debug("editarModal");
   const tarea = cloneDeep(ptarea);
   if (tarea && tarea.cliente) {
     tarea.cliente.nombreCompleto = `${tarea.cliente.nombre} ${tarea.cliente.apellidos}`;
   }
   tarea.empleado = find(this.empleados.docs, { _id: tarea.empleado });
-  this.tarea = formatearFechas(tarea);
+  this.copia = formatearFechas(tarea);
   // Hay que esperar a que el mapa cargue. No hay forma de hacer un watch sobre $refs.
   setTimeout(() => {
     this.$refs.map.panTo({
-      lat: this.tarea.ubicacion.coordinates[1],
-      lng: this.tarea.ubicacion.coordinates[0],
+      lat: this.copia.ubicacion.coordinates[1],
+      lng: this.copia.ubicacion.coordinates[0],
     });
   }, 1000);
 }
 
 function buscarLugar(lugar) {
-  this.tarea.ubicacion = {
+  debug("buscarLugar");
+  this.copia.ubicacion = {
     type: "Point",
     coordinates: [lugar.geometry.location.lng(), lugar.geometry.location.lat()],
   };
   this.$refs.map.panTo({
-    lat: this.tarea.ubicacion.coordinates[1],
-    lng: this.tarea.ubicacion.coordinates[0],
+    lat: this.copia.ubicacion.coordinates[1],
+    lng: this.copia.ubicacion.coordinates[0],
   });
 }
 
 function buscarClientesDebounce(txt) {
+  debug("buscarClientesDebounce");
   if (!txt) {
     return [];
   }
-  return clienteApi.buscar(txt, 0, 10).then((resp) => {
-    this.clientes = resp;
-    return resp;
+  return this.$store.dispatch("storeCliente/buscar", {
+    txt, pagina: 0, cantidad: 10, recordar: true,
   });
 }
 
 function formatearFechas(tarea) {
+  debug("formatearFechas");
   const tareaMod = cloneDeep(tarea);
   tareaMod.start = moment.isMoment(tarea.start) ? tarea.start.format() : tarea.start;
   tareaMod.end = moment.isMoment(tarea.end) ? tarea.end.format() : tarea.end;
@@ -284,10 +308,11 @@ function formatearFechas(tarea) {
 }
 
 function crearSubtarea() {
-  if (some(this.tarea.subtareas, { texto: "" })) {
+  debug("crearSubtarea");
+  if (some(this.copia.subtareas, { texto: "" })) {
     return false;
   }
-  return this.tarea.subtareas.push({
+  return this.copia.subtareas.push({
     texto: "",
     completado: false,
   });

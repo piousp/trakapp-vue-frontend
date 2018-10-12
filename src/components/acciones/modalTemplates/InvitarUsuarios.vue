@@ -9,7 +9,7 @@
         v-model="tag"
         :tags="tags"
         :validation="validation"
-        :autocomplete-items="autocompleteItems"
+        placeholder="usuario@dominio.com"
         @tags-changed="newTags => tags = newTags"
       />
     </div>
@@ -27,7 +27,6 @@ import VueTagsInput from "@johmun/vue-tags-input";
 import cloneDeep from "lodash/cloneDeep";
 import map from "lodash/map";
 import D from "debug";
-import cuentaApi from "../../perfil/cuentaAPI";
 
 const debug = D("ciris:InvitarUsuarios.vue");
 
@@ -39,7 +38,7 @@ export default {
   data,
   methods: {
     invitarUsuarios,
-    hideModal() { return this.$store.commit("modal/hideModal"); },
+    hideModal() { return this.$store.commit("storeModal/hideModal"); },
   },
 };
 
@@ -47,7 +46,6 @@ function data() {
   return {
     tag: "",
     tags: [],
-    autocompleteItems: [{ text: "Tiene que ingresar un correo valido" }],
     validation: [
       {
         type: "error",
@@ -64,14 +62,11 @@ function invitarUsuarios() {
   const usuario = cloneDeep(this.usuario);
   usuario.cuenta = cloneDeep(this.cuenta);
   debug(`Enviando invitaciones a ${correos.length} correos`);
-  cuentaApi.invitarUsuarios(usuario, correos)
+  return this.$store.dispatch("storeCuenta/invitarUsuarios", { usuario, correos })
     .then(() => {
       comp.tag = "";
       comp.tags = [];
-      comp.modalInvitaciones = false;
-      debug("Envio exitoso");
-      return comp.$toastr("success", "Se enviaron correos de invitación a los correos especificados", "Éxito");
-    })
-    .catch(err => debug(err));
+      return comp;
+    });
 }
 </script>

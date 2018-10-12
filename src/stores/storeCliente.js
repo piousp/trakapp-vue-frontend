@@ -1,11 +1,13 @@
 import D from "debug";
+import reject from "lodash/reject";
+import findIndex from "lodash/findIndex";
 import clienteApi from "../APIs/clienteApi";
 
 const debug = D("ciris:storeCliente");
 
 const state = {
   cliente: {},
-  clientes: [],
+  clientes: { docs: [], cant: 0 },
 };
 
 const actions = {
@@ -21,6 +23,8 @@ const actions = {
 const mutations = {
   setCliente,
   setClientes,
+  replaceEnClientes,
+  eliminarEnClientes,
   resetCliente,
   resetClientes,
 };
@@ -44,7 +48,8 @@ function getID(context, params) {
     .then((resp) => {
       context.commit("setCliente", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function getBase(context, params) {
@@ -52,59 +57,70 @@ function getBase(context, params) {
   const { pagina, cantidad } = params;
   return clienteApi.getBase(pagina, cantidad)
     .then((resp) => {
+      debug(resp);
       context.commit("setClientes", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function putID(context, params) {
   debug("putID");
-  const { cuenta, conservar } = params;
-  return clienteApi.putID(cuenta)
+  const { cliente, conservar } = params;
+  return clienteApi.putID(cliente)
     .then((resp) => {
       if (conservar) context.commit("setCliente", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function postBase(context, params) {
   debug("postBase");
-  const { cuenta, conservar } = params;
-  return clienteApi.postBase(cuenta)
+  const { cliente, conservar } = params;
+  return clienteApi.postBase(cliente)
     .then((resp) => {
       if (conservar) context.commit("setCliente", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function deleteID(context, params) {
   debug("deleteID");
-  const { cuenta, delLocal } = params;
-  return clienteApi.deleteID(cuenta._id)
+  const { cliente, delLocal, deLista } = params;
+  return clienteApi.deleteID(cliente._id)
     .then(() => {
-      if (delLocal) context.commit("setCliente", null);
+      if (delLocal) context.commit("resetCliente");
+      if (deLista) context.commit("eliminarEnClientes", cliente);
       return null;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function guardar(context, params) {
   debug("guardar");
-  const { cuenta, conservar } = params;
-  return clienteApi.guardar(cuenta)
+  const { cliente, conservar, actualizarLista } = params;
+  return clienteApi.guardar(cliente)
     .then((resp) => {
       if (conservar) context.commit("setCliente", resp);
+      if (actualizarLista) context.commit("replaceEnClientes", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function buscar(context, params) {
   debug("buscar");
-  const { txt, pagina, cantidad } = params;
+  const {
+    txt, pagina, cantidad, recordar,
+  } = params;
   return clienteApi.buscar(txt, pagina, cantidad)
     .then((resp) => {
-      context.commit("setClientes", resp);
+      if (recordar) context.commit("setClientes", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 // mutations
@@ -117,6 +133,20 @@ function setCliente(pState, cliente) {
 function setClientes(pState, clientes) {
   debug("setClientes");
   pState.clientes = clientes;
+}
+
+function replaceEnClientes(pState, cliente) {
+  debug("replaceEnClientes");
+  const index = findIndex(pState.clientes.docs, { _id: cliente._id });
+  pState.clientes.docs.splice(index, 1, cliente);
+}
+
+function eliminarEnClientes(pState, cliente) {
+  debug("eliminarEnClientes");
+  pState.clientes = {
+    docs: reject(pState.clientes.docs, ["_id", cliente._id]),
+    cant: pState.clientes.cant - 1,
+  };
 }
 
 function resetCliente(pState) {

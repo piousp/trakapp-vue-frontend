@@ -53,10 +53,12 @@ export default store;
 function getID(context, params) {
   debug("getID");
   const { id } = params;
-  return empleadoApi.getID(id).then((empleado) => {
-    context.commit("setEmpleado", empleado);
-    return empleado;
-  });
+  return empleadoApi.getID(id)
+    .then((empleado) => {
+      context.commit("setEmpleado", empleado);
+      return empleado;
+    })
+    .catch(err => debug(err));
 }
 
 function getBase(context, params) {
@@ -66,7 +68,8 @@ function getBase(context, params) {
     .then((resp) => {
       context.commit("setEmpleados", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function putID(context, params) {
@@ -77,7 +80,8 @@ function putID(context, params) {
       if (conservar) context.commit("setEmpleado", resp);
       if (aLista) context.commit("modificarEmpleadoDeLista", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function postBase(context, params) {
@@ -88,7 +92,8 @@ function postBase(context, params) {
       if (conservar) context.commit("setEmpleado", resp);
       if (aLista) context.commit("agregarEmpleadoALista", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function deleteID(context, params) {
@@ -99,7 +104,8 @@ function deleteID(context, params) {
       if (delLocal) context.commit("resetEmpleado");
       if (aLista) context.commit("eliminarEmpleadoDeLista", empleado);
       return null;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function guardar(context, params) {
@@ -116,7 +122,8 @@ function guardar(context, params) {
         }
       }
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function cargarEmpleadosConMensajes(context, params) {
@@ -126,7 +133,8 @@ function cargarEmpleadosConMensajes(context, params) {
     .then((empleados) => {
       context.commit("setEmpleadosCMensajes", empleados);
       return null;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 // mutations
@@ -152,12 +160,12 @@ function resetEmpleadosCMensajes(pState) {
 }
 
 function resetEmpleados(pState) {
-  debug("setEmpleados");
+  debug("resetEmpleados");
   pState.empleados = { docs: [], cant: 0 };
 }
 
 function resetEmpleado(pState) {
-  debug("setEmpleado");
+  debug("resetEmpleado");
   pState.empleado = { device: {}, ubicacion: {}, horarios: {} };
 }
 
@@ -182,7 +190,7 @@ function eliminarEmpleadoDeLista(pState, empleado) {
 function listadoSinNuevos(pState) {
   debug("listadoSinNuevos");
   return {
-    docs: filter(pState.listado.docs, obj => !!obj.ubicacion),
-    cant: pState.listado.cant,
+    docs: filter(pState.empleados.docs, obj => !!obj.ubicacion),
+    cant: pState.empleados.cant,
   };
 }

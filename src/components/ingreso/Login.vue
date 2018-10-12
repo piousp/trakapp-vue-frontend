@@ -89,7 +89,6 @@ import D from "debug";
 import noop from "lodash/noop";
 import cloneDeep from "lodash/cloneDeep";
 import find from "lodash/find";
-import usuarioAPI from "../perfil/perfilApi";
 import id from "../ids.js";
 
 const debug = D("ciris:Login.vue");
@@ -153,7 +152,7 @@ function login() {
           if (this.idCuenta && !find(this.usuario.cuentas, n => n === this.idCuenta)) {
             const usuario = cloneDeep(resp.usuario);
             usuario.cuentas.push(this.idCuenta);
-            return usuarioAPI.actualizarUsuario(usuario)
+            return this.$store.dispatch("storeUsuario/guardar", usuario)
               .then(() => {
                 this.$toastr("success", this.$t("invitation.success"), "Éxito");
                 return redirijir();

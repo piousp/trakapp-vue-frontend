@@ -1,4 +1,6 @@
 import D from "debug";
+import findIndex from "lodash/findIndex";
+import reject from "lodash/reject";
 import mensajeApi from "../APIs/mensajeApi";
 
 const debug = D("ciris:storeMensaje");
@@ -23,6 +25,10 @@ const actions = {
 const mutations = {
   setMensaje,
   setMensajes,
+  agregarAMensajes,
+  agregarMensajesAMensajes,
+  replaceEnMensajes,
+  eliminarEnMensajes,
   resetMensaje,
   resetMensajes,
 };
@@ -44,7 +50,8 @@ function getID(context, params) {
     .then((resp) => {
       context.commit("setMensaje", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function getBase(context, params) {
@@ -54,47 +61,55 @@ function getBase(context, params) {
     .then((resp) => {
       context.commit("setMensajes", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function putID(context, params) {
   debug("putID");
-  const { cuenta, conservar } = params;
-  return mensajeApi.putID(cuenta)
+  const { mensaje, conservar } = params;
+  return mensajeApi.putID(mensaje)
     .then((resp) => {
       if (conservar) context.commit("setMensaje", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function postBase(context, params) {
   debug("postBase");
-  const { cuenta, conservar } = params;
-  return mensajeApi.postBase(cuenta)
+  const { mensaje, conservar } = params;
+  return mensajeApi.postBase(mensaje)
     .then((resp) => {
       if (conservar) context.commit("setMensaje", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function deleteID(context, params) {
   debug("deleteID");
-  const { cuenta, delLocal } = params;
-  return mensajeApi.deleteID(cuenta._id)
+  const { mensaje, delLocal, delLista } = params;
+  return mensajeApi.deleteID(mensaje._id)
     .then(() => {
-      if (delLocal) context.commit("setMensaje", null);
+      if (delLocal) context.commit("resetMensaje");
+      if (delLista) context.commit("replaceEnMensajes", mensaje);
       return null;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function guardar(context, params) {
   debug("guardar");
-  const { cuenta, conservar } = params;
-  return mensajeApi.guardar(cuenta)
+  const { mensaje, conservar, aLista } = params;
+  return mensajeApi.guardar(mensaje)
     .then((resp) => {
       if (conservar) context.commit("setMensaje", resp);
+      if (aLista) context.commit("replaceEnMensajes", resp);
+      if (!mensaje._id) context.commit("agregarAMensajes", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function listarPrivado(context, params) {
@@ -106,7 +121,8 @@ function listarPrivado(context, params) {
     .then((resp) => {
       context.commit("setMensajes", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function listarPublico(context, params) {
@@ -118,13 +134,16 @@ function listarPublico(context, params) {
     .then((resp) => {
       context.commit("setMensajes", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function marcarComoVistos(context, params) {
   debug("listarPublico");
   const { emisor } = params;
-  return mensajeApi.marcarComoVistos(emisor);
+  return mensajeApi.marcarComoVistos(emisor)
+    .then(debug("Se marcaron los mensajes como vistos"))
+    .catch(err => debug(err));
 }
 
 // mutations
@@ -137,6 +156,32 @@ function setMensaje(pState, mensaje) {
 function setMensajes(pState, mensajes) {
   debug("setMensaje");
   pState.mensajes = mensajes;
+}
+
+function agregarAMensajes(pState, mensaje) {
+  debug("agregarAMensajes");
+  pState.mensajes.docs.push(mensaje);
+  pState.mensajes.cant += 1;
+}
+
+function agregarMensajesAMensajes(pState, mensajes) {
+  debug("agregarMensajesAMensajes");
+  pState.mensajes.docs = pState.mensajes.docs.concat(mensajes);
+  pState.mensajes.cant += mensajes.length;
+}
+
+function replaceEnMensajes(pState, mensaje) {
+  debug("replaceEnMensajes");
+  const index = findIndex(pState.mensajes.docs, { _id: mensaje._id });
+  pState.mensajes.docs.splice(index, 1, mensaje);
+}
+
+function eliminarEnMensajes(pState, mensaje) {
+  debug("eliminarEnMensajes");
+  pState.mensajes = {
+    docs: reject(pState.mensajes.docs, ["_id", mensaje._id]),
+    cant: pState.mensajes.cant - 1,
+  };
 }
 
 function resetMensaje(pState) {

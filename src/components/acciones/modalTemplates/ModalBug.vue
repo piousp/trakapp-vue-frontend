@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import perfilAPi from "../../perfil/perfilApi.js";
 
 export default {
   name: "ModalBug",
@@ -41,7 +40,7 @@ export default {
 };
 
 function hideModal() {
-  return this.$store.commit("modal/hideModal");
+  return this.$store.commit("storeModal/hideModal");
 }
 
 function data() {
@@ -61,12 +60,8 @@ function enviar() {
         apellidos: creds.apellidos,
         correo: creds.correo,
       };
-      return perfilAPi
-        .reportarBug(this.bug)
-        .then(() => {
-          this.hideModal();
-          return this.$toastr("success", "Su mensaje ha sido enviado", "Gracias");
-        });
+      return this.$store.dispatch("usuario/reportarBug", { form: this.bug })
+        .then(() => this.hideModal());
     }
     return null;
   });

@@ -1,10 +1,12 @@
 import D from "debug";
+import swal from "sweetalert2";
 import usuarioApi from "../APIs/usuarioApi";
 
 const debug = D("ciris:storeUsuario");
 
 const state = {
-  usuario: { subtareas: [] },
+  usuario: { usuarios: [] },
+  usuarioActivo: { usuarios: [] },
   usuarios: { docs: [], cant: 0 },
 };
 
@@ -15,12 +17,16 @@ const actions = {
   postBase,
   deleteID,
   guardar,
+  getUsuarioActivo,
+  reportarBug,
 };
 
 const mutations = {
   setUsuario,
+  setUsuarioActivo,
   setUsuarios,
   resetUsuario,
+  resetUsuarioActivo,
   resetUsuarios,
 };
 
@@ -34,6 +40,8 @@ const store = {
 
 export default store;
 
+// actions
+
 function getID(context, params) {
   debug("getID");
   const { id } = params;
@@ -41,7 +49,8 @@ function getID(context, params) {
     .then((resp) => {
       context.commit("setUsuario", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function getBase(context, params) {
@@ -51,61 +60,105 @@ function getBase(context, params) {
     .then((resp) => {
       context.commit("setUsuarios", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function putID(context, params) {
   debug("putID");
-  const { cuenta, conservar } = params;
-  return usuarioApi.putID(cuenta)
+  const { usuario, conservar } = params;
+  return usuarioApi.putID(usuario)
     .then((resp) => {
       if (conservar) context.commit("setUsuario", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function postBase(context, params) {
   debug("postBase");
-  const { cuenta, conservar } = params;
-  return usuarioApi.postBase(cuenta)
+  const { usuario, conservar } = params;
+  return usuarioApi.postBase(usuario)
     .then((resp) => {
       if (conservar) context.commit("setUsuario", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function deleteID(context, params) {
   debug("deleteID");
-  const { cuenta, delLocal } = params;
-  return usuarioApi.deleteID(cuenta._id)
+  const { usuario, delLocal } = params;
+  return usuarioApi.deleteID(usuario._id)
     .then(() => {
       if (delLocal) context.commit("setUsuario", null);
       return null;
-    });
+    })
+    .catch(err => debug(err));
 }
 
 function guardar(context, params) {
   debug("guardar");
-  const { cuenta, conservar } = params;
-  return usuarioApi.guardar(cuenta)
+  const { usuario, conservar, conservarActivo } = params;
+  return usuarioApi.guardar(usuario)
     .then((resp) => {
       if (conservar) context.commit("setUsuario", resp);
+      if (conservarActivo) context.commit("setUsuarioActivo", resp);
       return resp;
-    });
+    })
+    .catch(err => debug(err));
 }
 
+function getUsuarioActivo(context) {
+  debug("getUsuarioActivo");
+  return usuarioApi.getUsuarioActivo()
+    .then((resp) => {
+      context.commit("setUsuarioActivo", resp);
+      return resp;
+    })
+    .catch(err => debug(err));
+}
+
+function reportarBug(context, params) {
+  debug("reportarBug");
+  const { form } = params;
+  return usuarioApi.reportarBug(form)
+    .then(() => swal(
+      "Reportar error",
+      "Se ha enviado el reporte exitosamente",
+      "success",
+    ))
+    .catch(err => debug(err));
+}
+
+// mutations
+
 function setUsuario(pState, usuario) {
+  debug("setUsuario");
   pState.usuario = usuario;
 }
 
+function setUsuarioActivo(pState, usuario) {
+  debug("setUsuarioActivo");
+  pState.usuarioActivo = usuario;
+}
+
 function setUsuarios(pState, usuarios) {
+  debug("setUsuarios");
   pState.usuarios = usuarios;
 }
 
 function resetUsuario(pState) {
-  pState.usuario = { subtareas: [] };
+  debug("resetUsuario");
+  pState.usuario = { usuarios: [] };
+}
+
+function resetUsuarioActivo(pState) {
+  debug("resetUsuarioActivo");
+  pState.usuarioActivo = { usuarios: [] };
 }
 
 function resetUsuarios(pState) {
+  debug("resetUsuarios");
   pState.usuarios = { docs: [], cant: 0 };
 }

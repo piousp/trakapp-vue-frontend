@@ -31,9 +31,8 @@
 import D from "debug";
 import noop from "lodash/noop";
 import moment from "moment";
-import chatApi from "../chat/chatApi.js";
 
-const debug = D("ciris:comunes/ChatIndividuo.vue");
+const debug = D("ciris:ChatIndividuo.vue");
 
 export default {
   name: "ChatIndividuo",
@@ -45,21 +44,23 @@ export default {
     },
   },
   data,
+  computed: {
+    mensajes() {
+      return this.$store.state.storeMensaje.mensajes;
+    },
+  },
   mounted,
   methods: {
     enviar,
-    cargarMensajes,
     arreglarScroll,
-    agregarMensaje,
     listar,
   },
 };
 
 function data() {
   return {
-    mensajes: { docs: [], cant: 0 },
     mensaje: {},
-    idEmisor: this.$store.state.perfil.usuario._id,
+    idEmisor: this.$store.state.storeUsuario.usuarioActivo._id,
     idReceptor: "",
     limiteItems: 20,
     cargando: false,
@@ -73,7 +74,7 @@ function enviar(txt) {
   }
   const msj = {
     texto: txtTrim,
-    emisor: this.$auth.usuario,
+    emisor: this.idEmisor,
     modelo: "usuario",
     fechaEnvio: moment(),
   };
@@ -81,27 +82,17 @@ function enviar(txt) {
     msj.receptor = this.idReceptor;
   }
   debug("Enviando el texto", txtTrim);
-  this.agregarMensaje(msj, true);
   setTimeout(() => {
     this.$refs.chatInput.focus();
     this.mensaje = {};
   }, 10);
-  return chatApi.guardar(msj).then((resp) => {
-    debug("Mensaje guardado");
-    this.$socket.emit(this.privado ? "mensajeEnviado" : "broadcastEnviado", resp);
-    return null;
-  });
-}
-
-function cargarMensajes(id) {
-  debug("Cargando los mensajes del chat");
-  this.idReceptor = id;
-  return this.listar(0).then((msjs) => {
-    this.mensajes = msjs;
-    this.arreglarScroll();
-    this.$refs.chatInput.focus();
-    return null;
-  });
+  return this.$store.dispatch("storeMensaje/guardar", { mensaje: msj })
+    .then((resp) => {
+      debug("Mensaje guardado");
+      this.arreglarScroll();
+      this.$socket.emit(this.privado ? "mensajeEnviado" : "broadcastEnviado", resp);
+      return null;
+    });
 }
 
 function arreglarScroll() {
@@ -115,30 +106,31 @@ function arreglarScroll() {
   });
 }
 
-function agregarMensaje(mensaje) {
-  this.mensajes.docs.push(mensaje);
-  this.mensajes.cant += 1;
-  this.arreglarScroll();
-}
-
 function listar(cargados) {
+  const params = {
+    cargados,
+    cantidad: this.limiteItems,
+    emisor: this.idEmisor,
+    receptor: this.idReceptor,
+  };
   if (this.privado) {
-    return chatApi
-      .listarPrivado(cargados, this.limiteItems, this.idEmisor, this.idReceptor);
+    return this.$store.dispatch("storeMensaje/listarPrivado", params);
   }
-  return chatApi
-    .listarPublico(cargados, this.limiteItems);
+  return this.$store.dispatch("storeMensaje/listarPublico", params);
 }
 
 function mounted() {
-  this.$socket.on(this.privado ? "recibirMensaje" : "recibirBroadcast", this.agregarMensaje);
+  this.$socket.on(
+    this.privado ? "recibirMensaje" : "recibirBroadcast",
+    obj => this.$store.commit("agregarAMensajes", obj),
+  );
   this.$refs.dialogo.onscroll = () => {
     if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
       this.cargando = true;
       return this.listar(this.mensajes.docs.length)
         .then((msjs) => {
           const heightInicial = this.$refs.dialogo.scrollHeight;
-          this.mensajes.docs = msjs.docs.concat(this.mensajes.docs);
+          this.$store.commit("storeMensaje/agregarMensajesAMensajes", msjs);
           this.cargando = false;
           this.$nextTick(() => {
             this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight - heightInicial;

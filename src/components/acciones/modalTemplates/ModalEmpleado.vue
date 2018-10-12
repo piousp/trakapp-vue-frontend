@@ -52,7 +52,10 @@ export default {
   props: ["params"],
   mounted() {
     return this.$refs.map.$mapPromise
-      .then(objMapa => this.abrirModal(this.params.emp, objMapa));
+      .then(objMapa => this.abrirModal(this.empleado, objMapa));
+  },
+  computed: {
+    empleado() { return this.$store.state.storeEmpleado.empleado; },
   },
   methods: {
     abrirModal,
@@ -106,9 +109,8 @@ function abrirModal(empleado, objMapa) {
   return objMapa;
 }
 
-
 function cerrarModal() {
-  return this.$store.commit("modal/hideModal");
+  return this.$store.commit("storeModal/hideModal");
 }
 </script>
 

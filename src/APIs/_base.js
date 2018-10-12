@@ -1,7 +1,7 @@
 import D from "debug";
 import axios from "../config/axios";
 
-const debug = D("ciris:rest/rutas/_base.js");
+const debug = D("ciris:APIs/_base.js");
 
 export default rutasGenericas;
 export {
@@ -14,14 +14,18 @@ export {
 };
 
 function getID(api) {
-  api.getID = id => axios
-    .get(`${axios.defaults.baseUrl}/api/${api.modelo}/${id}`)
-    .then(resp => resp.data);
+  api.getID = (id) => {
+    debug(`Ejecutando getID en API de ${api.modelo}`);
+    return axios
+      .get(`${axios.defaults.baseUrl}/api/${api.modelo}/${id}`)
+      .then(resp => resp.data);
+  };
   return api;
 }
 
 function getBase(api) {
   api.getBase = (pagina, cantidad) => {
+    debug(`Ejecutando getBase en API de ${api.modelo}`);
     const query = {
       params: {
         pagina: pagina || 0,
@@ -35,26 +39,36 @@ function getBase(api) {
 }
 
 function putID(api) {
-  api.putID = obj => axios
-    .put(`${axios.defaults.baseUrl}/api/${api.modelo}/${obj.id}`, obj)
-    .then(resp => resp.data);
+  api.putID = (obj) => {
+    debug(`Ejecutando putID en API de ${api.modelo}`);
+    return axios
+      .put(`${axios.defaults.baseUrl}/api/${api.modelo}/${obj.id}`, obj)
+      .then(resp => resp.data);
+  };
   return api;
 }
 
 function postBase(api) {
-  api.postBase = obj => axios
-    .post(`${axios.defaults.baseUrl}/api/${api.modelo}`, obj)
-    .then(resp => resp.data);
+  api.postBase = (obj) => {
+    debug(`Ejecutando postBase en API de ${api.modelo}`);
+    return axios
+      .post(`${axios.defaults.baseUrl}/api/${api.modelo}`, obj)
+      .then(resp => resp.data);
+  };
   return api;
 }
 
 function deleteID(api) {
-  api.deleteID = id => axios.delete(`${axios.defaults.baseUrl}/api/${api.modelo}/${id}`);
+  api.deleteID = (id) => {
+    debug(`Ejecutando deleteID en API de ${api.modelo}`);
+    return axios.delete(`${axios.defaults.baseUrl}/api/${api.modelo}/${id}`);
+  };
   return api;
 }
 
 function guardar(api) {
   api.guardar = (obj) => {
+    debug(`Ejecutando guardar en API de ${api.modelo}`);
     if (obj._id) {
       return axios
         .put(`${axios.defaults.baseUrl}/api/${api.modelo}/${obj._id}`, obj)
@@ -68,7 +82,7 @@ function guardar(api) {
 }
 
 function rutasGenericas(api) {
-  debug("Registrando todas las rutas genéricas");
+  debug(`Registrando todas las rutas genéricas para: ${api.modelo}`);
   const APIg = getID(api);
   const APIbase = getBase(APIg);
   const APIput = putID(APIbase);

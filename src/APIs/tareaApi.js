@@ -13,7 +13,7 @@ const apiSinBases = {
 const tareaApi = rutasGenericas(apiSinBases);
 
 function listarXFecha(fechaInicio, fechaFin) {
-  debug("Llamando al listar", "fechaInicio", fechaInicio, "fechaFin", fechaFin);
+  debug("listarXFecha", "fechaInicio", fechaInicio, "fechaFin", fechaFin);
   const query = {
     params: {
       fechaInicio,
@@ -26,7 +26,7 @@ function listarXFecha(fechaInicio, fechaFin) {
 }
 
 function getTareasPopuladas() {
-  debug("Get Tareas Populadas");
+  debug("getTareasPopuladas");
   return axios
     .get(`${axios.defaults.baseUrl}/api/tarea/listaPopulada`)
     .then(resp => resp.data);

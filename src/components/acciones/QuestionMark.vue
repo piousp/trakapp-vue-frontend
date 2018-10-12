@@ -39,8 +39,8 @@ export default {
 };
 
 function reportar() {
-  this.$store.commit("modal/showModal", {
-    componentName: "ModalBug",
+  this.$store.commit("storeModal/showModal", {
+    componentName: "modalBug",
   });
   this.mostrarPopup = false;
 }

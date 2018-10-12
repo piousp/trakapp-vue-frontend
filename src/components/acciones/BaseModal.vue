@@ -10,21 +10,9 @@
 <script>
 import Vue from "vue";
 import D from "debug";
-import SelectCuenta from "./modalTemplates/SelectCuenta.vue";
-import InvitarUsuarios from "./modalTemplates/InvitarUsuarios.vue";
-import ModalBug from "./modalTemplates/ModalBug.vue";
-import ModalTarea from "./modalTemplates/ModalTarea.vue";
-import ModalEmpleado from "./modalTemplates/ModalEmpleado.vue";
+import modales from "./modalTemplates/importarModales";
 
 const debug = D("ciris:BaseModal.vue");
-
-const modales = {
-  SelectCuenta,
-  InvitarUsuarios,
-  ModalBug,
-  ModalTarea,
-  ModalEmpleado,
-};
 
 export default {
   name: "AppModal",
@@ -34,9 +22,9 @@ export default {
     };
   },
   computed: {
-    visible() { return this.$store.state.modal.modalVisible; },
-    modalComponent() { return this.$store.state.modal.modalComponent; },
-    params() { return this.$store.state.modal.params; },
+    visible() { return this.$store.state.storeModal.modalVisible; },
+    modalComponent() { return this.$store.state.storeModal.modalComponent; },
+    params() { return this.$store.state.storeModal.params; },
   },
   watch: {
     modalComponent(componentName) {

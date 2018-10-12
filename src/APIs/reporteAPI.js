@@ -1,4 +1,7 @@
+import D from "debug";
 import axios from "../config/axios";
+
+const debug = D("ciris:reporteAPI.js");
 
 const reporteApi = {
   getTareasRealizadas,
@@ -7,6 +10,7 @@ const reporteApi = {
 };
 
 function getTareasRealizadas(filtros) {
+  debug("getTareasRealizadas");
   const query = {
     params: {
       filtros,
@@ -18,6 +22,7 @@ function getTareasRealizadas(filtros) {
 }
 
 function getTareasPendientes(filtros) {
+  debug("getTareasPendientes");
   const query = {
     params: {
       filtros,
@@ -29,6 +34,7 @@ function getTareasPendientes(filtros) {
 }
 
 function getTareasAtrasadas(filtros) {
+  debug("getTareasAtrasadas");
   const query = {
     params: {
       filtros,

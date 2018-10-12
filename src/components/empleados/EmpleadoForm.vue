@@ -5,18 +5,18 @@
       <button
         type="button"
         class="boton boton--cancelar"
-        v-if="empleado._id && editando"
+        v-if="copia._id && editando"
         @click="cancelar"/>
       <button
         type="button"
         class="boton boton--editar"
-        v-if="empleado._id && !editando"
-        @click="editar(empleado)"/>
+        v-if="copia._id && !editando"
+        @click="editar(copia)"/>
       <button
         type="button"
         class="boton boton--guardar"
         v-if="editando"
-        @click="guardar(empleado)"/>
+        @click="guardar(copia)"/>
     </div>
     <section class="grid">
       <div class="col-md-6">
@@ -26,7 +26,7 @@
             <input
               name="nombre"
               class="form__input"
-              v-model="empleado.nombre"
+              v-model="copia.nombre"
               :disabled="!editando"
               required
               v-validate="'required'" >
@@ -36,7 +36,7 @@
             <input
               name="apellidos"
               class="form__input"
-              v-model="empleado.apellidos"
+              v-model="copia.apellidos"
               :disabled="!editando"
               required
               v-validate="'required'" >
@@ -45,7 +45,7 @@
 
           <form-group :error="errors.has('correo') && submitted">
             <input class="form__input"
-                   v-model="empleado.correo"
+                   v-model="copia.correo"
                    :disabled="!editando"
                    v-validate="'required|email'"
                    required
@@ -60,7 +60,7 @@
               id="costoHora"
               name="costoHora"
               class="form__input"
-              v-model="empleado.costoHora"
+              v-model="copia.costoHora"
               v-bind="money"
               :disabled="!editando"
             />
@@ -71,7 +71,7 @@
               id="horaExtra"
               name="horaExtra"
               class="form__input"
-              v-model="empleado.horaExtra"
+              v-model="copia.horaExtra"
               v-bind="money"
               :disabled="!editando"
             />
@@ -90,14 +90,14 @@
               <multiselect
                 placeholder="Seleccione una hora"
                 :disabled="!editando"
-                v-model="empleado.horarios.lunes.desde"
+                v-model="copia.horarios.lunes.desde"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
             </div>
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.lunes.hasta"
+                v-model="copia.horarios.lunes.hasta"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -110,7 +110,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.martes.desde"
+                v-model="copia.horarios.martes.desde"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -118,7 +118,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.martes.hasta"
+                v-model="copia.horarios.martes.hasta"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -131,7 +131,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.miercoles.desde"
+                v-model="copia.horarios.miercoles.desde"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -139,7 +139,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.miercoles.hasta"
+                v-model="copia.horarios.miercoles.hasta"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -152,7 +152,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.jueves.desde"
+                v-model="copia.horarios.jueves.desde"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -160,7 +160,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.jueves.hasta"
+                v-model="copia.horarios.jueves.hasta"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -173,7 +173,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.viernes.desde"
+                v-model="copia.horarios.viernes.desde"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -181,7 +181,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.viernes.hasta"
+                v-model="copia.horarios.viernes.hasta"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -194,7 +194,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.sabado.desde"
+                v-model="copia.horarios.sabado.desde"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -202,7 +202,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.sabado.hasta"
+                v-model="copia.horarios.sabado.hasta"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -215,7 +215,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.domingo.desde"
+                v-model="copia.horarios.domingo.desde"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -223,7 +223,7 @@
             <div class="lista__item__cell">
               <multiselect
                 placeholder="Seleccione una hora"
-                v-model="empleado.horarios.domingo.hasta"
+                v-model="copia.horarios.domingo.hasta"
                 :disabled="!editando"
                 :options="horarios"
                 :custom-label="opt => aHora(opt)"/>
@@ -239,8 +239,8 @@
 <script>
 import D from "debug";
 import range from "lodash/range";
+import isNil from "lodash/isNil";
 import cloneDeep from "lodash/cloneDeep";
-import empleadoApi from "./empleadoApi.js";
 
 const debug = D("ciris:EmpleadoForm.vue");
 
@@ -249,6 +249,22 @@ export default {
   data,
   computed: {
     horarios,
+    empleado() {
+      return this.$store.state.storeEmpleado.empleado;
+    },
+  },
+  watch: {
+    empleado: {
+      handler(newV) {
+        this.copia = cloneDeep(newV);
+        this.copia.horarios = verificarHorarios(newV.horarios);
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
+  beforeDestroy() {
+    this.$store.commit("storeEmpleado/resetEmpleado");
   },
   methods: {
     guardar,
@@ -261,10 +277,7 @@ export default {
 
 function data() {
   return {
-    empleado: {
-      horarios: verificarHorarios(null),
-    },
-    copia: {},
+    copia: { horarios: {} },
     editando: true,
     submitted: false,
     money: {
@@ -279,17 +292,19 @@ function data() {
 }
 
 function guardar(empleado) {
+  debug("Iniciar guardado");
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      return this.$store.dispatch("empleados/agregarEmpleado", empleado)
+      return this.$store.dispatch("storeEmpleado/guardar", { empleado, conservar: true, aLista: true })
         .then((resp) => {
+          debug("Guardado exitoso");
           this.$toastr("success", "Empleado guardado exitosamente", "Éxito");
-          this.$router.push({ name: "empleadoform", params: { id: resp._id } });
           this.editando = false;
           return resp;
         })
         .catch((err) => {
+          debug(err);
           if (err.response.status === 409) {
             return this.$toastr(
               "error",
@@ -352,21 +367,9 @@ function cancelar() {
 }
 
 function beforeRouteEnter(to, from, next) {
-  const self = this;
-  if (to.params.id) {
-    return empleadoApi.obtener(to.params.id)
-      .then(resp => next((vm) => {
-        vm.empleado = resp;
-        vm.empleado.horarios = verificarHorarios(vm.empleado.horarios);
-        vm.copia = cloneDeep(vm.empleado);
-        vm.editando = to.params.edit;
-      }))
-      .catch((err) => {
-        debug(err);
-        self.$toastr("error", err, "Error");
-      });
-  }
-  return next();
+  next((vm) => {
+    if (!isNil(to.params.edit)) vm.editando = to.params.edit;
+  });
 }
 
 function aHora(val) {

@@ -19,18 +19,18 @@ const Auth = {
         _id: localStorage.getItem("trakappCuenta"),
       };
       if (cuenta._id) {
-        Vue.prototype.$store.dispatch("perfil/cargarCuenta", {
-          cuenta: cuenta._id,
-          recordarme: true,
-        });
+        return Vue.prototype.$store.dispatch("storeCuenta/getID", {
+          id: cuenta._id,
+          conservarComoActivo: true,
+        }).then(() => Vue.prototype.$store.commit("storeApp/toggleAuthCargado"));
       } else if (usuario.cuentas.length > 1) {
-        Vue.prototype.$store.commit("modal/showModal", "SelectCuenta");
-      } else {
-        Vue.prototype.$store.dispatch("perfil/cargarCuenta", {
-          cuenta: usuario.cuentas[0],
-          recordarme: true,
-        });
+        Vue.prototype.$store.commit("storeModal/showModal", "selectCuenta");
+        return Vue.prototype.$store.commit("storeApp/toggleAuthCargado");
       }
+      return Vue.prototype.$store.dispatch("storeCuenta/getID", {
+        id: usuario.cuentas[0],
+        conservarComoActivo: true,
+      }).then(() => Vue.prototype.$store.commit("storeApp/toggleAuthCargado"));
     }
     Vue.auth = {
       registro(obj) {
@@ -49,7 +49,7 @@ const Auth = {
             storage.setItem(options.pkg, JSON.stringify(resp.data));
             const { usuario } = resp.data;
             usuario.estaAutenticado = true;
-            Vue.prototype.$store.commit("perfil/setUsuario", usuario);
+            Vue.prototype.$store.commit("storeUsuario/setUsuarioActivo", usuario);
             axios.defaults.headers.common.Authorization = `Bearer ${resp.data.token}`;
             resolverCuenta(usuario);
             identificarSocket(usuario);
@@ -59,7 +59,7 @@ const Auth = {
       logout() {
         sessionStorage.removeItem(options.pkg);
         localStorage.removeItem(options.pkg);
-        Vue.prototype.$store.commit("perfil/setUsuario", null);
+        Vue.prototype.$store.commit("storeUsuario/resetUsuarioActivo");
       },
       checkAuth() {
         debug("checkAuth");
@@ -69,7 +69,7 @@ const Auth = {
         if (credenciales) {
           const { usuario } = credenciales;
           usuario.estaAutenticado = !!credenciales.token;
-          Vue.prototype.$store.commit("perfil/setUsuario", usuario);
+          Vue.prototype.$store.commit("storeUsuario/setUsuarioActivo", usuario);
           axios.defaults.headers.common.Authorization = `Bearer ${credenciales.token}`;
           resolverCuenta(usuario);
           identificarSocket(usuario);

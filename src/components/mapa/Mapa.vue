@@ -26,7 +26,7 @@ import map from "lodash/map";
 import compact from "lodash/compact";
 import get from "lodash/get";
 import findIndex from "lodash/findIndex";
-import empleadoApi from "../empleados/empleadoApi";
+import cloneDeep from "lodash/cloneDeep";
 import estilos from "../comunes/estilosMapa";
 
 const debug = D("ciris:Mapa.vue");
@@ -34,6 +34,11 @@ const debug = D("ciris:Mapa.vue");
 export default {
   name: "Mapa",
   data,
+  computed: {
+    sEmpleados() {
+      return this.$store.state.storeEmpleado.empleados;
+    },
+  },
   sockets: {
     actualizar,
   },
@@ -62,25 +67,24 @@ function generarCoords(coordinates) {
 }
 
 function mounted() {
-  this.$refs.map.$mapCreated
+  this.$refs.map.$mapPromise
     .then((objMapa) => {
       const bounds = new google.maps.LatLngBounds();
       const trafficLayer = new google.maps.TrafficLayer();
       trafficLayer.setMap(objMapa);
-      return empleadoApi.listar(0, 0).then((empleados) => {
-        const empMapeados = map(empleados.docs, (e) => {
-          if (get(e.ubicacion, "pos.coordinates", null)) {
-            e.opened = false;
-            e.ubicacion.pos = generarCoords(e.ubicacion.pos.coordinates);
-            bounds.extend(e.ubicacion.pos);
-            return e;
-          }
-          return null;
-        });
-        objMapa.fitBounds(bounds);
-        this.empleados = compact(empMapeados);
+      const copiaSEmpleados = cloneDeep(this.sEmpleados);
+      const empMapeados = map(copiaSEmpleados.docs, (e) => {
+        if (get(e.ubicacion, "pos.coordinates", null)) {
+          e.opened = false;
+          e.ubicacion.pos = generarCoords(e.ubicacion.pos.coordinates);
+          bounds.extend(e.ubicacion.pos);
+          return e;
+        }
         return null;
       });
+      objMapa.fitBounds(bounds);
+      this.empleados = compact(empMapeados);
+      return null;
     })
     .catch((err) => {
       this.$toastr("error", err, "Error");
