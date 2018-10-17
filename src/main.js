@@ -22,6 +22,7 @@ import bugsnagClient from "./components/comunes/bugsnag";
 import AppModal from "./components/acciones/BaseModal.vue";
 import "./config/filtros.js";
 import "./components/comunes";
+import "./registerServiceWorker";
 
 const pkg = require("../package.json").name;
 
