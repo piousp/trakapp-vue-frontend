@@ -16,37 +16,18 @@
         </span>
       </li>
     </ul>
-    <modal-empleado ref="modalempleado"/>
   </section>
 </template>
 
 <script>
 import cloneDeep from "lodash/cloneDeep";
-import ModalEmpleado from "./ModalEmpleado.vue";
 import obtenerColor from "./colores.js";
-import chatApi from "../chat/chatApi";
-
-function abrirEmpleado(emp) {
-  if (emp.cantMensajesNoVistos > 0) {
-    chatApi.marcarComoVistos(emp._id);
-    this.setIndicadorMensajes(emp._id, 0);
-  }
-  this.$refs.modalempleado.abrirModal(emp);
-}
-
-function setIndicadorMensajes(id, val) {
-  const emisor = cloneDeep(this.empleados.docs.find(e => e._id === id));
-  emisor.cantMensajesNoVistos = val ? emisor.cantMensajesNoVistos + val : val;
-  this.$store.commit("empleados/modificarEmpleado", emisor);
-}
 
 export default {
-  components: {
-    "modal-empleado": ModalEmpleado,
-  },
+  name: "ListaEmpleados",
   computed: {
     empleados() {
-      return this.$store.getters["empleados/listadoSinNuevos"];
+      return this.$store.getters["storeEmpleado/listadoSinNuevos"];
     },
   },
   methods: {
@@ -63,6 +44,26 @@ export default {
     },
   },
 };
+
+function abrirEmpleado(emp) {
+  if (emp.cantMensajesNoVistos > 0) {
+    this.$store.dispatch("storeMensaje/marcarComoVistos", { emisor: emp._id });
+    this.setIndicadorMensajes(emp._id, 0);
+  }
+  this.$store.commit("storeEmpleado/setEmpleado", emp);
+  return this.$store.commit("storeModal/showModal", {
+    componentName: "modalEmpleado",
+    params: {
+      grande: true,
+    },
+  });
+}
+
+function setIndicadorMensajes(id, val) {
+  const emisor = cloneDeep(this.empleados.docs.find(e => e._id === id));
+  emisor.cantMensajesNoVistos = val ? emisor.cantMensajesNoVistos + val : val;
+  this.$store.commit("empleados/modificarEmpleado", emisor);
+}
 </script>
 
 <style lang="scss" scoped="true">

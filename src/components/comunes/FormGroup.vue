@@ -9,6 +9,7 @@
 import $ from "jquery";
 
 export default {
+  name: "FormGroup",
   directives: {
     labelizador,
   },

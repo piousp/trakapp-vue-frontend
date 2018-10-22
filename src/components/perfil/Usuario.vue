@@ -40,51 +40,37 @@
         </form>
       </div>
     </div>
-    <modal :visible="modalclave">
-      <div class="modal__body">
-        <p class="h4">Digite una nueva contraseña</p>
-        <password
-        @password="claveNueva = $event"/>
-      </div>
-      <div class="modal__footer">
-        <button type="button" class="boton boton--cancelar" @click="cerrarModal"/>
-        <button type="button" class="boton boton--verde" @click="actualizarContrasena(claveNueva)">
-          <i class="fa fal fa-lock-alt"/>
-          <span>Cambiar contraseña</span>
-        </button>
-      </div>
-    </modal>
   </section>
 </template>
 
 <script>
 import cloneDeep from "lodash/cloneDeep";
 import D from "debug";
-import api from "./perfilApi.js";
 
-const debug = D("ciris:Perfil.vue");
+const debug = D("ciris:Usuario.vue");
 
 export default {
+  name: "Usuario",
   data,
   computed: {
     sUsuario() {
-      return this.$store.state.perfil.usuario;
+      return this.$store.state.storeUsuario.usuarioActivo;
     },
   },
   watch: {
-    sUsuario(newVal) {
-      this.usuario = cloneDeep(newVal);
+    sUsuario: {
+      handler(newVal) {
+        this.usuario = cloneDeep(newVal);
+      },
+      immediate: true,
+      deep: true,
     },
-  },
-  mounted() {
-    this.usuario = cloneDeep(this.$store.state.perfil.usuario);
   },
   methods: {
     logout,
     guardarUsuario,
     mostrarModalCambioClave,
-    cerrarModal,
-    actualizarContrasena,
+    finalizar,
   },
 };
 
@@ -92,8 +78,6 @@ function data() {
   return {
     usuario: {},
     claveActual: "",
-    modalclave: false,
-    claveNueva: "",
   };
 }
 
@@ -102,16 +86,16 @@ function logout() {
   this.$router.push("/login");
 }
 
-function cerrarModal() {
-  this.modalclave = false;
-}
-
 function mostrarModalCambioClave(claveActual) {
-  return api.verificarPasswordCorrecto(claveActual)
+  return this.$auth.verificarPasswordCorrecto(claveActual)
     .then((resp) => {
       debug(resp);
-      this.modalclave = true;
-      return null;
+      return this.$store.commit("storeModal/showModal", {
+        componentName: "modalPassword",
+        params: {
+          aceptar: this.finalizar,
+        },
+      });
     })
     .catch((error) => {
       debug(error);
@@ -119,29 +103,12 @@ function mostrarModalCambioClave(claveActual) {
       return null;
     })
     .finally(() => {
-      this.claveActual = "";
+      this.finalizar();
     });
 }
 
-function actualizarContrasena(pass) {
-  debug("actualizarContrasena");
-  return this.$validator.validateAll()
-    .then((valido) => {
-      if (valido) {
-        return api.actualizarContrasena(pass)
-          .then(() => {
-            this.$toastr("success", "Se ha modificado su contraseña", "Contraseña Cambiada");
-            this.modalclave = false;
-            this.claveNueva = "";
-            return null;
-          })
-          .catch((err) => {
-            debug(err);
-            this.$toastr("error", "Error al cambiar la contraseña", "Error");
-          });
-      }
-      return null;
-    });
+function finalizar() {
+  this.claveActual = "";
 }
 
 function guardarUsuario(usuario) {

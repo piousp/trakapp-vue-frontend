@@ -1,4 +1,4 @@
-<template lang="html">
+1111<template lang="html">
   <section>
     <h2 class="h3"><strong class="text--bold">Admi</strong>nistración de la cuenta</h2>
     <div class="botones-pagina">
@@ -9,12 +9,16 @@
         <span>Migrar a cuenta empresarial</span>
       </button>
       <button class="boton boton--indigo" v-if="cuenta.empresarial"
-              @click="$store.commit('modal/showModal', 'InvitarUsuarios')">
+              @click="$store.commit('storeModal/showModal', {
+                componentName:'invitarUsuarios'
+              })">
         <i class="fal fa-envelope"/>
         <span>Invitar usuarios</span>
       </button>
       <button class="boton boton--morado" v-if="cuentas.length > 1"
-              @click="$store.commit('modal/showModal', 'SelectCuenta')">
+        @click="$store.commit('storeModal/showModal', {
+          componentName:'selectCuenta'
+        })">
         <i class="fal fa-exchange"/>
         <span>Cambiar de cuenta</span>
       </button>
@@ -74,22 +78,24 @@ import id from "../ids";
 const debug = D("ciris:DatosCuenta.vue");
 
 export default {
+  name: "Cuenta",
   data,
   computed: {
     sCuenta() {
-      return this.$store.state.perfil.cuenta;
+      return this.$store.state.storeCuenta.cuentaActiva;
     },
     cuentas() {
-      return this.$store.state.perfil.usuario.cuentas;
+      return this.$store.state.storeUsuario.usuarioActivo.cuentas;
     },
   },
   watch: {
-    sCuenta(newVal) {
-      this.cuenta = cloneDeep(newVal);
+    sCuenta: {
+      handler(newVal) {
+        this.cuenta = cloneDeep(newVal);
+      },
+      immediate: true,
+      deep: true,
     },
-  },
-  mounted() {
-    this.cuenta = cloneDeep(this.$store.state.perfil.cuenta);
   },
   created,
   methods: {
@@ -111,10 +117,9 @@ function guardarCuenta(cuenta) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      return this.$store.dispatch("perfil/actualizarDatosCuenta", cuenta)
+      return this.$store.dispatch("storeCuenta/guardar", { cuenta, conservar: true, conservarComoActivo: true })
         .then((resp) => {
           debug(resp);
-          this.cuenta = cloneDeep(this.$store.state.perfil.cuenta);
           this.$toastr("success", "Se han guardado correctamente los datos de su cuenta");
           return resp;
         })
@@ -144,8 +149,7 @@ function migrarEmpresarial() {
     showCancelButton: true,
   }).then((swalRes) => {
     if (swalRes.value) {
-      this.$store.commit("perfil/migrarEmpresarial");
-      this.$store.dispatch("perfil/actualizarDatosCuenta", this.cuenta)
+      this.$store.dispatch("storeCuenta/migrarEmpresarial", { cuenta: this.cuenta, conservar: true, conservarComoActivo: true })
         .then((resp) => {
           debug(resp);
           this.$toastr("success", "Se ha migrado su cuenta a una cuenta empresarial", "Éxito");

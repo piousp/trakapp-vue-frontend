@@ -19,19 +19,7 @@
 </template>
 
 <script>
-
 export default {
-  computed: computed(),
+  name: "Perfil",
 };
-
-function computed() {
-  return {
-    cuenta() {
-      return this.$store.state.perfil.cuenta;
-    },
-  };
-}
 </script>
-
-<style lang="scss">
-</style>

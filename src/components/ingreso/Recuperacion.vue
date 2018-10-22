@@ -43,6 +43,7 @@ import axios from "../../config/axios";
 const debug = require("debug")("ciris:Recuperacion.vue");
 
 export default {
+  name: "Recuperacion",
   data,
   methods: {
     recuperar,

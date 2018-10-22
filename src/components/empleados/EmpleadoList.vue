@@ -3,7 +3,7 @@
     <div class="botones-pagina">
       <router-link tag="button"
                    class="boton boton--nuevo"
-                   :to="{name: 'empleadoform'}"/>
+                   :to="{name: 'empleadoform', params: { edit: true }}"/>
     </div>
     <div v-if="empleados.docs.length > 0">
       <table class="tabla tabla--responsive">
@@ -17,27 +17,23 @@
         </thead>
         <tbody class="tabla__body tabla__body--clickable tabla__body--striped">
           <tr v-for="empleado in empleados.docs" :key="empleado._id">
-            <router-link tag="td"
-                         :to="{name: 'empleadoform', params: {id: empleado._id}}">
+            <td @click="irAEmpleado(empleado, false)">
               {{ empleado.nombre }}
-            </router-link>
-            <router-link tag="td"
-                         :to="{name: 'empleadoform', params: {id: empleado._id}}">
+            </td>
+            <td @click="irAEmpleado(empleado, false)">
               {{ empleado.apellidos }}
-            </router-link>
-            <router-link tag="td"
-                         :to="{name: 'empleadoform', params: {id: empleado._id}}">
+            </td>
+            <td @click="irAEmpleado(empleado, false)">
               {{ empleado.correo }}
               <span class="badge badge--verde" v-show="!empleado.ubicacion">Nuevo</span>
-            </router-link>
+            </td>
             <td>
               <ul class="tabla__opciones">
-                <router-link tag="li"
-                             class="tabla__opciones__elem"
-                             tooltip="Editar"
-                             :to="{name: 'empleadoform', params: {id: empleado._id, edit: true}}">
+                <li @click="irAEmpleado(empleado, true)"
+                    class="tabla__opciones__elem"
+                    tooltip="Editar">
                   <i class="text--cyan fa fa-fw fa-edit"/>
-                </router-link>
+                </li>
                 <li class="tabla__opciones__elem" tooltip="Eliminar" @click="eliminar(empleado)">
                   <i class="text--tomate fa fa-fw fa-trash"/>
                 </li>
@@ -60,15 +56,25 @@ import noop from "lodash/noop";
 import swal from "sweetalert2";
 
 export default {
+  name: "EmpleadoList",
   computed: {
     empleados() {
-      return this.$store.state.empleados.listado;
+      return this.$store.state.storeEmpleado.empleados;
     },
   },
   methods: {
+    irAEmpleado,
     eliminar,
   },
+  created() {
+    return this.$store.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 });
+  },
 };
+
+function irAEmpleado(empleado, edit) {
+  this.$store.commit("storeEmpleado/setEmpleado", empleado);
+  return this.$router.push({ name: "empleadoform", params: { edit } });
+}
 
 function eliminar(empleado) {
   swal({
@@ -78,7 +84,7 @@ function eliminar(empleado) {
     showCancelButton: true,
   }).then((resp) => {
     if (resp && !resp.dismiss) {
-      return this.$store.dispatch("empleados/eliminarEmpleado", empleado)
+      return this.$store.dispatch("storeEmpleado/eliminarEmpleado", empleado)
         .then(() => this.$toastr("success", "El empleado ha sido eliminado", "Éxito"))
         .catch(err => this.$toastr("error", err, "Error"));
     }

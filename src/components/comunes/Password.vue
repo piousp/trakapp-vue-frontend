@@ -63,6 +63,7 @@ const debug = D("ciris:Password.vue");
 Validator.extend("passwordBueno", value => zxcvbn(value).score > 2);
 
 export default {
+  name: "Password",
   props: {
     submitted: {
       type: Boolean,

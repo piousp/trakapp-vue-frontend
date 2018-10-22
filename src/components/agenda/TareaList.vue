@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="botones-pagina">
-      <button class="boton boton--nuevo" @click="$refs.tareaform.abrirModal({})"/>
+      <button class="boton boton--nuevo" @click="abrirModal"/>
     </div>
     <div v-if="tareas.cant > 0">
       <table class="tabla tabla--responsive">
@@ -55,55 +55,51 @@
         <span>No hay tareas registradas.</span>
       </p>
     </div>
-    <modal-tarea
-      ref="tareaform"
-      @aceptar="(t) => { aceptar(t) }"
-      @eliminar="(t) => { eliminar(t) }"/>
   </section>
 </template>
 <script>//
-import reject from "lodash/reject";
 import noop from "lodash/noop";
 import cloneDeep from "lodash/cloneDeep";
-import findIndex from "lodash/findIndex";
 import swal from "sweetalert2";
-import agendaApi from "../agenda/agendaApi.js";
-import ModalTarea from "../agenda/ModalTarea.vue";
 
 export default {
-  components: {
-    "modal-tarea": ModalTarea,
+  name: "TareaList",
+  created() {
+    return this.$store.dispatch("storeTarea/getTareasPopuladas");
   },
-  data,
+  computed: {
+    tareas() {
+      return this.$store.state.storeTarea.tareas;
+    },
+  },
   methods: {
     eliminar,
     abrir,
+    abrirModal,
     aceptar,
   },
-  beforeRouteEnter,
 };
 
-function data() {
-  return {
-    tareas: [],
-  };
+function abrirModal(tarea) {
+  this.$store.commit("storeTarea/setTarea", tarea);
+  return this.$store.commit("storeModal/showModal", {
+    componentName: "modalTarea",
+    params: {
+      aceptar: this.aceptar,
+      eliminar: this.eliminar,
+      grande: true,
+    },
+  });
 }
 
 function abrir(tarea) {
   const copy = cloneDeep(tarea);
   copy.empleado = tarea.empleado._id;
-  this.$refs.tareaform.editarModal(copy);
+  return this.abrirModal(copy);
 }
 
 function aceptar(tarea) {
-  return agendaApi.guardar(tarea).then((resp) => {
-    const index = findIndex(this.tareas.docs, { _id: resp._id });
-    resp.empleado = tarea.empleado;
-    resp.cliente = tarea.cliente;
-    this.tareas.docs.splice(index, 1, resp);
-    this.$refs.tareaform.cerrarModal();
-    return resp;
-  });
+  return this.$store.dispatch("storeTarea/guardar", { tarea, conservar: false, actualizarLista: true });
 }
 
 function eliminar(tarea) {
@@ -112,32 +108,13 @@ function eliminar(tarea) {
     text: "¿Está seguro que desea eliminar este tarea?",
     type: "warning",
     showCancelButton: true,
-  }).then((resp) => {
-    if (resp && !resp.dismiss) {
-      return agendaApi
-        .eliminar(tarea._id)
-        .then(() => {
-          this.$toastr("success", "La tarea ha sido eliminado", "Éxito");
-          this.tareas.docs = reject(this.tareas.docs, ["_id", tarea._id]);
-          this.tareas.cant -= 1;
-          return this.tareas;
-        })
-        .catch((err) => {
-          this.$toastr("error", err, "Error");
-        });
-    }
-    return noop;
   })
-    .catch((err) => {
-      this.$toastr("error", err, "Error");
-    });
-}
-
-function beforeRouteEnter(to, from, next) {
-  return agendaApi.getTareas(0, 10)
-    .then(resp => next((vm) => {
-      vm.tareas = resp;
-    }))
+    .then((resp) => {
+      if (resp && !resp.dismiss) {
+        return this.$store.dispatch("storeTarea/deleteID", { tarea, delLocal: true, deLista: true });
+      }
+      return noop;
+    })
     .catch((err) => {
       this.$toastr("error", err, "Error");
     });

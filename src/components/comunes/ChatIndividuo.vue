@@ -31,11 +31,11 @@
 import D from "debug";
 import noop from "lodash/noop";
 import moment from "moment";
-import chatApi from "../chat/chatApi.js";
 
-const debug = D("ciris:comunes/ChatIndividuo.vue");
+const debug = D("ciris:ChatIndividuo.vue");
 
 export default {
+  name: "ChatIndividuo",
   props: {
     privado: {
       type: Boolean,
@@ -44,22 +44,38 @@ export default {
     },
   },
   data,
+  computed: {
+    mensajes() {
+      return this.privado ?
+        this.$store.state.storeMensaje.mensajesPrivados :
+        this.$store.state.storeMensaje.mensajesPublicos;
+    },
+  },
   mounted,
+  watch: {
+    mensajes: {
+      handler() {
+        this.$nextTick(() => {
+          if (this.$refs.dialogo) {
+            this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight;
+          }
+        });
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     enviar,
-    cargarMensajes,
     arreglarScroll,
-    agregarMensaje,
-    listar,
   },
 };
 
 function data() {
   return {
-    mensajes: { docs: [], cant: 0 },
     mensaje: {},
-    idEmisor: this.$store.state.perfil.usuario._id,
-    idReceptor: "",
+    idEmisor: this.$store.state.storeUsuario.usuarioActivo._id,
+    idReceptor: this.$store.state.storeEmpleado.empleado._id,
     limiteItems: 20,
     cargando: false,
   };
@@ -72,7 +88,7 @@ function enviar(txt) {
   }
   const msj = {
     texto: txtTrim,
-    emisor: this.$auth.usuario,
+    emisor: this.idEmisor,
     modelo: "usuario",
     fechaEnvio: moment(),
   };
@@ -80,27 +96,25 @@ function enviar(txt) {
     msj.receptor = this.idReceptor;
   }
   debug("Enviando el texto", txtTrim);
-  this.agregarMensaje(msj, true);
   setTimeout(() => {
     this.$refs.chatInput.focus();
     this.mensaje = {};
   }, 10);
-  return chatApi.guardar(msj).then((resp) => {
-    debug("Mensaje guardado");
-    this.$socket.emit(this.privado ? "mensajeEnviado" : "broadcastEnviado", resp);
-    return null;
+  debug({
+    mensaje: msj, aListaPublica: !this.privado, aListaPrivada: this.privado,
   });
-}
-
-function cargarMensajes(id) {
-  debug("Cargando los mensajes del chat");
-  this.idReceptor = id;
-  return this.listar(0).then((msjs) => {
-    this.mensajes = msjs;
-    this.arreglarScroll();
-    this.$refs.chatInput.focus();
-    return null;
-  });
+  return this.$store.dispatch("storeMensaje/guardar", {
+    mensaje: msj, conservar: true, aListaPublica: !this.privado, aListaPrivada: this.privado,
+  })
+    .then(() => {
+      this.arreglarScroll();
+      this.$socket.emit(
+        this.privado ? "mensajeEnviado" : "broadcastEnviado",
+        this.$store.state.storeMensaje.mensaje,
+      );
+      this.$store.commit("storeMensaje/resetMensaje");
+      return null;
+    });
 }
 
 function arreglarScroll() {
@@ -114,39 +128,12 @@ function arreglarScroll() {
   });
 }
 
-function agregarMensaje(mensaje) {
-  this.mensajes.docs.push(mensaje);
-  this.mensajes.cant += 1;
-  this.arreglarScroll();
-}
-
-function listar(cargados) {
-  if (this.privado) {
-    return chatApi
-      .listarPrivado(cargados, this.limiteItems, this.idEmisor, this.idReceptor);
-  }
-  return chatApi
-    .listarPublico(cargados, this.limiteItems);
-}
-
 function mounted() {
-  this.$socket.on(this.privado ? "recibirMensaje" : "recibirBroadcast", this.agregarMensaje);
-  this.$refs.dialogo.onscroll = () => {
-    if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
-      this.cargando = true;
-      return this.listar(this.mensajes.docs.length)
-        .then((msjs) => {
-          const heightInicial = this.$refs.dialogo.scrollHeight;
-          this.mensajes.docs = msjs.docs.concat(this.mensajes.docs);
-          this.cargando = false;
-          this.$nextTick(() => {
-            this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight - heightInicial;
-          });
-          return msjs;
-        });
-    }
-    return null;
-  };
+  debug("mounted");
+  this.$socket.on(
+    this.privado ? "recibirMensaje" : "recibirBroadcast",
+    obj => this.$store.commit(this.privado ? "agregarAMensajesPrivados" : "agregarAMensajesPublicos", obj),
+  );
 }
 </script>
 

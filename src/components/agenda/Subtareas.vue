@@ -22,7 +22,7 @@
           </div>
         </div>
       </li>
-      <li v-if="!lista.length">
+      <li v-if="!lista || !lista.length">
         <span class="text--center">No hay subtareas</span>
       </li>
     </ul>
@@ -45,6 +45,23 @@
 <script>
 import noop from "lodash/noop";
 
+export default {
+  name: "Subtareas",
+  props: {
+    lista: {
+      type: Array,
+      default: noop,
+    },
+  },
+  data,
+  methods: {
+    editar,
+    guardar,
+    eliminar,
+    agregar,
+  },
+};
+
 function data() {
   return {
     subtareaNva: null,
@@ -63,6 +80,9 @@ function guardar(item, valorNvo) {
 }
 
 function agregar(str) {
+  if (!str) {
+    return;
+  }
   this.lista.push({
     texto: str,
     completado: false,
@@ -74,22 +94,6 @@ function agregar(str) {
 function eliminar(index) {
   this.lista.splice(index, 1);
 }
-
-export default {
-  props: {
-    lista: {
-      type: Array,
-      default: noop,
-    },
-  },
-  data,
-  methods: {
-    editar,
-    guardar,
-    eliminar,
-    agregar,
-  },
-};
 </script>
 
 <style lang="scss">

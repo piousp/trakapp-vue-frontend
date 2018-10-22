@@ -29,7 +29,7 @@
       </form-group>
       <div>
         <span class="text text--blanco text--registro text--small">
-          ¿Olvidó su contraseña? <a @click="() => {modalVisible = !modalVisible}"
+          ¿Olvidó su contraseña? <a @click="abrirModalRecuperacion"
                                     class="text--cyan clickable">Recupérela aquí</a>
         </span>
       </div>
@@ -49,38 +49,6 @@
                    }"
                    params="class=&quot;text--cyan&quot;">¡Regístrese ahora!</router-link>
     </p>
-    <modal :visible="modalVisible">
-      <form novalidate @submit.stop.prevent="recuperar()">
-        <div class="modal__header text--center">
-          <div class="modal__header__titulo">
-            Recuperar contraseña
-          </div>
-        </div>
-        <div class="modal__body">
-          <form-group class="modal__form" :error="errors.has(ids.modalCorreo) && modalSubmitted">
-            <input type="text"
-                   :id="ids.modalCorreo"
-                   :name="ids.modalCorreo"
-                   class="form__input form__input--blanco"
-                   v-model="modalCorreo"
-                   required
-                   v-validate="'required|email'">
-            <label :for="ids.modalCorreo" class="form__label">
-              Ingrese el correo electrónico al que está asociado su cuenta
-            </label>
-            <span class="text text--rojo text--small modal__form__error"
-                  v-show="errors.has(ids.modalCorreo) && modalSubmitted">
-              * Formato de correo inválido.
-            </span>
-          </form-group>
-        </div>
-        <div class="modal__footer">
-          <button type="button" class="boton boton--cancelar"
-                  @click="cerrarModal"/>
-          <button class="boton boton--aceptar" type="submit"/>
-        </div>
-      </form>
-    </modal>
   </section>
 </template>
 
@@ -89,17 +57,17 @@ import D from "debug";
 import noop from "lodash/noop";
 import cloneDeep from "lodash/cloneDeep";
 import find from "lodash/find";
-import usuarioAPI from "../perfil/perfilApi";
 import id from "../ids.js";
 
 const debug = D("ciris:Login.vue");
+
 export default {
+  name: "Login",
   data,
   created,
   methods: {
     login,
-    recuperar,
-    cerrarModal,
+    abrirModalRecuperacion,
   },
   beforeRouteEnter,
 };
@@ -111,9 +79,6 @@ function data() {
     password: "",
     recordar: true,
     submitted: false,
-    modalSubmitted: false,
-    modalVisible: false,
-    modalCorreo: "",
     idCuenta: null,
   };
 }
@@ -151,7 +116,7 @@ function login() {
           if (this.idCuenta && !find(this.usuario.cuentas, n => n === this.idCuenta)) {
             const usuario = cloneDeep(resp.usuario);
             usuario.cuentas.push(this.idCuenta);
-            return usuarioAPI.actualizarUsuario(usuario)
+            return this.$store.dispatch("storeUsuario/guardar", usuario)
               .then(() => {
                 this.$toastr("success", this.$t("invitation.success"), "Éxito");
                 return redirijir();
@@ -178,33 +143,10 @@ function login() {
   });
 }
 
-function recuperar() {
-  this.modalSubmitted = true;
-  return this.$validator.validateAll().then((valido) => {
-    if (valido) {
-      return this.$auth.solicitarCambio(this.modalCorreo)
-        .then((resp) => {
-          this.modalVisible = !this.modalVisible;
-          this.$toastr("success", this.$t("recovery.solicitud.success"), this.$t("common.success"));
-          return resp;
-        })
-        .catch((err) => {
-          debug(err);
-          if (err.response.status < 500) {
-            this.$toastr("info", this.$t("login.credencialesInvalidos.msj"), this.$t("login.credencialesInvalidos.titulo"));
-          } else {
-            this.$toastr("error", this.$t("login.error"), this.$t("common.error"));
-          }
-        });
-    }
-    return noop;
+function abrirModalRecuperacion() {
+  return this.$store.commit("storeModal/showModal", {
+    componentName: "recuperarContrasena",
   });
-}
-
-function cerrarModal() {
-  this.modalVisible = !this.modalVisible;
-  this.modalCorreo = "";
-  this.modalSubmitted = false;
 }
 </script>
 

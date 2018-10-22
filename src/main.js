@@ -24,8 +24,6 @@ import "./config/filtros.js";
 import "./components/comunes";
 import "./registerServiceWorker";
 
-window.eventBus = new Vue({});
-
 const pkg = require("../package.json").name;
 
 if (process.env.NODE_ENV === "production") {

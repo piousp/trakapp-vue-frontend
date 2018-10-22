@@ -10,7 +10,7 @@
       </div>
       <div class="modal__body">
         <div class="cuentaContainer">
-          <div class="cuenta" v-for="cuenta in cuentas" :key="cuenta._id"
+          <div class="cuenta" v-for="cuenta in cuentas.docs" :key="cuenta._id"
                @click="cargarCuenta(cuenta)">
             <avatar :username="cuenta.nombre" :src="cuenta.avatar" :rounded="true"/>
             <p class="cuenta--nombre">{{ cuenta.nombre }}</p>
@@ -29,43 +29,55 @@
 
 <script>
 import Avatar from "vue-avatar";
-import cuentaAPI from "../../perfil/cuentaAPI";
+import D from "debug";
+
+const debug = D("ciris:SelectCuenta.vue");
 
 export default {
   name: "ModalSelectCuenta",
   components: {
     Avatar,
   },
-  data() {
-    return {
-      cuentas: [],
-      cargando: false,
-      recordarme: false,
-    };
-  },
-  created() {
-    this.cargando = true;
-    cuentaAPI.cargarBulk(this.$store.state.perfil.usuario.cuentas)
-      .then((resp) => {
-        this.cargando = false;
-        this.cuentas = resp.docs;
-        return resp;
-      })
-      .catch(() => {
-        this.$toastr("error", "Error al cargar sus cuentas", "Error");
-      });
+  data,
+  created,
+  computed: {
+    empleados() {
+      return this.$store.state.storeEmpleado.empleados;
+    },
+    usuario() {
+      return this.$store.state.storeUsuario.usuarioActivo;
+    },
+    cuentas() {
+      return this.$store.state.storeCuenta.cuentas;
+    },
   },
   methods: {
-    hideModal() { return this.$store.commit("modal/hideModal"); },
+    hideModal() { return this.$store.commit("storeModal/hideModal"); },
     cargarCuenta(cuenta) {
-      this.$store.dispatch("perfil/cargarCuenta", { cuenta, recordarme: this.recordarme });
+      debug("cargarCuenta");
+      this.$store.dispatch("storeCuenta/getID", { id: cuenta._id, conservarComoActivo: true, recordarCuenta: this.recordarme });
       return this.hideModal();
-    },
-    escogerCuenta() {
-      this.hideModal();
     },
   },
 };
+
+function data() {
+  return {
+    cargando: false,
+    recordarme: false,
+  };
+}
+
+function created() {
+  debug("created");
+  this.cargando = true;
+  this.$store.dispatch("storeCuenta/cargarBulk", { cuentas: this.usuario.cuentas })
+    .then((resp) => {
+      this.cargando = false;
+      return resp;
+    })
+    .catch(err => debug(err));
+}
 </script>
 <style>
 .cuentaContainer {

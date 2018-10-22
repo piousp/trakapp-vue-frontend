@@ -60,7 +60,7 @@ export default {
   data,
   computed: {
     empleados() {
-      return this.$store.state.empleados.listado;
+      return this.$store.state.storeEmpleado.empleados;
     },
   },
   methods: {

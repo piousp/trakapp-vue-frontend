@@ -3,7 +3,7 @@
     <div class="botones-pagina">
       <router-link tag="button"
                    class="boton boton--nuevo"
-                   :to="{name: 'clienteform'}"/>
+                   :to="{name: 'clienteform', params: { edit: true }}"/>
     </div>
     <div v-if="clientes.cant > 0">
       <table class="tabla tabla--responsive">
@@ -17,27 +17,22 @@
         </thead>
         <tbody class="tabla__body tabla__body--clickable tabla__body--striped">
           <tr v-for="cliente in clientes.docs" :key="cliente._id">
-            <router-link tag="td"
-                         :to="{name: 'clienteform', params: {id: cliente._id}}">
+            <td @click="irACliente(cliente, false)">
               {{ cliente.cedula }}
-            </router-link>
-            <router-link tag="td"
-                         :to="{name: 'clienteform', params: {id: cliente._id}}">
+            </td>
+            <td @click="irACliente(cliente, false)">
               {{ cliente.nombre }}
-            </router-link>
-            <router-link tag="td"
-                         :to="{name: 'clienteform', params: {id: cliente._id}}">
+            </td>
+            <td @click="irACliente(cliente, false)">
               <span v-if="cliente.direccion">{{ cliente.direccion }}</span>
               <span v-else>N/A</span>
-            </router-link>
+            </td>
             <td>
               <ul class="tabla__opciones">
-                <router-link tag="li"
-                             class="tabla__opciones__elem"
-                             tooltip="Editar"
-                             :to="{name: 'clienteform', params: {id: cliente._id, edit: true}}">
+                <li class="tabla__opciones__elem"
+                    tooltip="Editar" @click="irACliente(cliente, true)">
                   <i class="text--cyan fa fa-fw fa-edit"/>
-                </router-link>
+                </li>
                 <li class="tabla__opciones__elem" tooltip="Eliminar" @click="eliminar(cliente)">
                   <i class="text--tomate fa fa-fw fa-trash"/>
                 </li>
@@ -55,24 +50,29 @@
     </div>
   </section>
 </template>
-<script>//
-import reject from "lodash/reject";
+<script>
 import noop from "lodash/noop";
 import swal from "sweetalert2";
-import clienteApi from "./clienteApi.js";
 
 export default {
-  data,
+  name: "ClienteList",
+  computed: {
+    clientes() {
+      return this.$store.state.storeCliente.clientes;
+    },
+  },
+  created() {
+    return this.$store.dispatch("storeCliente/getBase", { pagina: 0, cantidad: 10 });
+  },
   methods: {
     eliminar,
+    irACliente,
   },
-  beforeRouteEnter,
 };
 
-function data() {
-  return {
-    clientes: [],
-  };
+function irACliente(cliente, edit) {
+  this.$store.commit("storeCliente/setCliente", cliente);
+  this.$router.push({ name: "clienteform", params: { edit } });
 }
 
 function eliminar(cliente) {
@@ -83,30 +83,10 @@ function eliminar(cliente) {
     showCancelButton: true,
   }).then((resp) => {
     if (resp && !resp.dismiss) {
-      return clienteApi
-        .eliminar(cliente._id)
-        .then(() => {
-          this.$toastr("success", "El cliente ha sido eliminado", "Éxito");
-          this.clientes.docs = reject(this.clientes.docs, ["_id", cliente._id]);
-          this.clientes.cant -= 1;
-          return this.clientes;
-        })
-        .catch((err) => {
-          this.$toastr("error", err, "Error");
-        });
+      this.$store.dispatch("storeCliente/deleteID", { cliente, delLocal: true, deLista: true });
     }
     return noop;
   })
-    .catch((err) => {
-      this.$toastr("error", err, "Error");
-    });
-}
-
-function beforeRouteEnter(to, from, next) {
-  clienteApi.listar(0, 10)
-    .then(resp => next((vm) => {
-      vm.clientes = resp;
-    }))
     .catch((err) => {
       this.$toastr("error", err, "Error");
     });

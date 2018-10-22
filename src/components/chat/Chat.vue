@@ -6,9 +6,15 @@
 
 <script>
 export default {
+  name: "Chat",
   mounted,
 };
+
 function mounted() {
-  this.$refs.chat.cargarMensajes();
+  const params = {
+    cargados: 0,
+    cantidad: this.$refs.chat.limiteItems,
+  };
+  return this.$store.dispatch("storeMensaje/listarPublico", params);
 }
 </script>

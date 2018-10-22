@@ -6,25 +6,25 @@
         <button
           type="button"
           class="boton boton--cancelar"
-          v-if="cliente._id && editando"
+          v-if="copia._id && editando"
           @click="cancelar"/>
         <button
           type="button"
           class="boton boton--editar"
-          v-if="cliente._id && !editando"
-          @click="editar(cliente)"/>
+          v-if="copia._id && !editando"
+          @click="editar(copia)"/>
         <button
           type="button"
           class="boton boton--guardar"
           v-if="editando"
-          @click="guardar(cliente)"/>
+          @click="guardar(copia)"/>
       </div>
       <section class="grid">
         <div class="col-md-6">
           <h1 class="h1"><strong class="text--bold">Info</strong>rmación básica</h1>
 
           <div class="checkbox">
-            <input type="checkbox" id="ckbxEmpresa" v-model="cliente.esEmpresa">
+            <input type="checkbox" id="ckbxEmpresa" v-model="copia.esEmpresa">
             <label class="form__label" for="ckbxEmpresa">Es una empresa</label>
           </div>
 
@@ -32,23 +32,23 @@
             <input
               name="nombre"
               class="form__input"
-              v-model="cliente.nombre"
+              v-model="copia.nombre"
               :disabled="!editando"
               required
               v-validate="'required'" >
             <label class="form__label">Nombre</label>
           </form-group>
-          <form-group v-if="!cliente.esEmpresa">
+          <form-group v-if="!copia.esEmpresa">
             <input class="form__input"
-                   v-model="cliente.apellidos"
+                   v-model="copia.apellidos"
                    :disabled="!editando">
             <label class="form__label">Apellidos</label>
           </form-group>
 
-          <form-group v-if="cliente.esEmpresa" :error="errors.has('cedula') && submitted">
+          <form-group v-if="copia.esEmpresa" :error="errors.has('cedula') && submitted">
             <the-mask
               class="form__input"
-              v-model="cliente.cedula"
+              v-model="copia.cedula"
               :disabled="!editando"
               :masked="true"
               mask="#-###-######"
@@ -61,7 +61,7 @@
           <form-group v-else>
             <the-mask
               class="form__input"
-              v-model="cliente.cedula"
+              v-model="copia.cedula"
               :disabled="!editando"
               :masked="true"
               mask="#-####-####"
@@ -69,9 +69,9 @@
             <label class="form__label">Cédula</label>
           </form-group>
 
-          <form-group v-if="cliente.esEmpresa" :error="errors.has('correo') && submitted">
+          <form-group v-if="copia.esEmpresa" :error="errors.has('correo') && submitted">
             <input class="form__input"
-                   v-model="cliente.correo"
+                   v-model="copia.correo"
                    :disabled="!editando"
                    required
                    name="correo"
@@ -84,7 +84,7 @@
           <h1 class="h1"><strong class="text--bold">Ubic</strong>ación</h1>
           <form-group :error="errors.has('direccion') && submitted">
             <textarea class="form__input"
-                      v-model="cliente.direccion"
+                      v-model="copia.direccion"
                       :disabled="!editando"
                       name="direccion"/>
             <label class="form__label">Dirección</label>
@@ -100,8 +100,8 @@
             class="mapa-cliente"
             ref="mapCliente"
             :center="{
-              lat: cliente.ubicacion.coordinates[1] || 9.93,
-              lng: cliente.ubicacion.coordinates[0] || -84.07
+              lat: copia.ubicacion.coordinates[1] || 9.93,
+              lng: copia.ubicacion.coordinates[0] || -84.07
             }"
             :zoom="14"
             :options="{ disableDefaultUI : true }"
@@ -109,8 +109,8 @@
             <gmap-marker
               :draggable="editando"
               :position="{
-                lat: cliente.ubicacion.coordinates[1],
-                lng: cliente.ubicacion.coordinates[0]
+                lat: copia.ubicacion.coordinates[1],
+                lng: copia.ubicacion.coordinates[0]
               }
             "/>
           </gmap-map>
@@ -123,83 +123,29 @@
 <script>
 import D from "debug";
 import cloneDeep from "lodash/cloneDeep";
-import clienteApi from "./clienteApi.js";
 
 const debug = D("ciris:ClienteForm.vue");
 
-function data() {
-  return {
-    cliente: { ubicacion: { coordinates: [0, 0] } },
-    copia: {},
-    editando: true,
-    submitted: false,
-  };
-}
-
-function guardar(cliente) {
-  this.submitted = true;
-  this.$validator.validateAll().then((valido) => {
-    if (valido) {
-      return clienteApi
-        .guardar(cliente)
-        .then((resp) => {
-          this.$toastr("success", "Cliente guardado exitosamente", "Éxito");
-          this.$router.push({ name: "clienteform", params: { id: resp._id } });
-          this.cliente._id = resp._id;
-          this.editando = false;
-          return resp;
-        })
-        .catch((err) => {
-          this.$toastr("error", err, "Error");
-        });
-    }
-    return this.$toastr("error", "Hay campos requeridos sin completar", "Error");
-  })
-    .catch((err) => {
-      this.$toastr("error", err, "Error");
-    });
-}
-
-function editar(cliente) {
-  this.editando = true;
-  this.copia = cloneDeep(cliente);
-}
-
-function cancelar() {
-  this.editando = false;
-  this.cliente = this.copia;
-}
-
-function buscarLugar(lugar) {
-  this.cliente.ubicacion = {
-    type: "Point",
-    coordinates: [lugar.geometry.location.lng(), lugar.geometry.location.lat()],
-  };
-  this.$refs.mapCliente.panTo({
-    lat: this.cliente.ubicacion.coordinates[1],
-    lng: this.cliente.ubicacion.coordinates[0],
-  });
-}
-
-function beforeRouteEnter(to, from, next) {
-  const self = this;
-  if (to.params.id) {
-    return clienteApi.obtener(to.params.id)
-      .then(resp => next((vm) => {
-        vm.cliente = resp;
-        vm.copia = cloneDeep(resp);
-        vm.editando = to.params.edit;
-      }))
-      .catch((err) => {
-        debug(err);
-        self.$toastr("error", err, "Error");
-      });
-  }
-  return next();
-}
-
 export default {
+  name: "ClienteForm",
   data,
+  computed: {
+    cliente() {
+      return this.$store.state.storeCliente.cliente;
+    },
+  },
+  watch: {
+    cliente: {
+      handler(newV) {
+        this.copia = cloneDeep(newV);
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
+  beforeDestroy() {
+    this.$store.commit("storeCliente/resetCliente");
+  },
   methods: {
     guardar,
     editar,
@@ -208,6 +154,66 @@ export default {
   },
   beforeRouteEnter,
 };
+
+function data() {
+  return {
+    copia: { ubicacion: { coordinates: [-84.0483781, 9.9281102] } },
+    editando: true,
+    submitted: false,
+  };
+}
+
+function guardar(cliente) {
+  debug("Guardando");
+  this.submitted = true;
+  this.$validator.validateAll()
+    .then((valido) => {
+      if (valido) {
+        return this.$store.dispatch("storeCliente/guardar", { cliente, conservar: true })
+          .then((resp) => {
+            debug("Guardado exitoso");
+            this.$toastr("success", "Cliente guardado exitosamente", "Éxito");
+            this.editando = false;
+            return resp;
+          })
+          .catch((err) => {
+            debug(err);
+            this.$toastr("error", err, "Error");
+          });
+      }
+      debug("Hay campos requeridos sin completar");
+      return this.$toastr("error", "Hay campos requeridos sin completar", "Error");
+    })
+    .catch((err) => {
+      debug(err);
+      this.$toastr("error", err, "Error");
+    });
+}
+
+function editar() {
+  this.editando = true;
+}
+
+function cancelar() {
+  this.editando = false;
+}
+
+function buscarLugar(lugar) {
+  this.copia.ubicacion = {
+    type: "Point",
+    coordinates: [lugar.geometry.location.lng(), lugar.geometry.location.lat()],
+  };
+  this.$refs.mapCliente.panTo({
+    lat: this.copia.ubicacion.coordinates[1],
+    lng: this.copia.ubicacion.coordinates[0],
+  });
+}
+
+function beforeRouteEnter(to, from, next) {
+  next((vm) => {
+    vm.editando = to.params.edit;
+  });
+}
 </script>
 
 <style>

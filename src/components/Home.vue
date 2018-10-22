@@ -36,13 +36,13 @@ function created() {
 }
 
 export default {
-  name: "App",
+  name: "Home",
   components: { Navbar, QuestionMark },
   data,
   created,
   sockets: {
     connect() {
-      this.$socket.emit("sesionIniciada", this.$store.state.perfil.usuario);
+      this.$socket.emit("sesionIniciada", this.$store.state.storeUsuario.usuarioActivo);
     },
     recibirMensaje(msj) {
       this.$notify(`${msj.emisor.nombre} dice: `, msj.texto);
