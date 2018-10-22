@@ -24,7 +24,6 @@
 </template>
 <script>
 import VueTagsInput from "@johmun/vue-tags-input";
-import cloneDeep from "lodash/cloneDeep";
 import map from "lodash/map";
 import D from "debug";
 
@@ -34,6 +33,14 @@ export default {
   name: "ModalInvitarUsuarios",
   components: {
     VueTagsInput,
+  },
+  computed: {
+    usuario() {
+      return this.$store.state.storeUsuario.usuarioActivo;
+    },
+    cuenta() {
+      return this.$store.state.storeCuenta.cuentaActiva;
+    },
   },
   data,
   methods: {
@@ -57,15 +64,19 @@ function data() {
 }
 
 function invitarUsuarios() {
+  debug("invitarUsuarios");
   const comp = this;
   const correos = map(this.tags, "text");
-  const usuario = cloneDeep(this.usuario);
-  usuario.cuenta = cloneDeep(this.cuenta);
   debug(`Enviando invitaciones a ${correos.length} correos`);
-  return this.$store.dispatch("storeCuenta/invitarUsuarios", { usuario, correos })
+  return this.$store.dispatch("storeCuenta/invitarUsuarios", {
+    usuario: this.usuario,
+    cuenta: this.cuenta,
+    correos,
+  })
     .then(() => {
       comp.tag = "";
       comp.tags = [];
+      this.hideModal();
       return comp;
     });
 }

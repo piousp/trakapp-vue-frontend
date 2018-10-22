@@ -49,6 +49,7 @@
     "vue-tour": "1.0.1",
     "vue2-google-maps": "0.10.2",
     "vuex": "3.0.1",
+    "vuex-persist": "1.7.2",
     "weekstart": "1.0.0",
     "zxcvbn": "4.4.2"
   },

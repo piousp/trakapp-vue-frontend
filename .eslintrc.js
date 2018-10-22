@@ -30,7 +30,8 @@ module.exports = {
     "vue/html-self-closing": ["error", {"html": {"void": "never"}}],
     "lodash/prefer-lodash-method": "off",
     "promise/no-callback-in-promise": "off",
-    "promise/no-nesting": "off"
+    "promise/no-nesting": "off",
+    "lodash/chaining": [2, "never"]
   },
   parserOptions: {
     parser: "babel-eslint",

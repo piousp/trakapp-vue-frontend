@@ -136,7 +136,7 @@ function getTareasPopuladas(context) {
 function setTarea(pState, tarea) {
   tarea.start = moment(tarea.start);
   tarea.end = moment(tarea.end);
-  if (tarea.empleado._id) tarea.empleado = tarea.empleado._id;
+  if (tarea.empleado && tarea.empleado._id) tarea.empleado = tarea.empleado._id;
   pState.tarea = tarea;
 }
 
@@ -161,7 +161,7 @@ function eliminarEnTareas(pState, tarea) {
 
 function resetTarea(pState) {
   debug("resetTarea");
-  pState.tarea = {};
+  pState.tarea = { subtareas: [] };
 }
 
 function resetTareas(pState) {

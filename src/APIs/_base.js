@@ -1,4 +1,5 @@
 import D from "debug";
+import flow from "lodash/flow";
 import axios from "../config/axios";
 
 const debug = D("ciris:APIs/_base.js");
@@ -83,11 +84,6 @@ function guardar(api) {
 
 function rutasGenericas(api) {
   debug(`Registrando todas las rutas genéricas para: ${api.modelo}`);
-  const APIg = getID(api);
-  const APIbase = getBase(APIg);
-  const APIput = putID(APIbase);
-  const APIpost = postBase(APIput);
-  const APIdelete = deleteID(APIpost);
-  const APIguardar = guardar(APIdelete);
-  return APIguardar;
+  const curryFlow = flow(getID, getBase, putID, postBase, deleteID, guardar);
+  return curryFlow(api);
 }

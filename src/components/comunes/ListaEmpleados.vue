@@ -50,7 +50,7 @@ function abrirEmpleado(emp) {
     this.$store.dispatch("storeMensaje/marcarComoVistos", { emisor: emp._id });
     this.setIndicadorMensajes(emp._id, 0);
   }
-  this.$store.commit("empleado/setEmpleado", emp);
+  this.$store.commit("storeEmpleado/setEmpleado", emp);
   return this.$store.commit("storeModal/showModal", {
     componentName: "modalEmpleado",
     params: {

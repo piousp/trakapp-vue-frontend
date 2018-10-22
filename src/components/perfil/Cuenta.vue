@@ -1,4 +1,4 @@
-<template lang="html">
+1111<template lang="html">
   <section>
     <h2 class="h3"><strong class="text--bold">Admi</strong>nistración de la cuenta</h2>
     <div class="botones-pagina">
@@ -17,8 +17,7 @@
       </button>
       <button class="boton boton--morado" v-if="cuentas.length > 1"
         @click="$store.commit('storeModal/showModal', {
-          componentName:'selectCuenta',
-          params: {grande: true}
+          componentName:'selectCuenta'
         })">
         <i class="fal fa-exchange"/>
         <span>Cambiar de cuenta</span>

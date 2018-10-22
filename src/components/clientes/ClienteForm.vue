@@ -143,6 +143,9 @@ export default {
       deep: true,
     },
   },
+  beforeDestroy() {
+    this.$store.commit("storeCliente/resetCliente");
+  },
   methods: {
     guardar,
     editar,
@@ -154,7 +157,7 @@ export default {
 
 function data() {
   return {
-    copia: { ubicacion: { coordinates: [0, 0] } },
+    copia: { ubicacion: { coordinates: [-84.0483781, 9.9281102] } },
     editando: true,
     submitted: false,
   };
@@ -196,13 +199,13 @@ function cancelar() {
 }
 
 function buscarLugar(lugar) {
-  this.cliente.ubicacion = {
+  this.copia.ubicacion = {
     type: "Point",
     coordinates: [lugar.geometry.location.lng(), lugar.geometry.location.lat()],
   };
   this.$refs.mapCliente.panTo({
-    lat: this.cliente.ubicacion.coordinates[1],
-    lng: this.cliente.ubicacion.coordinates[0],
+    lat: this.copia.ubicacion.coordinates[1],
+    lng: this.copia.ubicacion.coordinates[0],
   });
 }
 

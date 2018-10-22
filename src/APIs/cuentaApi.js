@@ -21,10 +21,10 @@ function getCuentaActiva() {
     .then(resp => resp.data);
 }
 
-function invitarUsuarios(usuario, correos) {
+function invitarUsuarios(usuario, cuenta, correos) {
   debug("Invitando usuarios");
   const query = {
-    usuario, correos,
+    usuario, cuenta, correos,
   };
   return axios
     .post(`${axios.defaults.baseUrl}/api/cuenta/invitarUsuarios`, query)

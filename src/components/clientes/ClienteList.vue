@@ -3,7 +3,7 @@
     <div class="botones-pagina">
       <router-link tag="button"
                    class="boton boton--nuevo"
-                   :to="{name: 'clienteform'}"/>
+                   :to="{name: 'clienteform', params: { edit: true }}"/>
     </div>
     <div v-if="clientes.cant > 0">
       <table class="tabla tabla--responsive">

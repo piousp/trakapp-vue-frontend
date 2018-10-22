@@ -66,6 +66,9 @@ export default {
     irAEmpleado,
     eliminar,
   },
+  created() {
+    return this.$store.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 });
+  },
 };
 
 function irAEmpleado(empleado, edit) {

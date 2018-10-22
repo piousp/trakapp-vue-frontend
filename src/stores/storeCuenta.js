@@ -145,8 +145,8 @@ function getCuentaActiva(context) {
 
 function invitarUsuarios(context, params) {
   debug("invitarUsuarios");
-  const { usuario, correos } = params;
-  return cuentaApi.invitarUsuarios(usuario, correos)
+  const { usuario, cuenta, correos } = params;
+  return cuentaApi.invitarUsuarios(usuario, cuenta, correos)
     .then(() => swal(
       "Invitar usuarios",
       "Se ha enviado la invitación exitosamente",

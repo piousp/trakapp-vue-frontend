@@ -54,6 +54,7 @@ export default {
   methods: {
     hideModal() { return this.$store.commit("storeModal/hideModal"); },
     cargarCuenta(cuenta) {
+      debug("cargarCuenta");
       this.$store.dispatch("storeCuenta/getID", { id: cuenta._id, conservarComoActivo: true, recordarCuenta: this.recordarme });
       return this.hideModal();
     },
@@ -68,6 +69,7 @@ function data() {
 }
 
 function created() {
+  debug("created");
   this.cargando = true;
   this.$store.dispatch("storeCuenta/cargarBulk", { cuentas: this.usuario.cuentas })
     .then((resp) => {

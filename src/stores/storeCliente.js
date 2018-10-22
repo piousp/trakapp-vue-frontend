@@ -6,7 +6,7 @@ import clienteApi from "../APIs/clienteApi";
 const debug = D("ciris:storeCliente");
 
 const state = {
-  cliente: {},
+  cliente: { ubicacion: { coordinates: [-84.0483781, 9.9281102] } },
   clientes: { docs: [], cant: 0 },
 };
 
@@ -151,7 +151,7 @@ function eliminarEnClientes(pState, cliente) {
 
 function resetCliente(pState) {
   debug("resetCliente");
-  pState.cliente = {};
+  pState.cliente = { ubicacion: { coordinates: [-84.0483781, 9.9281102] } };
 }
 
 function resetClientes(pState) {

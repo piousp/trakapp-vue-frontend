@@ -47,7 +47,7 @@
 import cloneDeep from "lodash/cloneDeep";
 import D from "debug";
 
-const debug = D("ciris:Perfil.vue");
+const debug = D("ciris:Usuario.vue");
 
 export default {
   name: "Usuario",

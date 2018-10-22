@@ -9,7 +9,7 @@ const debug = D("ciris:storeEmpleados");
 const state = {
   empleados: { docs: [], cant: 0 },
   empleadosCMensajes: { docs: [], cant: 0 },
-  empleado: { device: {}, ubicacion: {}, horarios: {} },
+  empleado: {},
 };
 
 const actions = {

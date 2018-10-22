@@ -35,6 +35,21 @@ export default {
 
       this.component = componentName;
     },
+    /* visible(newV) {
+      if (newV) {
+        debug("Se agrega un evento para oir ESC para cerrar el modal");
+        return window.addEventListener("keydown", this.listener);
+      }
+      debug("Se remueve el evento para oir ESC para cerrar el modal");
+      return window.removeEventListener("keydown", this.listener);
+    }, */
   },
+  /* methods: {
+    listener(e) {
+      if (e.key === "Escape") {
+        this.$store.commit("storeModal/hideModal");
+      }
+    },
+  }, */
 };
 </script>

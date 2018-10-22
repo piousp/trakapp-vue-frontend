@@ -120,11 +120,15 @@
 <script>
 import D from "debug";
 import noop from "lodash/noop";
+import Password from "../comunes/Password.vue";
 
 const debug = D("ciris:Registro.vue");
 
 export default {
-  name: "Registros",
+  name: "Registro",
+  components: {
+    Password,
+  },
   data,
   created,
   methods: {

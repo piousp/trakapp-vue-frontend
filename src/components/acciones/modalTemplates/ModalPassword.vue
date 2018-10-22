@@ -16,11 +16,15 @@
 </template>
 <script>
 import D from "debug";
+import Password from "../../comunes/Password.vue";
 
 const debug = D("ciris:ModalPassword.vue");
 
 export default {
   name: "ModalPassword",
+  components: {
+    Password,
+  },
   props: ["params"],
   data() {
     return {
@@ -42,7 +46,8 @@ function actualizarContrasena(pass) {
   return this.$validator.validateAll()
     .then((valido) => {
       if (valido) {
-        return this.$auth.actualizarContrasena(pass)
+        const { _id } = this.$store.state.storeUsuario.usuarioActivo;
+        return this.$auth.actualizarContrasena(_id, pass)
           .then(() => {
             this.$toastr("success", "Se ha modificado su contraseña", "Contraseña Cambiada");
             this.$store.commit("storeModal/hideModal");

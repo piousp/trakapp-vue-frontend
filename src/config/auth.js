@@ -18,19 +18,14 @@ const Auth = {
       const cuenta = {
         _id: localStorage.getItem("trakappCuenta"),
       };
-      if (cuenta._id) {
+      if (cuenta._id || usuario.cuentas[0]) {
         return Vue.prototype.$store.dispatch("storeCuenta/getID", {
-          id: cuenta._id,
+          id: cuenta._id || usuario.cuentas[0],
           conservarComoActivo: true,
         }).then(() => Vue.prototype.$store.commit("storeApp/toggleAuthCargado"));
-      } else if (usuario.cuentas.length > 1) {
-        Vue.prototype.$store.commit("storeModal/showModal", "selectCuenta");
-        return Vue.prototype.$store.commit("storeApp/toggleAuthCargado");
       }
-      return Vue.prototype.$store.dispatch("storeCuenta/getID", {
-        id: usuario.cuentas[0],
-        conservarComoActivo: true,
-      }).then(() => Vue.prototype.$store.commit("storeApp/toggleAuthCargado"));
+      Vue.prototype.$store.commit("storeModal/showModal", "selectCuenta");
+      return Vue.prototype.$store.commit("storeApp/toggleAuthCargado");
     }
     Vue.auth = {
       registro(obj) {
@@ -72,8 +67,9 @@ const Auth = {
           Vue.prototype.$store.commit("storeUsuario/setUsuarioActivo", usuario);
           axios.defaults.headers.common.Authorization = `Bearer ${credenciales.token}`;
           resolverCuenta(usuario);
-          identificarSocket(usuario);
+          return identificarSocket(usuario);
         }
+        return Vue.prototype.$store.commit("storeApp/toggleAuthCargado");
       },
       solicitarCambio(correo) {
         const url = `${axios.defaults.baseUrl}/api/auth/solicitarCambio/`;
@@ -92,9 +88,8 @@ const Auth = {
           .then(resp => resp);
       },
       actualizarContrasena(idRec, nvoPass) {
-        const url = `${axios.defaults.baseUrl}/api/auth/actualizarContrasena/`;
         return axios
-          .post(`${url}${idRec}`, {
+          .put(`${axios.defaults.baseUrl}/api/auth/actualizarContrasena/`, {
             password: nvoPass,
           })
           .then(resp => resp);

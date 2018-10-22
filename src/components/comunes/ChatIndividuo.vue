@@ -46,14 +46,28 @@ export default {
   data,
   computed: {
     mensajes() {
-      return this.$store.state.storeMensaje.mensajes;
+      return this.privado ?
+        this.$store.state.storeMensaje.mensajesPrivados :
+        this.$store.state.storeMensaje.mensajesPublicos;
     },
   },
   mounted,
+  watch: {
+    mensajes: {
+      handler() {
+        this.$nextTick(() => {
+          if (this.$refs.dialogo) {
+            this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight;
+          }
+        });
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     enviar,
     arreglarScroll,
-    listar,
   },
 };
 
@@ -61,7 +75,7 @@ function data() {
   return {
     mensaje: {},
     idEmisor: this.$store.state.storeUsuario.usuarioActivo._id,
-    idReceptor: "",
+    idReceptor: this.$store.state.storeEmpleado.empleado._id,
     limiteItems: 20,
     cargando: false,
   };
@@ -86,11 +100,19 @@ function enviar(txt) {
     this.$refs.chatInput.focus();
     this.mensaje = {};
   }, 10);
-  return this.$store.dispatch("storeMensaje/guardar", { mensaje: msj })
-    .then((resp) => {
-      debug("Mensaje guardado");
+  debug({
+    mensaje: msj, aListaPublica: !this.privado, aListaPrivada: this.privado,
+  });
+  return this.$store.dispatch("storeMensaje/guardar", {
+    mensaje: msj, conservar: true, aListaPublica: !this.privado, aListaPrivada: this.privado,
+  })
+    .then(() => {
       this.arreglarScroll();
-      this.$socket.emit(this.privado ? "mensajeEnviado" : "broadcastEnviado", resp);
+      this.$socket.emit(
+        this.privado ? "mensajeEnviado" : "broadcastEnviado",
+        this.$store.state.storeMensaje.mensaje,
+      );
+      this.$store.commit("storeMensaje/resetMensaje");
       return null;
     });
 }
@@ -106,40 +128,12 @@ function arreglarScroll() {
   });
 }
 
-function listar(cargados) {
-  const params = {
-    cargados,
-    cantidad: this.limiteItems,
-    emisor: this.idEmisor,
-    receptor: this.idReceptor,
-  };
-  if (this.privado) {
-    return this.$store.dispatch("storeMensaje/listarPrivado", params);
-  }
-  return this.$store.dispatch("storeMensaje/listarPublico", params);
-}
-
 function mounted() {
+  debug("mounted");
   this.$socket.on(
     this.privado ? "recibirMensaje" : "recibirBroadcast",
-    obj => this.$store.commit("agregarAMensajes", obj),
+    obj => this.$store.commit(this.privado ? "agregarAMensajesPrivados" : "agregarAMensajesPublicos", obj),
   );
-  this.$refs.dialogo.onscroll = () => {
-    if (this.$refs.dialogo.scrollTop === 0 && this.mensajes.cant > this.mensajes.docs.length) {
-      this.cargando = true;
-      return this.listar(this.mensajes.docs.length)
-        .then((msjs) => {
-          const heightInicial = this.$refs.dialogo.scrollHeight;
-          this.$store.commit("storeMensaje/agregarMensajesAMensajes", msjs);
-          this.cargando = false;
-          this.$nextTick(() => {
-            this.$refs.dialogo.scrollTop = this.$refs.dialogo.scrollHeight - heightInicial;
-          });
-          return msjs;
-        });
-    }
-    return null;
-  };
 }
 </script>
 

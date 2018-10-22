@@ -29,6 +29,9 @@
 </template>
 
 <script>
+import D from "debug";
+
+const debug = D("ciris:ModalBug.vue");
 
 export default {
   name: "ModalBug",
@@ -51,6 +54,7 @@ function data() {
 }
 
 function enviar() {
+  debug("enviar");
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {

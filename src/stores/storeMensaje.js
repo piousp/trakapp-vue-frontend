@@ -7,7 +7,8 @@ const debug = D("ciris:storeMensaje");
 
 const state = {
   mensaje: {},
-  mensajes: { docs: [], cant: 0 },
+  mensajesPublicos: { docs: [], cant: 0 },
+  mensajesPrivados: { docs: [], cant: 0 },
 };
 
 const actions = {
@@ -24,13 +25,19 @@ const actions = {
 
 const mutations = {
   setMensaje,
-  setMensajes,
-  agregarAMensajes,
-  agregarMensajesAMensajes,
-  replaceEnMensajes,
-  eliminarEnMensajes,
+  setMensajesPublicos,
+  setMensajesPrivados,
+  agregarAMensajesPublicos,
+  agregarAMensajesPrivados,
+  agregarMensajesAMensajesPublicos,
+  agregarMensajesAMensajesPrivados,
+  replaceEnMensajesPublicos,
+  replaceEnMensajesPrivados,
+  eliminarEnMensajesPublicos,
+  eliminarEnMensajesPrivados,
   resetMensaje,
-  resetMensajes,
+  resetMensajesPublicos,
+  resetMensajesPrivados,
 };
 
 
@@ -59,7 +66,8 @@ function getBase(context, params) {
   const { pagina, cantidad } = params;
   return mensajeApi.getBase(pagina, cantidad)
     .then((resp) => {
-      context.commit("setMensajes", resp);
+      context.commit("setMensajesPublicos", resp);
+      context.commit("setMensajesPrivados", resp);
       return resp;
     })
     .catch(err => debug(err));
@@ -89,11 +97,14 @@ function postBase(context, params) {
 
 function deleteID(context, params) {
   debug("deleteID");
-  const { mensaje, delLocal, delLista } = params;
+  const {
+    mensaje, delLocal, delListaPublicos, delListaPrivados,
+  } = params;
   return mensajeApi.deleteID(mensaje._id)
     .then(() => {
       if (delLocal) context.commit("resetMensaje");
-      if (delLista) context.commit("replaceEnMensajes", mensaje);
+      if (delListaPublicos) context.commit("eliminarEnMensajesPublicos", mensaje);
+      if (delListaPrivados) context.commit("eliminarEnMensajesPrivados", mensaje);
       return null;
     })
     .catch(err => debug(err));
@@ -101,12 +112,20 @@ function deleteID(context, params) {
 
 function guardar(context, params) {
   debug("guardar");
-  const { mensaje, conservar, aLista } = params;
+  const {
+    mensaje, conservar, aListaPublica, aListaPrivada,
+  } = params;
   return mensajeApi.guardar(mensaje)
     .then((resp) => {
       if (conservar) context.commit("setMensaje", resp);
-      if (aLista) context.commit("replaceEnMensajes", resp);
-      if (!mensaje._id) context.commit("agregarAMensajes", resp);
+      if (aListaPublica) {
+        if (mensaje._id) return context.commit("replaceEnMensajesPublicos", resp);
+        return context.commit("agregarAMensajesPublicos", resp);
+      }
+      if (aListaPrivada) {
+        if (mensaje._id) return context.commit("replaceEnMensajesPrivada", resp);
+        return context.commit("agregarAMensajesPrivados", resp);
+      }
       return resp;
     })
     .catch(err => debug(err));
@@ -119,7 +138,7 @@ function listarPrivado(context, params) {
   } = params;
   return mensajeApi.listarPrivado(cargados, cantidad, emisor, receptor)
     .then((resp) => {
-      context.commit("setMensajes", resp);
+      context.commit("setMensajesPrivados", resp);
       return resp;
     })
     .catch(err => debug(err));
@@ -132,7 +151,7 @@ function listarPublico(context, params) {
   } = params;
   return mensajeApi.listarPublico(cargados, cantidad)
     .then((resp) => {
-      context.commit("setMensajes", resp);
+      context.commit("setMensajesPublicos", resp);
       return resp;
     })
     .catch(err => debug(err));
@@ -153,34 +172,65 @@ function setMensaje(pState, mensaje) {
   pState.mensaje = mensaje;
 }
 
-function setMensajes(pState, mensajes) {
-  debug("setMensaje");
-  pState.mensajes = mensajes;
+function setMensajesPublicos(pState, mensajes) {
+  debug("setMensajesPublicos");
+  pState.mensajesPublicos = mensajes;
 }
 
-function agregarAMensajes(pState, mensaje) {
-  debug("agregarAMensajes");
-  pState.mensajes.docs.push(mensaje);
-  pState.mensajes.cant += 1;
+function setMensajesPrivados(pState, mensajes) {
+  debug("setMensajesPrivados");
+  pState.mensajesPrivados = mensajes;
 }
 
-function agregarMensajesAMensajes(pState, mensajes) {
-  debug("agregarMensajesAMensajes");
-  pState.mensajes.docs = pState.mensajes.docs.concat(mensajes);
-  pState.mensajes.cant += mensajes.length;
+function agregarAMensajesPublicos(pState, mensaje) {
+  debug("agregarAMensajesPublicos");
+  pState.mensajesPublicos.docs.push(mensaje);
+  pState.mensajesPublicos.cant += 1;
 }
 
-function replaceEnMensajes(pState, mensaje) {
-  debug("replaceEnMensajes");
-  const index = findIndex(pState.mensajes.docs, { _id: mensaje._id });
-  pState.mensajes.docs.splice(index, 1, mensaje);
+function agregarAMensajesPrivados(pState, mensaje) {
+  debug("agregarAMensajesPrivados");
+  pState.mensajesPrivados.docs.push(mensaje);
+  pState.mensajesPrivados.cant += 1;
 }
 
-function eliminarEnMensajes(pState, mensaje) {
-  debug("eliminarEnMensajes");
-  pState.mensajes = {
-    docs: reject(pState.mensajes.docs, ["_id", mensaje._id]),
-    cant: pState.mensajes.cant - 1,
+function agregarMensajesAMensajesPublicos(pState, mensajes) {
+  debug("agregarMensajesAMensajesPublicos");
+  pState.mensajesPublicos.docs = pState.mensajesPublicos.docs.concat(mensajes);
+  pState.mensajesPublicos.cant += mensajes.length;
+}
+
+function agregarMensajesAMensajesPrivados(pState, mensajes) {
+  debug("agregarMensajesAMensajesPrivados");
+  pState.mensajesPrivados.docs = pState.mensajesPrivados.docs.concat(mensajes);
+  pState.mensajesPrivados.cant += mensajes.length;
+}
+
+function replaceEnMensajesPublicos(pState, mensaje) {
+  debug("replaceEnMensajesPublicos");
+  const index = findIndex(pState.mensajesPublicos.docs, { _id: mensaje._id });
+  pState.mensajesPublicos.docs.splice(index, 1, mensaje);
+}
+
+function replaceEnMensajesPrivados(pState, mensaje) {
+  debug("replaceEnMensajesPrivados");
+  const index = findIndex(pState.mensajesPrivados.docs, { _id: mensaje._id });
+  pState.mensajesPrivados.docs.splice(index, 1, mensaje);
+}
+
+function eliminarEnMensajesPublicos(pState, mensaje) {
+  debug("eliminarEnMensajesPublicos");
+  pState.mensajesPublicos = {
+    docs: reject(pState.mensajesPublicos.docs, ["_id", mensaje._id]),
+    cant: pState.mensajesPublicos.cant - 1,
+  };
+}
+
+function eliminarEnMensajesPrivados(pState, mensaje) {
+  debug("eliminarEnMensajesPrivados");
+  pState.mensajesPrivados = {
+    docs: reject(pState.mensajesPrivados.docs, ["_id", mensaje._id]),
+    cant: pState.mensajesPrivados.cant - 1,
   };
 }
 
@@ -189,7 +239,12 @@ function resetMensaje(pState) {
   pState.mensaje = {};
 }
 
-function resetMensajes(pState) {
-  debug("resetMensajes");
-  pState.mensajes = [];
+function resetMensajesPublicos(pState) {
+  debug("resetMensajesPublicos");
+  pState.mensajesPublicos = [];
+}
+
+function resetMensajesPrivados(pState) {
+  debug("resetMensajesPrivados");
+  pState.mensajesPrivados = [];
 }

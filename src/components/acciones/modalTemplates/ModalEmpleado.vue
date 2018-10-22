@@ -19,7 +19,6 @@
             :options="{ disableDefaultUI : true, styles: estilos }"
             map-type-id="terrain">
             <gmap-marker
-              :if="empleado"
               :position="empleado.ubicacion.pos"
               :clickable="false"/>
           </gmap-map>
@@ -50,15 +49,20 @@ export default {
   name: "ModalEmpleado",
   data,
   props: ["params"],
-  mounted() {
-    return this.$refs.map.$mapPromise
-      .then(objMapa => this.abrirModal(this.empleado, objMapa));
-  },
+  mounted,
   computed: {
-    empleado() { return this.$store.state.storeEmpleado.empleado; },
+    sEmpleado() { return this.$store.state.storeEmpleado.empleado; },
+  },
+  watch: {
+    sEmpleado: {
+      handler(newV) {
+        this.empleado = cloneDeep(newV);
+      },
+      immediate: true,
+      deep: true,
+    },
   },
   methods: {
-    abrirModal,
     cerrarModal,
     generarCoords,
   },
@@ -69,13 +73,11 @@ export default {
 
 function data() {
   return {
+    empleado: {},
     center: { lat: 9.93, lng: -84.07 },
     estilos,
     mensajes: [],
     mensaje: {},
-    empleado: {
-      ubicacion: {},
-    },
   };
 }
 
@@ -83,33 +85,45 @@ function actualizar(e) {
   debug("actualizarPosicion", e);
   this.empleado.ubicacion = {
     lastUpdate: e.ubicacion.lastUpdate,
-    pos: generarCoords(e.ubicacion.pos.coordinates),
+    pos: this.generarCoords(e.ubicacion.pos.coordinates),
   };
   this.$refs.map.panTo(this.empleado.ubicacion.pos);
 }
 
 function generarCoords(coordinates) {
+  debug("generarCoords", coordinates);
   return new google.maps.LatLng(coordinates[1], coordinates[0]);
 }
 
-function abrirModal(empleado, objMapa) {
-  const copiaEmpleado = cloneDeep(empleado);
-  debug("Abriendo el modal del empleado", copiaEmpleado);
-  this.$refs.chat.cargarMensajes(copiaEmpleado._id);
-  if (get(copiaEmpleado.ubicacion, "pos.coordinates", null)) {
-    copiaEmpleado.ubicacion.pos = this.generarCoords(copiaEmpleado.ubicacion.pos.coordinates);
-  }
-  const trafficLayer = new google.maps.TrafficLayer();
-  trafficLayer.setMap(objMapa);
-  const bounds = new google.maps.LatLngBounds();
-  bounds.extend(copiaEmpleado.ubicacion.pos);
-  objMapa.fitBounds(bounds);
-  objMapa.panTo(copiaEmpleado.ubicacion.pos);
-  this.empleado = copiaEmpleado;
-  return objMapa;
+function mounted() {
+  debug("mounted");
+  this.$refs.map.$mapPromise
+    .then((objMapa) => {
+      const params = {
+        cargados: 0,
+        cantidad: this.$refs.chat.limiteItems,
+        emisor: this.$store.state.storeUsuario.usuarioActivo._id,
+        receptor: this.empleado._id,
+      };
+      this.$store.dispatch("storeMensaje/listarPrivado", params);
+      if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
+        this.empleado.ubicacion.pos = this.generarCoords(this.empleado.ubicacion.pos.coordinates);
+      }
+      const trafficLayer = new google.maps.TrafficLayer();
+      const bounds = new google.maps.LatLngBounds();
+      trafficLayer.setMap(objMapa);
+      bounds.extend(this.empleado.ubicacion.pos);
+      objMapa.fitBounds(bounds);
+      objMapa.panTo(this.empleado.ubicacion.pos);
+      return objMapa;
+    })
+    .catch((err) => {
+      this.$toastr("error", err, "Error");
+    });
 }
 
 function cerrarModal() {
+  this.$store.commit("storeEmpleado/resetEmpleado");
   return this.$store.commit("storeModal/hideModal");
 }
 </script>

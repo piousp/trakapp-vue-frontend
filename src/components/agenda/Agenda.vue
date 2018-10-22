@@ -22,7 +22,7 @@ export default {
   data,
   computed: {
     cuenta() {
-      return this.$store.state.storeCuenta.cuenta;
+      return this.$store.state.storeCuenta.cuentaActiva;
     },
     tareas() {
       return this.$store.state.storeTarea.tareas;
@@ -36,7 +36,6 @@ export default {
   methods: {
     abrirModal,
     guardarTarea,
-    aceptarTarea,
     eliminarTarea,
     cargarTareas,
     obtenerColor,
@@ -70,15 +69,11 @@ function abrirModal(pevt) {
   return this.$store.commit("storeModal/showModal", {
     componentName: "modalTarea",
     params: {
-      aceptar: this.aceptarTarea,
+      aceptar: this.guardarTarea,
       eliminar: this.eliminarTarea,
       grande: true,
     },
   });
-}
-
-function aceptarTarea(tarea) {
-  return this.guardarTarea(tarea);
 }
 
 function guardarTarea(tarea) {
@@ -99,9 +94,12 @@ function guardarTarea(tarea) {
 }
 
 function eliminarTarea(tarea) {
-  const self = this;
-  return this.$store.dispatch("storeTarea/eliminar", { tarea })
-    .then(() => self.$refs.calendario.fireMethod("removeEvents", tarea._id));
+  if (tarea._id) {
+    const self = this;
+    return this.$store.dispatch("storeTarea/deleteID", { tarea, delLocal: true, deLista: true })
+      .then(() => self.$refs.calendario.fireMethod("removeEvents", tarea._id));
+  }
+  return this.$refs.calendario.fireMethod("removeEvents", tarea._id);
 }
 
 function agregarCamposCalendario(tarea) {
