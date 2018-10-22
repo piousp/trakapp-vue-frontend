@@ -12,6 +12,8 @@ const apiSinBases = {
 
 const perfilApi = rutasGenericas(apiSinBases);
 
+export default perfilApi;
+
 function getUsuarioActivo() {
   debug("Trayendo usuario activo");
   return axios
@@ -25,5 +27,3 @@ function reportarBug(form) {
     .post(`${axios.defaults.baseUrl}/api/usuario/reportarbug`, form)
     .then(resp => resp.data);
 }
-
-export default perfilApi;

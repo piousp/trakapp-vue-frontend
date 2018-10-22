@@ -14,6 +14,8 @@ const apiSinBases = {
 
 const cuentaApi = rutasGenericas(apiSinBases);
 
+export default cuentaApi;
+
 function getCuentaActiva() {
   debug("Trayendo cuenta activa");
   return axios
@@ -49,5 +51,3 @@ function migrarEmpresarial(id) {
     .put(`${axios.defaults.baseUrl}/api/cuenta/migrarEmpresarial/${id}`)
     .then(resp => resp.data);
 }
-
-export default cuentaApi;

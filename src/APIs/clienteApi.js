@@ -11,6 +11,8 @@ const apiSinBases = {
 
 const clienteApi = rutasGenericas(apiSinBases);
 
+export default clienteApi;
+
 function buscar(txt, pagina, cantidad) {
   debug(`Buscando por texto: ${txt}`);
   return axios
@@ -22,5 +24,3 @@ function buscar(txt, pagina, cantidad) {
     })
     .then(resp => resp.data);
 }
-
-export default clienteApi;

@@ -13,6 +13,8 @@ const apiSinBases = {
 
 const mensajeApi = rutasGenericas(apiSinBases);
 
+export default mensajeApi;
+
 function listarPrivado(cargados, cantidad, emisor, receptor) {
   debug("Listando privado");
   const query = {
@@ -46,5 +48,3 @@ function marcarComoVistos(emisor) {
     .put(`${axios.defaults.baseUrl}/api/mensaje/marcarvistos/${emisor}`)
     .then(resp => resp.data);
 }
-
-export default mensajeApi;

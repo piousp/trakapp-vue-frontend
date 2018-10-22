@@ -9,6 +9,8 @@ const reporteApi = {
   getTareasAtrasadas,
 };
 
+export default reporteApi;
+
 function getTareasRealizadas(filtros) {
   debug("getTareasRealizadas");
   const query = {
@@ -44,5 +46,3 @@ function getTareasAtrasadas(filtros) {
     .get(`${axios.defaults.baseUrl}/api/reporte/getTareasAtrasadas/`, query)
     .then(resp => resp.data);
 }
-
-export default reporteApi;

@@ -11,6 +11,8 @@ const apiSinBases = {
 
 const empleadoApi = rutasGenericas(apiSinBases);
 
+export default empleadoApi;
+
 function listarConMensajes(pagina, cantidad) {
   debug("Listando con mensajes");
   const query = {
@@ -23,5 +25,3 @@ function listarConMensajes(pagina, cantidad) {
     .get(`${axios.defaults.baseUrl}/api/empleado/conmensajes`, query)
     .then(resp => resp.data);
 }
-
-export default empleadoApi;

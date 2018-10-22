@@ -12,6 +12,8 @@ const apiSinBases = {
 
 const tareaApi = rutasGenericas(apiSinBases);
 
+export default tareaApi;
+
 function listarXFecha(fechaInicio, fechaFin) {
   debug("listarXFecha", "fechaInicio", fechaInicio, "fechaFin", fechaFin);
   const query = {
@@ -31,5 +33,3 @@ function getTareasPopuladas() {
     .get(`${axios.defaults.baseUrl}/api/tarea/listaPopulada`)
     .then(resp => resp.data);
 }
-
-export default tareaApi;
