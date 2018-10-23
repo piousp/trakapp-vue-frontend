@@ -51,7 +51,7 @@ export default {
   props: ["params"],
   mounted,
   computed: {
-    sEmpleado() { return this.$store.state.storeEmpleado.empleado; },
+    sEmpleado() { return this.$store.state.empleado.empleado; },
   },
   watch: {
     sEmpleado: {
@@ -102,10 +102,10 @@ function mounted() {
       const params = {
         cargados: 0,
         cantidad: this.$refs.chat.limiteItems,
-        emisor: this.$store.state.storeUsuario.usuarioActivo._id,
+        emisor: this.$store.state.usuario.usuarioActivo._id,
         receptor: this.empleado._id,
       };
-      this.$store.dispatch("storeMensaje/listarPrivado", params);
+      this.$store.dispatch("mensaje/listarPrivado", params);
       if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
         this.empleado.ubicacion.pos = this.generarCoords(this.empleado.ubicacion.pos.coordinates);
       }
@@ -123,8 +123,8 @@ function mounted() {
 }
 
 function cerrarModal() {
-  this.$store.commit("storeEmpleado/resetEmpleado");
-  return this.$store.commit("storeModal/hideModal");
+  this.$store.commit("empleado/resetEmpleado");
+  return this.$store.commit("modal/hideModal");
 }
 </script>
 

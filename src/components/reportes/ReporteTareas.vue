@@ -63,7 +63,7 @@
 <script>
 import D from "debug";
 import capitalize from "lodash/capitalize";
-import api from "../../APIs/reporteAPI";
+import api from "./reporte.api.js";
 import Filtros from "./util/Filtros.vue";
 
 const debug = D("ciris:ReporteTareas.vue");

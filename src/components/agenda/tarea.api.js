@@ -1,6 +1,6 @@
 import D from "debug";
-import axios from "../config/axios";
-import rutasGenericas from "./_base";
+import axios from "../../config/axios";
+import rutasGenericas from "../../config/apiBase";
 
 const debug = D("ciris:tareaApi.js");
 

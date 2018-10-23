@@ -10,7 +10,7 @@ export default {
   name: "Perfil",
   computed: {
     authCargado() {
-      return this.$store.state.storeApp.authCargado;
+      return this.$store.state.app.authCargado;
     },
   },
 };

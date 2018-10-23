@@ -1,9 +1,9 @@
 import D from "debug";
 import reject from "lodash/reject";
 import findIndex from "lodash/findIndex";
-import clienteApi from "../APIs/clienteApi";
+import clienteApi from "./cliente.api.js";
 
-const debug = D("ciris:storeCliente");
+const debug = D("ciris:cliente");
 
 const state = {
   cliente: { ubicacion: { coordinates: [-84.0483781, 9.9281102] } },

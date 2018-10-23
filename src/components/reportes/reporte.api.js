@@ -1,5 +1,5 @@
 import D from "debug";
-import axios from "../config/axios";
+import axios from "../../config/axios";
 
 const debug = D("ciris:reporteAPI.js");
 

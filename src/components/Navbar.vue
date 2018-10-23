@@ -34,8 +34,8 @@ export default {
   computed: {
     nombreUsuario,
     version,
-    usuario() { return this.$store.state.storeUsuario.usuarioActivo; },
-    cuenta() { return this.$store.state.storeCuenta.cuentaActiva; },
+    usuario() { return this.$store.state.usuario.usuarioActivo; },
+    cuenta() { return this.$store.state.cuenta.cuentaActiva; },
   },
   watch: {
     $route: route,
@@ -84,7 +84,7 @@ function mounted() {
       if (resp && !resp.dismiss) {
         tour(this.$router, 0);
       }
-      return this.$store.dispatch("storeUsuario/guardar", {
+      return this.$store.dispatch("usuario/guardar", {
         usuario: this.usuario, conservar: false, conservarActivo: true,
       });
     }), 2000);

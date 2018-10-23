@@ -43,7 +43,7 @@ export default {
 };
 
 function hideModal() {
-  return this.$store.commit("storeModal/hideModal");
+  return this.$store.commit("modal/hideModal");
 }
 
 function data() {

@@ -22,10 +22,10 @@ export default {
   data,
   computed: {
     cuenta() {
-      return this.$store.state.storeCuenta.cuentaActiva;
+      return this.$store.state.cuenta.cuentaActiva;
     },
     tareas() {
-      return this.$store.state.storeTarea.tareas;
+      return this.$store.state.tarea.tareas;
     },
   },
   watch: {
@@ -65,8 +65,8 @@ function abrirModal(pevt) {
   if (evt.view) delete evt.view;
   if (evt.resource) delete evt.resource;
   if (evt.source) delete evt.source;
-  this.$store.commit("storeTarea/setTarea", evt);
-  return this.$store.commit("storeModal/showModal", {
+  this.$store.commit("tarea/setTarea", evt);
+  return this.$store.commit("modal/showModal", {
     componentName: "modalTarea",
     params: {
       aceptar: this.guardarTarea,
@@ -80,7 +80,7 @@ function guardarTarea(tarea) {
   debug("Guardando tarea", tarea);
   const self = this;
   const tareaLimpia = limpiarParaGuardar(tarea);
-  return this.$store.dispatch("storeTarea/guardar", { tarea: tareaLimpia, conservar: true })
+  return this.$store.dispatch("tarea/guardar", { tarea: tareaLimpia, conservar: true })
     .then((resp) => {
       debug("Tarea guardada. Refrescando calendario");
       if (tarea._id) {
@@ -96,7 +96,7 @@ function guardarTarea(tarea) {
 function eliminarTarea(tarea) {
   if (tarea._id) {
     const self = this;
-    return this.$store.dispatch("storeTarea/deleteID", { tarea, delLocal: true, deLista: true })
+    return this.$store.dispatch("tarea/deleteID", { tarea, delLocal: true, deLista: true })
       .then(() => self.$refs.calendario.fireMethod("removeEvents", tarea._id));
   }
   return this.$refs.calendario.fireMethod("removeEvents", tarea._id);
@@ -133,7 +133,7 @@ function limpiarParaGuardar(tarea) {
 function cargarTareas(inicio, fin, tz, cb) {
   debug("cargarTareas");
   const comp = this;
-  return this.$store.dispatch("storeTarea/listarXFecha", {
+  return this.$store.dispatch("tarea/listarXFecha", {
     fechaInicio: inicio.format(),
     fechaFin: fin.format(),
   })

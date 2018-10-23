@@ -47,8 +47,8 @@ export default {
   computed: {
     mensajes() {
       return this.privado ?
-        this.$store.state.storeMensaje.mensajesPrivados :
-        this.$store.state.storeMensaje.mensajesPublicos;
+        this.$store.state.mensaje.mensajesPrivados :
+        this.$store.state.mensaje.mensajesPublicos;
     },
   },
   mounted,
@@ -74,8 +74,8 @@ export default {
 function data() {
   return {
     mensaje: {},
-    idEmisor: this.$store.state.storeUsuario.usuarioActivo._id,
-    idReceptor: this.$store.state.storeEmpleado.empleado._id,
+    idEmisor: this.$store.state.usuario.usuarioActivo._id,
+    idReceptor: this.$store.state.empleado.empleado._id,
     limiteItems: 20,
     cargando: false,
   };
@@ -103,16 +103,16 @@ function enviar(txt) {
   debug({
     mensaje: msj, aListaPublica: !this.privado, aListaPrivada: this.privado,
   });
-  return this.$store.dispatch("storeMensaje/guardar", {
+  return this.$store.dispatch("mensaje/guardar", {
     mensaje: msj, conservar: true, aListaPublica: !this.privado, aListaPrivada: this.privado,
   })
     .then(() => {
       this.arreglarScroll();
       this.$socket.emit(
         this.privado ? "mensajeEnviado" : "broadcastEnviado",
-        this.$store.state.storeMensaje.mensaje,
+        this.$store.state.mensaje.mensaje,
       );
-      this.$store.commit("storeMensaje/resetMensaje");
+      this.$store.commit("mensaje/resetMensaje");
       return null;
     });
 }

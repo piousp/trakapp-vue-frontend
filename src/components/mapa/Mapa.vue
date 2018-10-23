@@ -36,7 +36,7 @@ export default {
   data,
   computed: {
     sEmpleados() {
-      return this.$store.state.storeEmpleado.empleados;
+      return this.$store.state.empleado.empleados;
     },
   },
   sockets: {

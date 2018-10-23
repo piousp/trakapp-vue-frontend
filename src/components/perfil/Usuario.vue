@@ -54,7 +54,7 @@ export default {
   data,
   computed: {
     sUsuario() {
-      return this.$store.state.storeUsuario.usuarioActivo;
+      return this.$store.state.usuario.usuarioActivo;
     },
   },
   watch: {
@@ -90,7 +90,7 @@ function mostrarModalCambioClave(claveActual) {
   return this.$auth.verificarPasswordCorrecto(claveActual)
     .then((resp) => {
       debug(resp);
-      return this.$store.commit("storeModal/showModal", {
+      return this.$store.commit("modal/showModal", {
         componentName: "modalPassword",
         params: {
           aceptar: this.finalizar,

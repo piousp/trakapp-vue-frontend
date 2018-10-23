@@ -1,9 +1,9 @@
 import D from "debug";
 import findIndex from "lodash/findIndex";
 import reject from "lodash/reject";
-import mensajeApi from "../APIs/mensajeApi";
+import mensajeApi from "./mensaje.api.js";
 
-const debug = D("ciris:storeMensaje");
+const debug = D("ciris:mensaje");
 
 const state = {
   mensaje: {},

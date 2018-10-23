@@ -27,7 +27,7 @@ export default {
   name: "ListaEmpleados",
   computed: {
     empleados() {
-      return this.$store.getters["storeEmpleado/listadoSinNuevos"];
+      return this.$store.getters["empleado/listadoSinNuevos"];
     },
   },
   methods: {
@@ -47,11 +47,11 @@ export default {
 
 function abrirEmpleado(emp) {
   if (emp.cantMensajesNoVistos > 0) {
-    this.$store.dispatch("storeMensaje/marcarComoVistos", { emisor: emp._id });
+    this.$store.dispatch("mensaje/marcarComoVistos", { emisor: emp._id });
     this.setIndicadorMensajes(emp._id, 0);
   }
-  this.$store.commit("storeEmpleado/setEmpleado", emp);
-  return this.$store.commit("storeModal/showModal", {
+  this.$store.commit("empleado/setEmpleado", emp);
+  return this.$store.commit("modal/showModal", {
     componentName: "modalEmpleado",
     params: {
       grande: true,

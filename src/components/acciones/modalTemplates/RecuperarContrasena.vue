@@ -46,7 +46,7 @@ export default {
   created,
   methods: {
     recuperar,
-    cerrarModal() { return this.$store.commit("storeModal/hideModal"); },
+    cerrarModal() { return this.$store.commit("modal/hideModal"); },
   },
 };
 
@@ -69,7 +69,7 @@ function recuperar() {
     if (valido) {
       return this.$auth.solicitarCambio(this.correo)
         .then((resp) => {
-          this.$store.commit("storeModal/hideModal");
+          this.$store.commit("modal/hideModal");
           this.$toastr("success", this.$t("recovery.solicitud.success"), this.$t("common.success"));
           return resp;
         })

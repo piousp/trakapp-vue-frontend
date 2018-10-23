@@ -59,7 +59,7 @@ export default {
   name: "EmpleadoList",
   computed: {
     empleados() {
-      return this.$store.state.storeEmpleado.empleados;
+      return this.$store.state.empleado.empleados;
     },
   },
   methods: {
@@ -67,12 +67,12 @@ export default {
     eliminar,
   },
   created() {
-    return this.$store.dispatch("storeEmpleado/getBase", { pagina: 0, cantidad: 10 });
+    return this.$store.dispatch("empleado/getBase", { pagina: 0, cantidad: 10 });
   },
 };
 
 function irAEmpleado(empleado, edit) {
-  this.$store.commit("storeEmpleado/setEmpleado", empleado);
+  this.$store.commit("empleado/setEmpleado", empleado);
   return this.$router.push({ name: "empleadoform", params: { edit } });
 }
 
@@ -84,7 +84,7 @@ function eliminar(empleado) {
     showCancelButton: true,
   }).then((resp) => {
     if (resp && !resp.dismiss) {
-      return this.$store.dispatch("storeEmpleado/eliminarEmpleado", empleado)
+      return this.$store.dispatch("empleado/eliminarEmpleado", empleado)
         .then(() => this.$toastr("success", "El empleado ha sido eliminado", "Éxito"))
         .catch(err => this.$toastr("error", err, "Error"));
     }
