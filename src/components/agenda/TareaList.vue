@@ -65,11 +65,11 @@ import swal from "sweetalert2";
 export default {
   name: "TareaList",
   created() {
-    return this.$store.dispatch("storeTarea/getTareasPopuladas");
+    return this.$store.dispatch("tarea/getTareasPopuladas");
   },
   computed: {
     tareas() {
-      return this.$store.state.storeTarea.tareas;
+      return this.$store.state.tarea.tareas;
     },
   },
   methods: {
@@ -81,8 +81,8 @@ export default {
 };
 
 function abrirModal(tarea) {
-  this.$store.commit("storeTarea/setTarea", tarea);
-  return this.$store.commit("storeModal/showModal", {
+  this.$store.commit("tarea/setTarea", tarea);
+  return this.$store.commit("modal/showModal", {
     componentName: "modalTarea",
     params: {
       aceptar: this.aceptar,
@@ -99,7 +99,7 @@ function abrir(tarea) {
 }
 
 function aceptar(tarea) {
-  return this.$store.dispatch("storeTarea/guardar", { tarea, conservar: false, actualizarLista: true });
+  return this.$store.dispatch("tarea/guardar", { tarea, conservar: false, actualizarLista: true });
 }
 
 function eliminar(tarea) {
@@ -111,7 +111,7 @@ function eliminar(tarea) {
   })
     .then((resp) => {
       if (resp && !resp.dismiss) {
-        return this.$store.dispatch("storeTarea/deleteID", { tarea, delLocal: true, deLista: true });
+        return this.$store.dispatch("tarea/deleteID", { tarea, delLocal: true, deLista: true });
       }
       return noop;
     })

@@ -131,7 +131,7 @@ export default {
   data,
   computed: {
     cliente() {
-      return this.$store.state.storeCliente.cliente;
+      return this.$store.state.cliente.cliente;
     },
   },
   watch: {
@@ -144,7 +144,7 @@ export default {
     },
   },
   beforeDestroy() {
-    this.$store.commit("storeCliente/resetCliente");
+    this.$store.commit("cliente/resetCliente");
   },
   methods: {
     guardar,
@@ -169,7 +169,7 @@ function guardar(cliente) {
   this.$validator.validateAll()
     .then((valido) => {
       if (valido) {
-        return this.$store.dispatch("storeCliente/guardar", { cliente, conservar: true })
+        return this.$store.dispatch("cliente/guardar", { cliente, conservar: true })
           .then((resp) => {
             debug("Guardado exitoso");
             this.$toastr("success", "Cliente guardado exitosamente", "Éxito");

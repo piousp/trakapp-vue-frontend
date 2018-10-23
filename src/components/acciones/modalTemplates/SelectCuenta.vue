@@ -42,20 +42,20 @@ export default {
   created,
   computed: {
     empleados() {
-      return this.$store.state.storeEmpleado.empleados;
+      return this.$store.state.empleado.empleados;
     },
     usuario() {
-      return this.$store.state.storeUsuario.usuarioActivo;
+      return this.$store.state.usuario.usuarioActivo;
     },
     cuentas() {
-      return this.$store.state.storeCuenta.cuentas;
+      return this.$store.state.cuenta.cuentas;
     },
   },
   methods: {
-    hideModal() { return this.$store.commit("storeModal/hideModal"); },
+    hideModal() { return this.$store.commit("modal/hideModal"); },
     cargarCuenta(cuenta) {
       debug("cargarCuenta");
-      this.$store.dispatch("storeCuenta/getID", { id: cuenta._id, conservarComoActivo: true, recordarCuenta: this.recordarme });
+      this.$store.dispatch("cuenta/getID", { id: cuenta._id, conservarComoActivo: true, recordarCuenta: this.recordarme });
       return this.hideModal();
     },
   },
@@ -71,7 +71,7 @@ function data() {
 function created() {
   debug("created");
   this.cargando = true;
-  this.$store.dispatch("storeCuenta/cargarBulk", { cuentas: this.usuario.cuentas })
+  this.$store.dispatch("cuenta/cargarBulk", { cuentas: this.usuario.cuentas })
     .then((resp) => {
       this.cargando = false;
       return resp;

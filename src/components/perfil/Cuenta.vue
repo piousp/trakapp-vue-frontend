@@ -9,14 +9,14 @@
         <span>Migrar a cuenta empresarial</span>
       </button>
       <button class="boton boton--indigo" v-if="cuenta.empresarial"
-              @click="$store.commit('storeModal/showModal', {
+              @click="$store.commit('modal/showModal', {
                 componentName:'invitarUsuarios'
               })">
         <i class="fal fa-envelope"/>
         <span>Invitar usuarios</span>
       </button>
       <button class="boton boton--morado" v-if="cuentas.length > 1"
-        @click="$store.commit('storeModal/showModal', {
+        @click="$store.commit('modal/showModal', {
           componentName:'selectCuenta'
         })">
         <i class="fal fa-exchange"/>
@@ -82,10 +82,10 @@ export default {
   data,
   computed: {
     sCuenta() {
-      return this.$store.state.storeCuenta.cuentaActiva;
+      return this.$store.state.cuenta.cuentaActiva;
     },
     cuentas() {
-      return this.$store.state.storeUsuario.usuarioActivo.cuentas;
+      return this.$store.state.usuario.usuarioActivo.cuentas;
     },
   },
   watch: {
@@ -117,7 +117,7 @@ function guardarCuenta(cuenta) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      return this.$store.dispatch("storeCuenta/guardar", { cuenta, conservar: true, conservarComoActivo: true })
+      return this.$store.dispatch("cuenta/guardar", { cuenta, conservar: true, conservarComoActivo: true })
         .then((resp) => {
           debug(resp);
           this.$toastr("success", "Se han guardado correctamente los datos de su cuenta");
@@ -149,7 +149,7 @@ function migrarEmpresarial() {
     showCancelButton: true,
   }).then((swalRes) => {
     if (swalRes.value) {
-      this.$store.dispatch("storeCuenta/migrarEmpresarial", { cuenta: this.cuenta, conservar: true, conservarComoActivo: true })
+      this.$store.dispatch("cuenta/migrarEmpresarial", { cuenta: this.cuenta, conservar: true, conservarComoActivo: true })
         .then((resp) => {
           debug(resp);
           this.$toastr("success", "Se ha migrado su cuenta a una cuenta empresarial", "Éxito");

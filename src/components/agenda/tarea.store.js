@@ -2,9 +2,9 @@ import D from "debug";
 import moment from "moment";
 import findIndex from "lodash/findIndex";
 import reject from "lodash/reject";
-import tareaApi from "../APIs/tareaApi";
+import tareaApi from "./tarea.api.js";
 
-const debug = D("ciris:storeTarea");
+const debug = D("ciris:tarea");
 
 const state = {
   tarea: { subtareas: [] },

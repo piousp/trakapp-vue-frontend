@@ -42,7 +42,7 @@ export default {
   created,
   sockets: {
     connect() {
-      this.$socket.emit("sesionIniciada", this.$store.state.storeUsuario.usuarioActivo);
+      this.$socket.emit("sesionIniciada", this.$store.state.usuario.usuarioActivo);
     },
     recibirMensaje(msj) {
       this.$notify(`${msj.emisor.nombre} dice: `, msj.texto);

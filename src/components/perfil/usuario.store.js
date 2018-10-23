@@ -1,8 +1,8 @@
 import D from "debug";
 import swal from "sweetalert2";
-import usuarioApi from "../APIs/usuarioApi";
+import usuarioApi from "./usuario.store.js";
 
-const debug = D("ciris:storeUsuario");
+const debug = D("ciris:usuario");
 
 const state = {
   usuario: { usuarios: [] },

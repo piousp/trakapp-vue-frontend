@@ -167,13 +167,13 @@ export default {
   props: ["params"],
   computed: {
     empleados() {
-      return this.$store.state.storeEmpleado.empleados;
+      return this.$store.state.empleado.empleados;
     },
     tarea() {
-      return this.$store.state.storeTarea.tarea;
+      return this.$store.state.tarea.tarea;
     },
     clientes() {
-      return this.$store.state.storeCliente.clientes;
+      return this.$store.state.cliente.clientes;
     },
   },
   created() {
@@ -215,8 +215,8 @@ function data() {
 
 function eliminarTarea(ptarea) {
   debug("eliminarTarea");
-  this.$store.commit("storeModal/hideModal");
-  this.$store.commit("storeTarea/resetTarea");
+  this.$store.commit("modal/hideModal");
+  this.$store.commit("tarea/resetTarea");
   if (this.params.eliminar) this.params.eliminar(ptarea);
 }
 
@@ -225,8 +225,8 @@ function verificarYAceptar(tarea) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido && tarea.ubicacion.coordinates) {
-      this.$store.commit("storeModal/hideModal");
-      this.$store.commit("storeTarea/resetTarea");
+      this.$store.commit("modal/hideModal");
+      this.$store.commit("tarea/resetTarea");
       if (this.params.aceptar) this.params.aceptar(tarea);
       return tarea;
     } else if (!valido) {
@@ -254,10 +254,10 @@ function abrirModal(evt) {
 function cerrarModal() {
   debug("cerrarModal");
   this.submitted = false;
-  this.$store.commit("storeTarea/resetTarea");
+  this.$store.commit("tarea/resetTarea");
   this.$refs.gmapAutocomplete.$el.value = null;
   this.clienteBuscado = null;
-  this.$store.commit("storeModal/hideModal");
+  this.$store.commit("modal/hideModal");
 }
 
 function editarModal(ptarea) {
@@ -294,7 +294,7 @@ function buscarClientesDebounce(txt) {
   if (!txt) {
     return [];
   }
-  return this.$store.dispatch("storeCliente/buscar", {
+  return this.$store.dispatch("cliente/buscar", {
     txt, pagina: 0, cantidad: 10, recordar: true,
   });
 }

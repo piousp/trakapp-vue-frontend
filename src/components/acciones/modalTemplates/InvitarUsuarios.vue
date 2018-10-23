@@ -36,16 +36,16 @@ export default {
   },
   computed: {
     usuario() {
-      return this.$store.state.storeUsuario.usuarioActivo;
+      return this.$store.state.usuario.usuarioActivo;
     },
     cuenta() {
-      return this.$store.state.storeCuenta.cuentaActiva;
+      return this.$store.state.cuenta.cuentaActiva;
     },
   },
   data,
   methods: {
     invitarUsuarios,
-    hideModal() { return this.$store.commit("storeModal/hideModal"); },
+    hideModal() { return this.$store.commit("modal/hideModal"); },
   },
 };
 
@@ -68,7 +68,7 @@ function invitarUsuarios() {
   const comp = this;
   const correos = map(this.tags, "text");
   debug(`Enviando invitaciones a ${correos.length} correos`);
-  return this.$store.dispatch("storeCuenta/invitarUsuarios", {
+  return this.$store.dispatch("cuenta/invitarUsuarios", {
     usuario: this.usuario,
     cuenta: this.cuenta,
     correos,

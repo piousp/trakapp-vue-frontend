@@ -250,7 +250,7 @@ export default {
   computed: {
     horarios,
     empleado() {
-      return this.$store.state.storeEmpleado.empleado;
+      return this.$store.state.empleado.empleado;
     },
   },
   watch: {
@@ -264,7 +264,7 @@ export default {
     },
   },
   beforeDestroy() {
-    this.$store.commit("storeEmpleado/resetEmpleado");
+    this.$store.commit("empleado/resetEmpleado");
   },
   methods: {
     guardar,
@@ -296,7 +296,7 @@ function guardar(empleado) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      return this.$store.dispatch("storeEmpleado/guardar", { empleado, conservar: true, aLista: true })
+      return this.$store.dispatch("empleado/guardar", { empleado, conservar: true, aLista: true })
         .then((resp) => {
           debug("Guardado exitoso");
           this.$toastr("success", "Empleado guardado exitosamente", "Éxito");

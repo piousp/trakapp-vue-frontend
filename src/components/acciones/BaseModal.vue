@@ -22,9 +22,9 @@ export default {
     };
   },
   computed: {
-    visible() { return this.$store.state.storeModal.modalVisible; },
-    modalComponent() { return this.$store.state.storeModal.modalComponent; },
-    params() { return this.$store.state.storeModal.params; },
+    visible() { return this.$store.state.modal.modalVisible; },
+    modalComponent() { return this.$store.state.modal.modalComponent; },
+    params() { return this.$store.state.modal.params; },
   },
   watch: {
     modalComponent(componentName) {
@@ -47,7 +47,7 @@ export default {
   /* methods: {
     listener(e) {
       if (e.key === "Escape") {
-        this.$store.commit("storeModal/hideModal");
+        this.$store.commit("modal/hideModal");
       }
     },
   }, */

@@ -116,7 +116,7 @@ function login() {
           if (this.idCuenta && !find(this.usuario.cuentas, n => n === this.idCuenta)) {
             const usuario = cloneDeep(resp.usuario);
             usuario.cuentas.push(this.idCuenta);
-            return this.$store.dispatch("storeUsuario/guardar", usuario)
+            return this.$store.dispatch("usuario/guardar", usuario)
               .then(() => {
                 this.$toastr("success", this.$t("invitation.success"), "Éxito");
                 return redirijir();
@@ -144,7 +144,7 @@ function login() {
 }
 
 function abrirModalRecuperacion() {
-  return this.$store.commit("storeModal/showModal", {
+  return this.$store.commit("modal/showModal", {
     componentName: "recuperarContrasena",
   });
 }

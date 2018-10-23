@@ -7,7 +7,7 @@ import without from "lodash/without";
 import isString from "lodash/isString";
 import noop from "lodash/noop";
 
-import modules from "./stores/importarStores";
+import modules from "./config/importarStores";
 
 const debug = D("ciris:store.js");
 
@@ -17,7 +17,7 @@ const vuexPersist = new VuexPersist({
   key: "vuex-trakapp-store",
   storage: window.sessionStorage,
   asyncStorage: true,
-  modules: without(keys(modules), "storeApp", "storeModal"),
+  modules: without(keys(modules), "app", "modal"),
   restoreState(key, storage) {
     debug("Reestableciendo store de storage");
     return new Promise((resolve) => {

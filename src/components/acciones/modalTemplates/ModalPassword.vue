@@ -38,7 +38,7 @@ export default {
 };
 
 function cerrarModal() {
-  this.$store.commit("storeModal/hideModal");
+  this.$store.commit("modal/hideModal");
 }
 
 function actualizarContrasena(pass) {
@@ -46,11 +46,11 @@ function actualizarContrasena(pass) {
   return this.$validator.validateAll()
     .then((valido) => {
       if (valido) {
-        const { _id } = this.$store.state.storeUsuario.usuarioActivo;
+        const { _id } = this.$store.state.usuario.usuarioActivo;
         return this.$auth.actualizarContrasena(_id, pass)
           .then(() => {
             this.$toastr("success", "Se ha modificado su contraseña", "Contraseña Cambiada");
-            this.$store.commit("storeModal/hideModal");
+            this.$store.commit("modal/hideModal");
             if (this.params.aceptar) this.params.aceptar();
             return null;
           })

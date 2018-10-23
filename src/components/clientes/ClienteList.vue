@@ -58,11 +58,11 @@ export default {
   name: "ClienteList",
   computed: {
     clientes() {
-      return this.$store.state.storeCliente.clientes;
+      return this.$store.state.cliente.clientes;
     },
   },
   created() {
-    return this.$store.dispatch("storeCliente/getBase", { pagina: 0, cantidad: 10 });
+    return this.$store.dispatch("cliente/getBase", { pagina: 0, cantidad: 10 });
   },
   methods: {
     eliminar,
@@ -71,7 +71,7 @@ export default {
 };
 
 function irACliente(cliente, edit) {
-  this.$store.commit("storeCliente/setCliente", cliente);
+  this.$store.commit("cliente/setCliente", cliente);
   this.$router.push({ name: "clienteform", params: { edit } });
 }
 
@@ -83,7 +83,7 @@ function eliminar(cliente) {
     showCancelButton: true,
   }).then((resp) => {
     if (resp && !resp.dismiss) {
-      this.$store.dispatch("storeCliente/deleteID", { cliente, delLocal: true, deLista: true });
+      this.$store.dispatch("cliente/deleteID", { cliente, delLocal: true, deLista: true });
     }
     return noop;
   })

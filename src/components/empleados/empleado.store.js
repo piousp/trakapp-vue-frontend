@@ -2,9 +2,9 @@ import D from "debug";
 import reject from "lodash/reject";
 import filter from "lodash/filter";
 import findIndex from "lodash/findIndex";
-import empleadoApi from "../APIs/empleadoApi";
+import empleadoApi from "./empleado.api.js";
 
-const debug = D("ciris:storeEmpleados");
+const debug = D("ciris:empleados");
 
 const state = {
   empleados: { docs: [], cant: 0 },

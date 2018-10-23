@@ -2,7 +2,7 @@ import D from "debug";
 import flow from "lodash/flow";
 import axios from "../config/axios";
 
-const debug = D("ciris:APIs/_base.js");
+const debug = D("ciris:config/apiBase.js");
 
 export default rutasGenericas;
 export {

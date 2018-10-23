@@ -1,6 +1,6 @@
 import D from "debug";
 
-const debug = D("ciris:storeApp");
+const debug = D("ciris:app");
 
 const state = {
   authCargado: false,
