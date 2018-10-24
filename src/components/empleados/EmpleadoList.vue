@@ -67,12 +67,12 @@ export default {
     eliminar,
   },
   created() {
-    return this.$store.dispatch("empleado/getBase", { pagina: 0, cantidad: 10 });
+    return this.$store.dispatch(this.$actions.getBaseEmpleado, { pagina: 0, cantidad: 10 });
   },
 };
 
 function irAEmpleado(empleado, edit) {
-  this.$store.commit("empleado/setEmpleado", empleado);
+  this.$store.commit(this.$actions.setEmpleado, empleado);
   return this.$router.push({ name: "empleadoform", params: { edit } });
 }
 
@@ -84,7 +84,7 @@ function eliminar(empleado) {
     showCancelButton: true,
   }).then((resp) => {
     if (resp && !resp.dismiss) {
-      return this.$store.dispatch("empleado/eliminarEmpleado", empleado)
+      return this.$store.dispatch(this.$actions.eliminarEmpleado, empleado)
         .then(() => this.$toastr("success", "El empleado ha sido eliminado", "Éxito"))
         .catch(err => this.$toastr("error", err, "Error"));
     }

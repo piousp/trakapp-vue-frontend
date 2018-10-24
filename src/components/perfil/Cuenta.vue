@@ -9,14 +9,14 @@
         <span>Migrar a cuenta empresarial</span>
       </button>
       <button class="boton boton--indigo" v-if="cuenta.empresarial"
-              @click="$store.commit('modal/showModal', {
+              @click="$store.commit($actions.showModal, {
                 componentName:'invitarUsuarios'
               })">
         <i class="fal fa-envelope"/>
         <span>Invitar usuarios</span>
       </button>
       <button class="boton boton--morado" v-if="cuentas.length > 1"
-        @click="$store.commit('modal/showModal', {
+        @click="$store.commit($actions.showModal, {
           componentName:'selectCuenta'
         })">
         <i class="fal fa-exchange"/>
@@ -117,7 +117,9 @@ function guardarCuenta(cuenta) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      return this.$store.dispatch("cuenta/guardar", { cuenta, conservar: true, conservarComoActivo: true })
+      return this.$store.dispatch(this.$actions.guardarCuenta, {
+        cuenta, conservar: true, conservarComoActivo: true,
+      })
         .then((resp) => {
           debug(resp);
           this.$toastr("success", "Se han guardado correctamente los datos de su cuenta");
@@ -149,7 +151,9 @@ function migrarEmpresarial() {
     showCancelButton: true,
   }).then((swalRes) => {
     if (swalRes.value) {
-      this.$store.dispatch("cuenta/migrarEmpresarial", { cuenta: this.cuenta, conservar: true, conservarComoActivo: true })
+      this.$store.dispatch(this.$actions.migrarEmpresarial, {
+        cuenta: this.cuenta, conservar: true, conservarComoActivo: true,
+      })
         .then((resp) => {
           debug(resp);
           this.$toastr("success", "Se ha migrado su cuenta a una cuenta empresarial", "Éxito");

@@ -38,7 +38,7 @@ export default {
 };
 
 function cerrarModal() {
-  this.$store.commit("modal/hideModal");
+  this.$store.commit(this.$actions.hideModal);
 }
 
 function actualizarContrasena(pass) {
@@ -50,7 +50,7 @@ function actualizarContrasena(pass) {
         return this.$auth.actualizarContrasena(_id, pass)
           .then(() => {
             this.$toastr("success", "Se ha modificado su contraseña", "Contraseña Cambiada");
-            this.$store.commit("modal/hideModal");
+            this.$store.commit(this.$actions.hideModal);
             if (this.params.aceptar) this.params.aceptar();
             return null;
           })

@@ -103,7 +103,7 @@ function enviar(txt) {
   debug({
     mensaje: msj, aListaPublica: !this.privado, aListaPrivada: this.privado,
   });
-  return this.$store.dispatch("mensaje/guardar", {
+  return this.$store.dispatch(this.$actions.guardarMensaje, {
     mensaje: msj, conservar: true, aListaPublica: !this.privado, aListaPrivada: this.privado,
   })
     .then(() => {
@@ -112,7 +112,7 @@ function enviar(txt) {
         this.privado ? "mensajeEnviado" : "broadcastEnviado",
         this.$store.state.mensaje.mensaje,
       );
-      this.$store.commit("mensaje/resetMensaje");
+      this.$store.commit(this.$actions.resetMensaje);
       return null;
     });
 }
@@ -130,10 +130,10 @@ function arreglarScroll() {
 
 function mounted() {
   debug("mounted");
-  this.$socket.on(
-    this.privado ? "recibirMensaje" : "recibirBroadcast",
-    obj => this.$store.commit(this.privado ? "agregarAMensajesPrivados" : "agregarAMensajesPublicos", obj),
-  );
+  if (this.privado) {
+    return this.$socket.on("recibirMensaje", this.$actions.agregarAMensajesPrivados);
+  }
+  return this.$socket.on("recibirBroadcast", this.$actions.agregarAMensajesPublicos);
 }
 </script>
 

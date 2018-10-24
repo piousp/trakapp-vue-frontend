@@ -52,10 +52,12 @@ export default {
     },
   },
   methods: {
-    hideModal() { return this.$store.commit("modal/hideModal"); },
+    hideModal() { return this.$store.commit(this.$actions.hideModal); },
     cargarCuenta(cuenta) {
       debug("cargarCuenta");
-      this.$store.dispatch("cuenta/getID", { id: cuenta._id, conservarComoActivo: true, recordarCuenta: this.recordarme });
+      this.$store.dispatch(this.$actions.getIDCuenta, {
+        id: cuenta._id, conservarComoActivo: true, recordarCuenta: this.recordarme,
+      });
       return this.hideModal();
     },
   },
@@ -71,7 +73,7 @@ function data() {
 function created() {
   debug("created");
   this.cargando = true;
-  this.$store.dispatch("cuenta/cargarBulk", { cuentas: this.usuario.cuentas })
+  this.$store.dispatch(this.$actions.cargarBulkCuenta, { cuentas: this.usuario.cuentas })
     .then((resp) => {
       this.cargando = false;
       return resp;

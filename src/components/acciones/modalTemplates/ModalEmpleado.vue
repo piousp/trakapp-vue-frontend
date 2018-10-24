@@ -105,7 +105,7 @@ function mounted() {
         emisor: this.$store.state.usuario.usuarioActivo._id,
         receptor: this.empleado._id,
       };
-      this.$store.dispatch("mensaje/listarPrivado", params);
+      this.$store.dispatch(this.$actions.listarMensajePrivado, params);
       if (get(this.empleado.ubicacion, "pos.coordinates", null)) {
         this.empleado.ubicacion.pos = this.generarCoords(this.empleado.ubicacion.pos.coordinates);
       }
@@ -123,8 +123,8 @@ function mounted() {
 }
 
 function cerrarModal() {
-  this.$store.commit("empleado/resetEmpleado");
-  return this.$store.commit("modal/hideModal");
+  this.$store.commit(this.$actions.resetEmpleado);
+  return this.$store.commit(this.$actions.hideModal);
 }
 </script>
 

@@ -43,7 +43,7 @@ export default {
 };
 
 function hideModal() {
-  return this.$store.commit("modal/hideModal");
+  return this.$store.commit(this.$actions.hideModal);
 }
 
 function data() {
@@ -64,7 +64,7 @@ function enviar() {
         apellidos: creds.apellidos,
         correo: creds.correo,
       };
-      return this.$store.dispatch("usuario/reportarBug", { form: this.bug })
+      return this.$store.dispatch(this.$actions.reportarBug, { form: this.bug })
         .then(() => this.hideModal());
     }
     return null;

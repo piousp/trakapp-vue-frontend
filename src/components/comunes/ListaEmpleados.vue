@@ -27,7 +27,7 @@ export default {
   name: "ListaEmpleados",
   computed: {
     empleados() {
-      return this.$store.getters["empleado/listadoSinNuevos"];
+      return this.$store.getters[this.$actions.listaEmpleadosSinNuevos];
     },
   },
   methods: {
@@ -47,11 +47,11 @@ export default {
 
 function abrirEmpleado(emp) {
   if (emp.cantMensajesNoVistos > 0) {
-    this.$store.dispatch("mensaje/marcarComoVistos", { emisor: emp._id });
+    this.$store.dispatch(this.$actions.marcarMensajesComoVistos, { emisor: emp._id });
     this.setIndicadorMensajes(emp._id, 0);
   }
-  this.$store.commit("empleado/setEmpleado", emp);
-  return this.$store.commit("modal/showModal", {
+  this.$store.commit(this.$actions.setEmpleado, emp);
+  return this.$store.commit(this.$actions.showModal, {
     componentName: "modalEmpleado",
     params: {
       grande: true,
@@ -62,7 +62,7 @@ function abrirEmpleado(emp) {
 function setIndicadorMensajes(id, val) {
   const emisor = cloneDeep(this.empleados.docs.find(e => e._id === id));
   emisor.cantMensajesNoVistos = val ? emisor.cantMensajesNoVistos + val : val;
-  this.$store.commit("empleados/modificarEmpleado", emisor);
+  this.$store.commit(this.$actions.modificarEmpleado, emisor);
 }
 </script>
 

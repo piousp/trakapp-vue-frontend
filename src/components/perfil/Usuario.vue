@@ -90,7 +90,7 @@ function mostrarModalCambioClave(claveActual) {
   return this.$auth.verificarPasswordCorrecto(claveActual)
     .then((resp) => {
       debug(resp);
-      return this.$store.commit("modal/showModal", {
+      return this.$store.commit(this.$actions.showModal, {
         componentName: "modalPassword",
         params: {
           aceptar: this.finalizar,
@@ -115,7 +115,7 @@ function guardarUsuario(usuario) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      this.$store.dispatch("perfil/actualizarDatosUsuario", usuario)
+      this.$store.dispatch(this.$actions.actualizarDatosUsuario, usuario)
         .then((resp) => {
           debug(resp);
           this.$toastr("success", "La información ha sido guardada", "Éxito");
