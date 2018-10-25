@@ -48,3 +48,9 @@
       inset 0 4px 6px -3px darken($negro4, 25%);
   }
 }
+
+.VuePagination__pagination-item-prev-chunk,
+.VuePagination__pagination-item-next-chunk,
+.VuePagination__count {
+  display: none !important;
+}

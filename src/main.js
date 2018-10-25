@@ -11,6 +11,7 @@ import bugsnagVue from "bugsnag-vue";
 import Multiselect from "vue-multiselect";
 import money from "v-money";
 import VueTheMask from "vue-the-mask";
+import Pagination from "vue-pagination-2";
 import App from "./App.vue";
 import router from "./router";
 import Auth from "./config/auth.js";
@@ -50,6 +51,7 @@ Vue.use(VueTheMask);
 Vue.component("app-modal", AppModal);
 Vue.component("infoWindow", VueGoogleMaps.InfoWindow);
 Vue.component("multiselect", Multiselect);
+Vue.component("pagination", Pagination);
 
 Vue.prototype.$auth.checkAuth();
 

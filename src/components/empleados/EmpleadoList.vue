@@ -42,6 +42,11 @@
           </tr>
         </tbody>
       </table>
+      <pagination
+      :records="empleados.cant"
+      :page="pagina"
+      :per-page="cantidad"
+      @paginate="fetchData"/>
     </div>
     <div v-else>
       <p class="no-results text--center">
@@ -57,6 +62,7 @@ import swal from "sweetalert2";
 
 export default {
   name: "EmpleadoList",
+  data,
   computed: {
     empleados() {
       return this.$store.state.empleado.empleados;
@@ -65,11 +71,25 @@ export default {
   methods: {
     irAEmpleado,
     eliminar,
+    fetchData,
   },
   created() {
-    return this.$store.dispatch(this.$actions.getBaseEmpleado, { pagina: 0, cantidad: 10 });
+    return this.fetchData(this.pagina);
   },
 };
+
+function data() {
+  return {
+    pagina: 1,
+    cantidad: this.$store.state.app.cantPorPagina,
+  };
+}
+
+function fetchData(pagina) {
+  const paginacion = { pagina: pagina - 1, cantidad: this.cantidad };
+  this.pagina = pagina;
+  this.$store.dispatch(this.$actions.getBaseEmpleado, paginacion);
+}
 
 function irAEmpleado(empleado, edit) {
   this.$store.commit(this.$actions.setEmpleado, empleado);

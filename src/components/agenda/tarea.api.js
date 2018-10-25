@@ -27,9 +27,15 @@ function listarXFecha(fechaInicio, fechaFin) {
     .then(resp => resp.data);
 }
 
-function getTareasPopuladas() {
+function getTareasPopuladas(pagina, cantidad) {
+  const params = {
+    params: {
+      pagina: pagina || 0,
+      cantidad: cantidad || 0,
+    },
+  };
   debug("getTareasPopuladas");
   return axios
-    .get(`${axios.defaults.baseUrl}/api/tarea/listaPopulada`)
+    .get(`${axios.defaults.baseUrl}/api/tarea/listaPopulada`, params)
     .then(resp => resp.data);
 }

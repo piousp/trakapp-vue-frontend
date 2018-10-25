@@ -48,6 +48,11 @@
           </tr>
         </tbody>
       </table>
+      <pagination
+      :records="tareas.cant"
+      :page="pagina"
+      :per-page="cantidad"
+      @paginate="fetchData"/>
     </div>
     <div v-else>
       <p class="no-results text--center">
@@ -64,8 +69,9 @@ import swal from "sweetalert2";
 
 export default {
   name: "TareaList",
+  data,
   created() {
-    return this.$store.dispatch(this.$actions.getTareasPopuladas);
+    return this.fetchData(this.pagina);
   },
   computed: {
     tareas() {
@@ -77,8 +83,22 @@ export default {
     abrir,
     abrirModal,
     aceptar,
+    fetchData,
   },
 };
+
+function data() {
+  return {
+    pagina: 1,
+    cantidad: this.$store.state.app.cantPorPagina,
+  };
+}
+
+function fetchData(pagina) {
+  const paginacion = { pagina: pagina - 1, cantidad: this.cantidad };
+  this.pagina = pagina;
+  this.$store.dispatch(this.$actions.getTareasPopuladas, paginacion);
+}
 
 function abrirModal(tarea) {
   this.$store.commit(this.$actions.setTarea, tarea);
