@@ -45,7 +45,7 @@ export default {
   data,
   methods: {
     invitarUsuarios,
-    hideModal() { return this.$store.commit("modal/hideModal"); },
+    hideModal() { return this.$store.commit(this.$actions.hideModal); },
   },
 };
 
@@ -68,7 +68,7 @@ function invitarUsuarios() {
   const comp = this;
   const correos = map(this.tags, "text");
   debug(`Enviando invitaciones a ${correos.length} correos`);
-  return this.$store.dispatch("cuenta/invitarUsuarios", {
+  return this.$store.dispatch(this.$actions.invitarUsuarios, {
     usuario: this.usuario,
     cuenta: this.cuenta,
     correos,

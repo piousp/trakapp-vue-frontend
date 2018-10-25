@@ -6,6 +6,7 @@ import keys from "lodash/keys";
 import without from "lodash/without";
 import isString from "lodash/isString";
 import noop from "lodash/noop";
+import actions from "./config/actions";
 
 import modules from "./config/importarStores";
 
@@ -42,5 +43,6 @@ const store = new Vuex.Store({
 });
 
 Vue.prototype.$store = store;
+Vue.prototype.$actions = actions;
 
 export default store;

@@ -84,7 +84,7 @@ function mounted() {
       if (resp && !resp.dismiss) {
         tour(this.$router, 0);
       }
-      return this.$store.dispatch("usuario/guardar", {
+      return this.$store.dispatch(this.$actions.guardarUsuario, {
         usuario: this.usuario, conservar: false, conservarActivo: true,
       });
     }), 2000);

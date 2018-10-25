@@ -215,8 +215,8 @@ function data() {
 
 function eliminarTarea(ptarea) {
   debug("eliminarTarea");
-  this.$store.commit("modal/hideModal");
-  this.$store.commit("tarea/resetTarea");
+  this.$store.commit(this.$actions.hideModal);
+  this.$store.commit(this.$actions.resetTarea);
   if (this.params.eliminar) this.params.eliminar(ptarea);
 }
 
@@ -225,8 +225,8 @@ function verificarYAceptar(tarea) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido && tarea.ubicacion.coordinates) {
-      this.$store.commit("modal/hideModal");
-      this.$store.commit("tarea/resetTarea");
+      this.$store.commit(this.$actions.hideModal);
+      this.$store.commit(this.$actions.resetTarea);
       if (this.params.aceptar) this.params.aceptar(tarea);
       return tarea;
     } else if (!valido) {
@@ -254,10 +254,10 @@ function abrirModal(evt) {
 function cerrarModal() {
   debug("cerrarModal");
   this.submitted = false;
-  this.$store.commit("tarea/resetTarea");
+  this.$store.commit(this.$actions.resetTarea);
   this.$refs.gmapAutocomplete.$el.value = null;
   this.clienteBuscado = null;
-  this.$store.commit("modal/hideModal");
+  this.$store.commit(this.$actions.hideModal);
 }
 
 function editarModal(ptarea) {
@@ -294,7 +294,7 @@ function buscarClientesDebounce(txt) {
   if (!txt) {
     return [];
   }
-  return this.$store.dispatch("cliente/buscar", {
+  return this.$store.dispatch(this.$actions.buscarCliente, {
     txt, pagina: 0, cantidad: 10, recordar: true,
   });
 }

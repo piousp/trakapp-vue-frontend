@@ -15,6 +15,6 @@ function mounted() {
     cargados: 0,
     cantidad: this.$refs.chat.limiteItems,
   };
-  return this.$store.dispatch("mensaje/listarPublico", params);
+  return this.$store.dispatch(this.$actions.listarMensajePublico, params);
 }
 </script>

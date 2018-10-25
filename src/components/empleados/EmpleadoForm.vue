@@ -264,7 +264,7 @@ export default {
     },
   },
   beforeDestroy() {
-    this.$store.commit("empleado/resetEmpleado");
+    this.$store.commit(this.$actions.resetEmpleado);
   },
   methods: {
     guardar,
@@ -296,7 +296,9 @@ function guardar(empleado) {
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      return this.$store.dispatch("empleado/guardar", { empleado, conservar: true, aLista: true })
+      return this.$store.dispatch(this.$actions.guardarEmpleado, {
+        empleado, conservar: true, aLista: true,
+      })
         .then((resp) => {
           debug("Guardado exitoso");
           this.$toastr("success", "Empleado guardado exitosamente", "Éxito");
