@@ -4,6 +4,7 @@ const debug = D("ciris:app");
 
 const state = {
   authCargado: false,
+  cantPorPagina: 10,
 };
 
 const mutations = {

@@ -121,9 +121,10 @@ function listarXFecha(context, params) {
     .catch(err => debug(err));
 }
 
-function getTareasPopuladas(context) {
+function getTareasPopuladas(context, params) {
   debug("getTareasPopuladas");
-  return tareaApi.getTareasPopuladas()
+  const { pagina, cantidad } = params;
+  return tareaApi.getTareasPopuladas(pagina, cantidad)
     .then((resp) => {
       context.commit("setTareas", resp);
       return resp;
