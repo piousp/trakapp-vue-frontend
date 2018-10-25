@@ -110,32 +110,32 @@ function login() {
           function redirijir() {
             debug(resp);
             comp.$router.push({ name: "agenda" });
-            comp.$toastr("success", this.$t("login.success"), `${resp.usuario.nombre}`);
+            comp.$toastr("success", comp.$t("login.success"), `${resp.usuario.nombre}`);
             return resp;
           }
-          if (this.idCuenta && !find(this.usuario.cuentas, n => n === this.idCuenta)) {
+          if (comp.idCuenta && !find(comp.usuario.cuentas, n => n === comp.idCuenta)) {
             const usuario = cloneDeep(resp.usuario);
-            usuario.cuentas.push(this.idCuenta);
-            return this.$store.dispatch(this.$actions.guardarUsuario, usuario)
+            usuario.cuentas.push(comp.idCuenta);
+            return comp.$store.dispatch(comp.$actions.guardarUsuario, usuario)
               .then(() => {
-                this.$toastr("success", this.$t("invitation.success"), "Éxito");
+                comp.$toastr("success", comp.$t("invitation.success"), "Éxito");
                 return redirijir();
               })
               .catch((err) => {
                 debug(err);
-                return this.$toastr("error", this.$t("invitation.error"), "Error");
+                return comp.$toastr("error", comp.$t("invitation.error"), "Error");
               });
-          } else if (find(this.usuario.cuentas, n => n === this.idCuenta)) {
-            this.$toastr("error", this.$t("invitation.alreadyBelongs"), "Error");
+          } else if (find(comp.usuario.cuentas, n => n === comp.idCuenta)) {
+            comp.$toastr("error", comp.$t("invitation.alreadyBelongs"), "Error");
           }
           return redirijir();
         })
         .catch((err) => {
           debug(err);
           if (err.response.status < 500) {
-            this.$toastr("info", this.$t("login.credencialesInvalidos.msj"), this.$t("login.credencialesInvalidos.titulo"));
+            comp.$toastr("info", comp.$t("login.credencialesInvalidos.msj"), comp.$t("login.credencialesInvalidos.titulo"));
           } else {
-            this.$toastr("error", this.$t("login.error"), "Error");
+            comp.$toastr("error", comp.$t("login.error"), "Error");
           }
         });
     }

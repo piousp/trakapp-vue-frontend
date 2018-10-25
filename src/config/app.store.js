@@ -22,5 +22,5 @@ export default store;
 
 function toggleAuthCargado(pState) {
   debug("toggleAuthCargado");
-  pState.authCargado = !pState.authCargado;
+  pState.authCargado = true;
 }
