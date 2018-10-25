@@ -10,6 +10,7 @@ import RutasChat from "./components/chat/rutas.js";
 import RutasPerfil from "./components/perfil/rutas.js";
 import RutasCliente from "./components/clientes/rutas.js";
 import RutasReportes from "./components/reportes/rutas.js";
+import RutasRutas from "./components/rutas/rutas.js";
 
 Vue.use(Router);
 
@@ -28,6 +29,7 @@ const router = new Router({
         RutasEmpleados,
         RutasPerfil,
         RutasReportes,
+        RutasRutas,
       ),
       redirect: "/agenda",
     },
