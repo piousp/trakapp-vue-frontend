@@ -176,29 +176,30 @@ function created() {
 }
 
 function registrarse() {
+  const self = this;
   this.submitted = true;
   return this.$validator.validateAll().then((valido) => {
     if (valido) {
-      if (this.idCuenta) {
-        this.usuario.cuentas = [this.idCuenta];
+      if (self.idCuenta) {
+        self.usuario.cuentas = [self.idCuenta];
       }
-      this.$auth.registro(this.usuario)
+      self.$auth.registro(self.usuario)
         .then((resp) => {
           debug(resp);
-          this.$toastr(
+          self.$toastr(
             "success",
             "Se le ha enviado un correo de verificación para activar su cuenta.",
             "Cuenta creada",
           );
-          this.$router.push({ name: "login" });
+          self.$router.push({ name: "login" });
           return resp;
         })
         .catch((err) => {
           debug(err);
           if (err.response.status === 409) {
-            this.$toastr("info", "El usuario ya existe", "Error");
+            self.$toastr("info", "El usuario ya existe", "Error");
           } else {
-            this.$toastr("error", "Error al crear la cuenta", "Error");
+            self.$toastr("error", "Error al crear la cuenta", "Error");
           }
         });
     }
