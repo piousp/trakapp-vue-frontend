@@ -87,20 +87,22 @@
               <label class="text">Lunes:</label>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
                 :disabled="!editando"
-                v-model="copia.horarios.lunes.desde"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.lunes.desde">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.lunes.hasta"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.lunes.hasta">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
           </li>
           <li class="lista__item">
@@ -108,20 +110,22 @@
               <label class="text">Martes:</label>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.martes.desde"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.martes.desde">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.martes.hasta"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.martes.hasta">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
           </li>
           <li class="lista__item">
@@ -129,20 +133,22 @@
               <label class="text">Miércoles:</label>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.miercoles.desde"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.miercoles.desde">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.miercoles.hasta"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.miercoles.hasta">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
           </li>
           <li class="lista__item">
@@ -150,20 +156,22 @@
               <label class="text">Jueves:</label>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.jueves.desde"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.jueves.desde">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.jueves.hasta"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.jueves.hasta">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
           </li>
           <li class="lista__item">
@@ -171,20 +179,22 @@
               <label class="text">Viernes:</label>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.viernes.desde"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.viernes.desde">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.viernes.hasta"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.viernes.hasta">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
           </li>
           <li class="lista__item">
@@ -192,20 +202,22 @@
               <label class="text">Sábado:</label>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.sabado.desde"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.sabado.desde">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.sabado.hasta"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.sabado.hasta">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
           </li>
           <li class="lista__item">
@@ -213,20 +225,22 @@
               <label class="text">Domingo:</label>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.domingo.desde"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.domingo.desde">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
             <div class="lista__item__cell">
-              <multiselect
+              <select
+                class="form__input"
                 placeholder="Seleccione una hora"
-                v-model="copia.horarios.domingo.hasta"
                 :disabled="!editando"
-                :options="horarios"
-                :custom-label="opt => aHora(opt)"/>
+                v-model="copia.horarios.domingo.hasta">
+                <option v-for="(opt, i) in horarios" :value="opt" :key="i">{{ aHora(opt) }}</option>
+              </select>
             </div>
           </li>
         </ul>
