@@ -76,6 +76,7 @@ export default {
     @extend .sombra;
     background: $negro2;
     width: 260px;
+    position: relative;
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -86,16 +87,15 @@ export default {
     flex-grow: 2;
     width: 100%;
     background: transparentize($blanco, .2);
-    box-shadow: inset 2px 0 0 $negro2;
     position: relative;
   }
 
   .layout__content__bar{
-    background: $blanco;
-    box-shadow: inset 2px 0 0 $negro2;
+    @extend .sombra;
+    background: $grise;
     position: absolute;
     width: 100%;
-    height: 40px;
+    height: 44px;
     top: 0;
     left: 0;
   }
