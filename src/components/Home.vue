@@ -65,9 +65,6 @@ export default {
   @import "../sass/tema/globales";
 
   body{
-    background: url("/hero2.jpg");
-    background-attachment: fixed;
-    background-size: cover;
   }
 
   .layout {
@@ -77,7 +74,7 @@ export default {
   .layout__nav,
   .layout__chat{
     @extend .sombra;
-    background: transparentize($negro2, .3);
+    background: $negro2;
     width: 260px;
     overflow-y: auto;
     overflow-x: hidden;
