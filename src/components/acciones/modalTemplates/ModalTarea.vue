@@ -103,31 +103,58 @@
             </div>
           </div>
           <div class="col-6">
-            <form-group id="ubicacion-tarea">
-              <gmap-autocomplete class="form__input" ref="gmapAutocomplete"
-                                 :disabled="copia.activa === false"
-                                 required
-                                 :options="{componentRestrictions: {country: 'cr'}}"
-                                 @place_changed="buscarLugar"
-                                 placeholder=""/>
-              <label class="form__label form__label--required">Ubicación</label>
-            </form-group>
-            <gmap-map
-              class="mapa-agenda"
-              ref="map"
-              :center="mapCenter"
-              :zoom="14"
-              :options="{ disableDefaultUI : true }"
-              map-type-id="terrain">
-              <gmap-marker
-                v-if="copia.ubicacion && copia.ubicacion.coordinates"
-                :draggable="copia.activa !== false"
-                :position="{
-                  lat: copia.ubicacion.coordinates[1],
-                  lng: copia.ubicacion.coordinates[0]
-                }
-              "/>
-            </gmap-map>
+            <div class="radio--container">
+              <div class="radio radio--indigo">
+                <input type="radio" id="radioi" v-model="copia.usarUbicacion"
+                :value="true">
+                <label class="form__label" for="radioi">Usar ubicación</label>
+              </div>
+              <div class="radio radio--azul">
+                <input type="radio" id="radioa" v-model="copia.usarUbicacion"
+                :value="false" @click="cargarRutas">
+                <label class="form__label" for="radioa">Usar ruta</label>
+              </div>
+            </div>
+            <div v-if="copia.usarUbicacion">
+              <form-group id="ubicacion-tarea">
+                <gmap-autocomplete class="form__input" ref="gmapAutocomplete"
+                                   :disabled="copia.activa === false"
+                                   required
+                                   :options="{componentRestrictions: {country: 'cr'}}"
+                                   @place_changed="buscarLugar"
+                                   placeholder=""/>
+                <label class="form__label form__label--required">Ubicación</label>
+              </form-group>
+              <gmap-map
+                class="mapa-agenda"
+                ref="map"
+                :center="mapCenter"
+                :zoom="14"
+                :options="{ disableDefaultUI : true }"
+                map-type-id="terrain">
+                <gmap-marker
+                  v-if="copia.ubicacion && copia.ubicacion.coordinates"
+                  :draggable="copia.activa !== false"
+                  :position="{
+                    lat: copia.ubicacion.coordinates[1],
+                    lng: copia.ubicacion.coordinates[0]
+                  }
+                "/>
+              </gmap-map>
+            </div>
+            <div v-else>
+              <form-group id="ubicacion-tarea">
+                <label class="form__label" for="selectRuta">Seleccione una ruta</label>
+                <select name="" id="selectRuta" class="form__input"
+                @change="asignarRuta(ruta)" v-model="ruta">
+                  <option value="" selected disabled>--Seleccione una--</option>
+                  <option v-for="ruta in rutas.docs"
+                  :key="ruta._id" :value="ruta">
+                    {{ruta.nombre}} - {{ruta.descripcion}}
+                  </option>
+                </select>
+              </form-group>
+            </div>
           </div>
         </div>
         <div class="col-12 text">
@@ -153,6 +180,7 @@ import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
 import debounce from "lodash/debounce";
 import cloneDeep from "lodash/cloneDeep";
+import map from "lodash/map";
 import D from "debug";
 import Subtareas from "../../agenda/Subtareas.vue";
 
@@ -175,8 +203,12 @@ export default {
     clientes() {
       return this.$store.state.cliente.clientes;
     },
+    rutas() {
+      return this.$store.state.ruta.rutas;
+    },
   },
   created() {
+    this.$store.dispatch(this.$actions.getBaseCliente, { pagina: 0, cantidad: 0 });
     if (this.copia._id) {
       return this.editarModal(this.copia);
     }
@@ -201,16 +233,32 @@ export default {
     verificarYAceptar,
     isEmpty,
     crearSubtarea,
+    cargarRutas,
+    asignarRuta,
   },
 };
 
 function data() {
   return {
-    copia: { subtareas: [] },
+    copia: { usarUbicacion: true, subtareas: [] },
+    ruta: { ubicaciones: [] },
     mapCenter: { lat: 9.93, lng: -84.07 },
     submitted: false,
     mostrarSubtareas: true,
   };
+}
+
+function asignarRuta(ruta) {
+  debug("asignarRuta", ruta);
+  this.copia.subtareas = map(ruta.ubicaciones, e => ({
+    texto: e.nombre + (e.descripcion ? (` - ${e.descripcion}`) : "") + (e.telefono ? (` - ${e.telefono}`) : ""),
+    completado: false,
+    ubicacion: e.pos,
+  }));
+}
+
+function cargarRutas() {
+  this.$store.dispatch(this.$actions.getBaseRuta, { pagina: 0, cantidad: 0 });
 }
 
 function eliminarTarea(ptarea) {
@@ -247,6 +295,7 @@ function abrirModal(evt) {
     post: {},
     activa: true,
     subtareas: [],
+    usarUbicacion: true,
   };
   this.copia = formatearFechas(tarea);
 }
@@ -295,7 +344,7 @@ function buscarClientesDebounce(txt) {
     return [];
   }
   return this.$store.dispatch(this.$actions.buscarCliente, {
-    txt, pagina: 0, cantidad: 10, recordar: true,
+    txt, pagina: 0, cantidad: 0, recordar: true,
   });
 }
 
@@ -342,5 +391,9 @@ function crearSubtarea() {
       margin-bottom: 0;
     }
   }
+}
+.radio--container {
+  display: flex;
+  justify-content: space-evenly;
 }
 </style>

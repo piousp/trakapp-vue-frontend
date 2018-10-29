@@ -66,4 +66,13 @@ const usuario = {
   resetUsuarioActivo: "usuario/resetUsuarioActivo",
 };
 
-export default assign(app, cliente, cuenta, empleado, mensaje, modal, perfil, tarea, usuario);
+const ruta = {
+  buscarRuta: "ruta/buscar",
+  resetRuta: "ruta/resetRuta",
+  guardarRuta: "ruta/guardar",
+  getBaseRuta: "ruta/getBase",
+  deleteIDRuta: "ruta/deleteID",
+  setRuta: "ruta/setCliente",
+};
+
+export default assign(app, cliente, cuenta, empleado, mensaje, modal, perfil, tarea, usuario, ruta);

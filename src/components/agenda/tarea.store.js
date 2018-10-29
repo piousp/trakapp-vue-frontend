@@ -7,7 +7,7 @@ import tareaApi from "./tarea.api.js";
 const debug = D("ciris:tarea");
 
 const state = {
-  tarea: { subtareas: [] },
+  tarea: { usarUbicacion: true, subtareas: [] },
   tareas: { docs: [], cant: 0 },
 };
 
