@@ -64,8 +64,6 @@
   margin-right: 5px;
   box-shadow: 0px 4px 0 darken($fondo, 7%),
     0px 5px 0px darken($fondo, 19%),
-    inset -1px -1px 0 lighten($fondo, 5),
-    inset 1px 1px 0 lighten($fondo, 5),
     0 7px 4px 0 $sombra1;
 
   &:hover {
@@ -79,8 +77,6 @@
     border: 1px solid darken($fondo, 15%);
     box-shadow: 0px 2px 0 darken($fondo, 7%),
       0px 3px 0px darken($fondo, 19%),
-      inset -1px -1px 0 lighten($fondo, 5),
-      inset 1px 1px 0 lighten($fondo, 5),
       0 5px 4px 0 $sombra1;
     transform: translateY(2px);
   }
