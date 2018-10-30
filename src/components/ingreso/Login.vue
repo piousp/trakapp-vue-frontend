@@ -47,7 +47,7 @@
                      name: idCuenta ? 'invitacionRegistro' : 'registro',
                      params: idCuenta ? {idCuenta} : {}
                    }"
-                   params="class=&quot;text--cyan&quot;">¡Regístrese ahora!</router-link>
+                   class="text--cyan">¡Regístrese ahora!</router-link>
     </p>
   </section>
 </template>

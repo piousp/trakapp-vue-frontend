@@ -104,7 +104,7 @@
         </div>
       </div>
       <div class="text--center">
-        <button class="boton boton--celeste-tema boton--xl" type="submit">
+        <button class="boton boton--celeste-tema boton--l" type="submit">
           <i class="fas fa-fw fa-building"/>
           ¡Registrarse!
         </button>
