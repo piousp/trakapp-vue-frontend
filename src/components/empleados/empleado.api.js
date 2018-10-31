@@ -7,6 +7,7 @@ const debug = D("ciris:empleadoApi.js");
 const apiSinBases = {
   modelo: "empleado",
   listarConMensajes,
+  buscarEmpleadosChat,
 };
 
 const empleadoApi = rutasGenericas(apiSinBases);
@@ -23,5 +24,16 @@ function listarConMensajes(pagina, cantidad) {
   };
   return axios
     .get(`${axios.defaults.baseUrl}/api/empleado/conmensajes`, query)
+    .then(resp => resp.data);
+}
+
+function buscarEmpleadosChat(param) {
+  return axios
+    .get(`${axios.defaults.baseUrl}/api/empleado/buscadorchat/${param}`, {
+      params: {
+        pagina: 0,
+        cantidad: 10,
+      },
+    })
     .then(resp => resp.data);
 }

@@ -2,8 +2,16 @@
   <section id="chat-empleados">
     <h1 class="h5 text--blanco text--center">Chat empleados</h1>
     <ul class="lista-empleados">
+      <li class="lista-empleados__item">
+        <input
+        type="text"
+        class="form__input"
+        placeholder="Buscar más..."
+        v-model="buscador"
+        @input="buscarEmpleados(buscador)">
+      </li>
       <li class="text--center text--grisa text--small" v-show="!empleados.docs.length">
-        No hay empleados.
+        Sin resultados.
       </li>
       <li class="lista-empleados__item"
           @click="abrirEmpleado(emp)"
@@ -21,10 +29,16 @@
 
 <script>
 import cloneDeep from "lodash/cloneDeep";
+import debounce from "lodash/debounce";
 import obtenerColor from "./colores.js";
 
 export default {
   name: "ListaEmpleados",
+  data() {
+    return {
+      buscador: null,
+    };
+  },
   computed: {
     empleados() {
       return this.$store.state.empleado.empleadosCMensajes;
@@ -34,6 +48,7 @@ export default {
     obtenerColor,
     abrirEmpleado,
     setIndicadorMensajes,
+    buscarEmpleados: debounce(buscarEmpleadosChat, 500),
   },
   sockets: {
     recibirMensaje(msj) {
@@ -63,6 +78,13 @@ function setIndicadorMensajes(id, val) {
   const emisor = cloneDeep(this.empleados.docs.find(e => e._id === id));
   emisor.cantMensajesNoVistos = val ? emisor.cantMensajesNoVistos + val : val;
   this.$store.commit(this.$actions.modificarEmpleado, emisor);
+}
+
+function buscarEmpleadosChat(param) {
+  if (param) {
+    return this.$store.dispatch(this.$actions.buscarEmpleadosChat, param);
+  }
+  return this.$store.dispatch(this.$actions.cargarEmpleadosCMsjs, { pagina: 0, cantidad: 10 });
 }
 </script>
 
