@@ -29,6 +29,8 @@ const empleado = {
   resetEmpleado: "empleado/resetEmpleado",
   listaEmpleadosSinNuevos: "empleado/listadoSinNuevos",
   modificarEmpleado: "empleado/modificarEmpleado",
+  buscarEmpleadosChat: "empleado/buscarEmpleadosChat",
+  cargarEmpleadosCMsjs: "empleado/cargarEmpleadosConMensajes",
 };
 
 const mensaje = {

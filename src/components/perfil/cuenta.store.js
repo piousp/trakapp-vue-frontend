@@ -53,8 +53,7 @@ function getID(context, params) {
       context.commit("setCuenta", resp);
       if (conservarComoActivo) {
         context.commit("setCuentaActiva", { cuenta: resp, recordarme: recordarCuenta });
-        context.dispatch("empleado/cargarEmpleadosConMensajes", {}, { root: true });
-        context.dispatch("empleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+        context.dispatch("empleado/cargarEmpleadosConMensajes", { pagina: 0, cantidad: 10 }, { root: true });
       }
       return resp;
     })
@@ -80,8 +79,7 @@ function putID(context, params) {
       if (conservar) context.commit("setCuenta", resp);
       if (conservarComoActivo) {
         context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
-        context.dispatch("empleado/cargarEmpleadosConMensajes", {}, { root: true });
-        context.dispatch("empleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+        context.dispatch("empleado/cargarEmpleadosConMensajes", { pagina: 0, cantidad: 10 }, { root: true });
       }
       return resp;
     })
@@ -96,8 +94,7 @@ function postBase(context, params) {
       if (conservar) context.commit("setCuenta", resp);
       if (conservarComoActivo) {
         context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
-        context.dispatch("empleado/cargarEmpleadosConMensajes", {}, { root: true });
-        context.dispatch("empleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+        context.dispatch("empleado/cargarEmpleadosConMensajes", { pagina: 0, cantidad: 10 }, { root: true });
       }
       return resp;
     })
@@ -123,8 +120,7 @@ function guardar(context, params) {
       if (conservar) context.commit("setCuenta", resp);
       if (conservarComoActivo) {
         context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
-        context.dispatch("empleado/cargarEmpleadosConMensajes", {}, { root: true });
-        context.dispatch("empleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+        context.dispatch("empleado/cargarEmpleadosConMensajes", { pagina: 0, cantidad: 10 }, { root: true });
       }
       return resp;
     })
@@ -136,8 +132,7 @@ function getCuentaActiva(context) {
   return cuentaApi.getCuentaActiva()
     .then((resp) => {
       context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
-      context.dispatch("empleado/cargarEmpleadosConMensajes", {}, { root: true });
-      context.dispatch("empleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+      context.dispatch("empleado/cargarEmpleadosConMensajes", { pagina: 0, cantidad: 10 }, { root: true });
       return resp;
     })
     .catch(err => debug(err));
@@ -174,8 +169,7 @@ function migrarEmpresarial(context, params) {
       if (conservar) context.commit("setCuenta", resp);
       if (conservarComoActivo) {
         context.commit("setCuentaActiva", { cuenta: resp, recordarme: true });
-        context.dispatch("empleado/cargarEmpleadosConMensajes", {}, { root: true });
-        context.dispatch("empleado/getBase", { pagina: 0, cantidad: 10 }, { root: true });
+        context.dispatch("empleado/cargarEmpleadosConMensajes", { pagina: 0, cantidad: 10 }, { root: true });
       }
       return resp;
     })

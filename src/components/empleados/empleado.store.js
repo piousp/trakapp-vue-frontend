@@ -20,6 +20,7 @@ const actions = {
   deleteID,
   guardar,
   cargarEmpleadosConMensajes,
+  buscarEmpleadosChat,
 };
 
 const mutations = {
@@ -135,6 +136,14 @@ function cargarEmpleadosConMensajes(context, params) {
       return null;
     })
     .catch(err => debug(err));
+}
+
+function buscarEmpleadosChat(context, param) {
+  return empleadoApi.buscarEmpleadosChat(param)
+    .then((empleados) => {
+      context.commit("setEmpleadosCMensajes", empleados);
+      return null;
+    });
 }
 
 // mutations
