@@ -27,7 +27,7 @@ export default {
   name: "ListaEmpleados",
   computed: {
     empleados() {
-      return this.$store.getters[this.$actions.listaEmpleadosSinNuevos];
+      return this.$store.state.empleado.empleadosCMensajes;
     },
   },
   methods: {
