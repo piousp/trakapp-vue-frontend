@@ -6,8 +6,6 @@
 </template>
 
 <script>
-import $ from "jquery";
-
 export default {
   name: "FormGroup",
   directives: {
@@ -23,13 +21,11 @@ export default {
 };
 
 function labelizador(el) {
-  const jel = $(el);
   setTimeout(() => {
-    if (jel.children(".form__input").val()) {
-      jel.children(".form__label").addClass("form__label--active");
-    } else {
-      jel.children(".form__label").removeClass("form__label--active");
+    if (el.getElementsByClassName("form__input")[0].value) {
+      return el.getElementsByClassName("form__label")[0].classList.add("form__label--active");
     }
+    return el.getElementsByClassName("form__label")[0].classList.remove("form__label--active");
   }, 50);
 }
 </script>
