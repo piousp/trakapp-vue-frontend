@@ -1,17 +1,21 @@
 <template>
   <section id="chat-empleados">
     <h1 class="h4 text--negro4 text--center">Chat empleados</h1>
+    <form-group class="busqueda-empleados">
+      <input
+      type="search"
+      class="form__input"
+      v-model="buscador"
+      @input="buscarEmpleados(buscador)">
+      <label class="form__label">
+        <i class="fal fa-fw fa-search"/>
+        <span>Buscar por nombre</span>
+      </label>
+    </form-group>
     <ul class="lista-empleados">
-      <li class="lista-empleados__item">
-        <input
-        type="text"
-        class="form__input"
-        placeholder="Buscar más..."
-        v-model="buscador"
-        @input="buscarEmpleados(buscador)">
-      </li>
-      <li class="text--center text--grisa text--small" v-show="!empleados.docs.length">
-        Sin resultados.
+      <li class="lista-empleados__item lista-empleados__item--invisible"
+        v-show="!empleados.docs.length">
+        <p class="text--center text--gris8 text--small">No hay empleados.</p>
       </li>
       <li class="lista-empleados__item"
           @click="abrirEmpleado(emp)"
@@ -88,7 +92,7 @@ function buscarEmpleadosChat(param) {
 }
 </script>
 
-<style lang="scss" scoped="true">
+<style lang="scss">
 @import "../../sass/tema/globales";
 @import "../../sass/base/colores";
 @import "../../sass/tema/colores";
@@ -101,9 +105,15 @@ function buscarEmpleadosChat(param) {
   list-style: none;
 }
 
+.busqueda-empleados{
+  display: block;
+  text-align: justify;
+  margin-bottom: 1em;
+}
+
 .lista-empleados__item{
-  @extend .text--blanco;
-  box-shadow: inset 0 -1px 0 $negro2;
+  @extend .text--negro4;
+  box-shadow: inset 0 -1px 0 $grisa;
   display: block;
   text-align: justify;
   line-height: 35px;
@@ -119,10 +129,20 @@ function buscarEmpleadosChat(param) {
 
 }
 
+.lista-empleados__item--invisible{
+  @extend .lista-empleados__item;
+  box-shadow: 0 0 0 #000;
+
+  &:hover{
+    background: transparent;
+  }
+}
+
 .colorEmpleado{
   display: inline-block;
   height: 10px;
   width: 10px;
+  margin-right: 5px;
 }
 
 .badge{

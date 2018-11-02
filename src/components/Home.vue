@@ -79,7 +79,8 @@ export default {
   }
 
   .layout__chat{
-    @extend .sombra;
+    box-shadow: inset -1px 0 0 $grisa,
+    1px 0 2px transparentize($negro2, .6);
     background: $grisc;
     width: 260px;
     height: 100vh;

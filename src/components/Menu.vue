@@ -43,7 +43,7 @@ function data() {
 }
 
 .menu__item{
-  @extend .text--blanco;
+  color: $blanco;
   text-align: justify;
   line-height: 64px;
   padding: 0 1em;
@@ -59,15 +59,14 @@ function data() {
 }
 
 .menu__item--active{
-  @extend .text--blanco;
-  background: transparentize($azul-tema, .2);
+  @extend .text--azul;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background: $blanco;
   cursor: default;
   pointer-events: none;
-
-  &:hover{
-    @extend .text--blanco;
-    background: $fondo;
-  }
+  height: 54px;
+  transform: translateY(10px);
 }
 
 </style>
