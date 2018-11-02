@@ -1,20 +1,17 @@
 <template lang="html">
   <nav class="navbar">
     <img src="/icono.png" alt="Logo" class="img-responsive navbar__logo">
+    <p class="navbar__user__version text--gris6 text--extra-small
+     text--right text--center text--italic">Versión: {{ version }}</p>
     <directorio/>
-    <p class="nom--cuenta">
+    <!--<p class="nom--cuenta">
       <i class="far fa-fw fa-building"/>
       <span class="text">{{ cuenta.nombre }}</span>
-    </p>
+    </p>-->
     <router-link :to="{ name: 'usuario' }" tag="div"
                  class="navbar__user" active-class="navbar__user--active">
-      <p>
-        <i class="far fa-fw fa-user-circle"/>
-        <span class="text">{{ nombreUsuario }}</span>
-      </p>
-      <hr class="navbar__user__hr">
-      <p class="navbar__user__version text--gris8 text--small
-       text--right text--center text--italic">Versión: {{ version }}</p>
+                 <i class="far fa-fw fa-user-circle"/>
+                 <span class="text">{{ nombreUsuario }}</span>
     </router-link>
 
   </nav>
@@ -113,11 +110,12 @@ function mounted() {
   }
 
   .navbar__user{
-    @extend .text--blanco;
-    padding: .25em 1em;
-    user-select: none;
+    color: $blanco;
+    text-align: justify;
+    padding: 0 1em;
     cursor: pointer;
-    transition: all ease .5s;
+    user-select: none;
+    display: inline-block;
 
     &:hover{
       @extend .text--negro4;
@@ -131,24 +129,23 @@ function mounted() {
   }
 
   .nom--cuenta {
-    background-color: white;
-    color: black;
     padding: .25em 1em;
   }
 
   .navbar__user__version{
     user-select: none;
+    position: fixed;
+    bottom: 0;
   }
 
   .navbar__user--active{
-    @extend .text--blanco;
-    background: transparentize($azul-tema, .2);
+    @extend .text--azul;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background: $blanco;
     cursor: default;
     pointer-events: none;
-
-    &:hover{
-      @extend .text--blanco;
-      background: $fondo;
-    }
+    height: 54px;
+    transform: translateY(10px);
   }
 </style>

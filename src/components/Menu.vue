@@ -49,7 +49,6 @@ function data() {
   padding: 0 1em;
   cursor: pointer;
   user-select: none;
-  transition: all ease .5s;
   display: inline-block;
 
   &:hover{
