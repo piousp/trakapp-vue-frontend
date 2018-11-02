@@ -1,6 +1,6 @@
 <template>
   <section id="chat-empleados">
-    <h1 class="h5 text--blanco text--center">Chat empleados</h1>
+    <h1 class="h4 text--negro4 text--center">Chat empleados</h1>
     <ul class="lista-empleados">
       <li class="lista-empleados__item">
         <input

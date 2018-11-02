@@ -1,6 +1,7 @@
 <template lang="html">
   <nav class="navbar">
-    <img src="/logo-peq-contra.png" alt="Logo" class="img-responsive navbar__logo">
+    <img src="/icono.png" alt="Logo" class="img-responsive navbar__logo">
+    <directorio/>
     <p class="nom--cuenta">
       <i class="far fa-fw fa-building"/>
       <span class="text">{{ cuenta.nombre }}</span>
@@ -15,7 +16,7 @@
       <p class="navbar__user__version text--gris8 text--small
        text--right text--center text--italic">Versión: {{ version }}</p>
     </router-link>
-    <directorio/>
+
   </nav>
 </template>
 
@@ -103,10 +104,12 @@ function mounted() {
 
   .navbar {
     width: 100%;
+    display: flex;
+    flex-direction: row;
   }
 
   .navbar__logo {
-    padding: 1em 2em;
+    padding: .75em 2em;
   }
 
   .navbar__user{

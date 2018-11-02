@@ -39,17 +39,18 @@ function data() {
   @extend %sans;
   outline:none;
   list-style: none;
+  width: 100%;
 }
 
 .menu__item{
   @extend .text--blanco;
-  display: block;
   text-align: justify;
-  line-height: 35px;
+  line-height: 64px;
   padding: 0 1em;
   cursor: pointer;
   user-select: none;
   transition: all ease .5s;
+  display: inline-block;
 
   &:hover{
     @extend .text--negro4;

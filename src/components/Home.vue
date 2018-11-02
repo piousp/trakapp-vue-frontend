@@ -1,12 +1,10 @@
 <template>
   <div class="layout">
     <vue-progress-bar/>
-    <div class="layout__nav">
-      <navbar/>
-      <lista-empleados/>
-    </div>
+    <navbar class="layout__nav"/>
     <div class="layout__content">
-      <div class="layout__content__bar"/>
+      <lista-empleados class="layout__chat"/>
+      <!--<div class="layout__content__bar"/>-->
       <div class="layout__padding">
         <router-view/>
         <question-mark/>
@@ -69,25 +67,35 @@ export default {
 
   .layout {
     display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
-  .layout__nav,
-  .layout__chat{
+  .layout__nav{
     @extend .sombra;
     background: $negro2;
+    width: 100%;
+    height: 64px;
+  }
+
+  .layout__chat{
+    @extend .sombra;
+    background: $grisc;
     width: 260px;
+    height: 100vh;
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
   .layout__content{
-    min-height: 100vh;
-    padding-top: 40px;
+    display: flex;
+    min-height: 90vh;
     flex-grow: 2;
     width: 100%;
-    background: transparentize($blanco, .2);
+    background: $blanco;
     position: relative;
+    flex-direction: row;
   }
 
   .layout__content__bar{
@@ -103,12 +111,13 @@ export default {
   .layout__padding {
     padding: 1em;
     height: 100%;
+    width: 100%;
     @media (min-width: $reflex-md ) {
       padding: 1em 3em;
     }
   }
 
-  .botones-pagina,
+  /*.botones-pagina,
   .fc-header-toolbar
   {
     float: none;
@@ -124,5 +133,5 @@ export default {
     * {
       pointer-events: auto;
     }
-  }
+  }*/
 </style>
