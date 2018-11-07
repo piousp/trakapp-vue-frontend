@@ -81,7 +81,8 @@ export default {
   .layout__chat{
     box-shadow: inset -1px 0 0 $grisa,
     1px 0 2px transparentize($negro2, .6);
-    background: $grisc;
+    background: $grisd;
+    background-size: cover;
     width: 260px;
     height: 100vh;
     position: relative;
@@ -118,21 +119,16 @@ export default {
     }
   }
 
-  /*.botones-pagina,
-  .fc-header-toolbar
-  {
-    float: none;
+  .botones-pagina,
+  .fc-header-toolbar{
     text-align: center;
-    position: absolute;
     width: 100%;
-    height: 40px;
-    top: 0;
-    left: 0;
-    z-index: 5;
-    padding-top: 3px;
+    padding-bottom: 1em;
+    margin-bottom: .5em;
     pointer-events: none;
+    box-shadow: inset 0 -1px 0 $cyan;
     * {
       pointer-events: auto;
     }
-  }*/
+  }
 </style>

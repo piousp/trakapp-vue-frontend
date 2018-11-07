@@ -57,7 +57,7 @@ function route(val) {
 }
 
 function nombreUsuario() {
-  return `${this.usuario.nombre} ${this.usuario.apellidos || ""}`;
+  return `${this.usuario.nombre}`;
 }
 
 function version() {
